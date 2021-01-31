@@ -1,6 +1,5 @@
 <p align="center">
   <a href="https://github.com/aligungr/UERANSIM"><img src="/.github/logo.png" width="75" title="UERANSIM"></a>
-  <a href="https://github.com/aligungr/UERANSIM"><img src="/.github/hvl.png" width="75" title="UERANSIM"></a>
 </p>
 <p align="center">
 <img src="https://img.shields.io/badge/UERANSIM-v3.0.2-blue" />
@@ -40,4 +39,6 @@ UERANSIM is the first and currently only open source project that implements 5G-
 
 ## License
 
-UERANSIM is an <a href="https://github.com/aligungr/UERANSIM"><img src="/.github/hvl.png" width="75" title="HAVELSAN"></a> project. All source code and related files including documentation and wiki pages are licensed under [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), see [LICENSE](https://github.com/aligungr/UERANSIM/blob/master/LICENSE) for more details.
+<a href="https://github.com/aligungr/UERANSIM"><img src="/.github/hvl.png" width="75" title="HAVELSAN"></a>
+
+UERANSIM is a HAVELSAN project. All source code and related files including documentation and wiki pages are licensed under [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), see [LICENSE](https://github.com/aligungr/UERANSIM/blob/master/LICENSE) for more details.

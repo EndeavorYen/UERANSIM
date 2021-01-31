@@ -15,13 +15,13 @@ struct cons
     // Version information
     static constexpr const uint8_t Major = 3;
     static constexpr const uint8_t Minor = 0;
-    static constexpr const uint8_t Patch = 1;
-    static constexpr const char* Name = "UERANSIM v3.0.1";
+    static constexpr const uint8_t Patch = 2;
+    static constexpr const char *Name = "UERANSIM v3.0.2";
 
     // Some port values
     static constexpr const uint16_t GtpPort = 2152;
     static constexpr const uint16_t PortalPort = 4997;
 
     // TUN interface
-    static constexpr const char* TunNamePrefix = "uesimtun";
+    static constexpr const char *TunNamePrefix = "uesimtun";
 };

@@ -12,30 +12,28 @@
 #include <memory>
 #include <utils/nts.hpp>
 #include <thread>
-#include <udp/udp_server_task.hpp>
 #include <unordered_map>
 #include <vector>
 
-#include "ue_mr_rls.hpp"
-#include "ue_types.hpp"
+#include "ue/tun/ue_tun_task.hpp"
+#include "ue/ue_nts.hpp"
+#include "ue/ue_types.hpp"
 
 namespace nr::ue
 {
 
-class UeMrTask : public NtsTask
+class UeAppTask : public NtsTask
 {
   private:
     TaskBase *base;
     std::unique_ptr<Logger> logger;
 
-    udp::UdpServerTask *udpTask;
-    UeRls *rlsEntity;
-
-    long lastPlmnSearchFailurePrinted;
+    UeStatusInfo statusInfo;
+    TunTask *tunTasks[16];
 
   public:
-    explicit UeMrTask(TaskBase *base);
-    ~UeMrTask() override = default;
+    explicit UeAppTask(TaskBase *base);
+    ~UeAppTask() override = default;
 
   protected:
     void onStart() override;
@@ -43,7 +41,8 @@ class UeMrTask : public NtsTask
     void onQuit() override;
 
   private:
-    void receiveDownlinkPayload(rls::EPayloadType type, OctetString &&payload);
+    void receiveStatusUpdate(NwUeStatusUpdate &msg);
+    void setupTunInterface(const PduSession *pduSession);
 };
 
 } // namespace nr::ue

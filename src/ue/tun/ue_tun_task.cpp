@@ -7,7 +7,7 @@
 //
 
 #include "ue_tun_task.hpp"
-#include "ue_nts.hpp"
+#include "ue/ue_nts.hpp"
 
 #include <cstring>
 #include <utils/libc_error.hpp>

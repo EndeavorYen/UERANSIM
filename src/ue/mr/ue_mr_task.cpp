@@ -7,7 +7,7 @@
 //
 
 #include "ue_mr_task.hpp"
-#include "ue_nts.hpp"
+#include "ue/ue_nts.hpp"
 
 #include <utils/common.hpp>
 #include <utils/constants.hpp>

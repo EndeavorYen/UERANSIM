@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_nts.hpp"
+#include "ue/ue_nts.hpp"
 #include "ue_rrc_task.hpp"
 
 #include <asn/utils/asn_utils.hpp>

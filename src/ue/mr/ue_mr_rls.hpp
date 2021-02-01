@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "ue_types.hpp"
+#include "ue/ue_types.hpp"
 #include <nas/nas.hpp>
 #include <urs/rls/urs_rls_ue_entity.hpp>
 

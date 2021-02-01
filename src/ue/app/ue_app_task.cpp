@@ -7,7 +7,7 @@
 //
 
 #include "ue_app_task.hpp"
-#include "ue_tun.hpp"
+#include "ue/tun/ue_tun.hpp"
 
 #include <utils/common.hpp>
 #include <utils/constants.hpp>

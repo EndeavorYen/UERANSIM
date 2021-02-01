@@ -15,8 +15,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ue_nts.hpp"
-#include "ue_types.hpp"
+#include "ue/ue_nts.hpp"
+#include "ue/ue_types.hpp"
 
 extern "C"
 {

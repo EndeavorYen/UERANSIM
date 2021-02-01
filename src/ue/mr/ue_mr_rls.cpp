@@ -7,7 +7,7 @@
 //
 
 #include "ue_mr_rls.hpp"
-#include "ue_nts.hpp"
+#include "ue/ue_nts.hpp"
 
 #include <urs/rls/urs_rls_ue_entity.hpp>
 

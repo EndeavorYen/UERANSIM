@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_tun.hpp"
-#include "ue_tun_config.hpp"
+#include "tun.hpp"
+#include "config.hpp"
 #include <utils/libc_error.hpp>
 
 namespace nr::ue::tun

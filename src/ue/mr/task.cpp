@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_mr_task.hpp"
-#include "ue/ue_nts.hpp"
+#include "task.hpp"
+#include "ue/nts.hpp"
 
 #include <utils/common.hpp>
 #include <utils/constants.hpp>

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "ue_types.hpp"
+#include "types.hpp"
 #include <nas/timer.hpp>
 #include <rrc/rrc.hpp>
 #include <urs/rls/rls.hpp>

@@ -15,28 +15,34 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ue/ue_nts.hpp"
-#include "ue/ue_types.hpp"
+#include "ue/tun/task.hpp"
+#include "ue/nts.hpp"
+#include "ue/types.hpp"
 
 namespace nr::ue
 {
 
-class TunTask : public NtsTask
+class UeAppTask : public NtsTask
 {
   private:
     TaskBase *base;
-    int psi;
-    int fd;
-    ScopedThread *receiver;
+    std::unique_ptr<Logger> logger;
+
+    UeStatusInfo statusInfo;
+    TunTask *tunTasks[16];
 
   public:
-    explicit TunTask(TaskBase *taskBase, int psi, int fd);
-    ~TunTask() override = default;
+    explicit UeAppTask(TaskBase *base);
+    ~UeAppTask() override = default;
 
   protected:
     void onStart() override;
     void onLoop() override;
     void onQuit() override;
+
+  private:
+    void receiveStatusUpdate(NwUeStatusUpdate &msg);
+    void setupTunInterface(const PduSession *pduSession);
 };
 
 } // namespace nr::ue

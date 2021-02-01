@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_tun_config.hpp"
+#include "config.hpp"
 
 #include <arpa/inet.h>
 #include <array>

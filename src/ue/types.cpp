@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_types.hpp"
+#include "types.hpp"
 
 namespace nr::ue
 {

@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_mr_rls.hpp"
-#include "ue/ue_nts.hpp"
+#include "rls.hpp"
+#include "ue/nts.hpp"
 
 #include <urs/rls/ue_entity.hpp>
 

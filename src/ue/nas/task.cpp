@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "nas_task.hpp"
-#include <ue/ue_nts.hpp>
+#include "task.hpp"
+#include <ue/nts.hpp>
 
 static const int NTS_TIMER_ID_NAS_TIMER_CYCLE = 1;
 static const int NTS_TIMER_ID_MM_CYCLE = 2;

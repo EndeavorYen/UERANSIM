@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <ue/ue_nts.hpp>
-#include <ue/ue_types.hpp>
+#include <ue/nts.hpp>
+#include <ue/types.hpp>
 
 #include <crypt/milenage.hpp>
 #include <nas/nas.hpp>

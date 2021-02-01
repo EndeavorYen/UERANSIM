@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "nas_enc.hpp"
+#include "enc.hpp"
 
 #include <crypt/crypt.hpp>
 

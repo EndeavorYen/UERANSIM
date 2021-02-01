@@ -8,34 +8,31 @@
 
 #pragma once
 
-#include <memory>
-#include <thread>
-#include <udp/server_task.hpp>
-#include <unordered_map>
-#include <utils/logger.hpp>
+#include <crypt/milenage.hpp>
+#include <nas/nas.hpp>
+#include <nas/timer.hpp>
+#include <ue/mm/mm.hpp>
+#include <ue/sm/sm.hpp>
+#include <ue/nts.hpp>
+#include <ue/types.hpp>
 #include <utils/nts.hpp>
-#include <vector>
-
-#include "ue/ue_types.hpp"
-#include "ue_mr_rls.hpp"
 
 namespace nr::ue
 {
 
-class UeMrTask : public NtsTask
+class NasTask : public NtsTask
 {
   private:
     TaskBase *base;
     std::unique_ptr<Logger> logger;
 
-    udp::UdpServerTask *udpTask;
-    UeRls *rlsEntity;
-
-    long lastPlmnSearchFailurePrinted;
+    UeTimers timers;
+    NasMm *mm;
+    NasSm *sm;
 
   public:
-    explicit UeMrTask(TaskBase *base);
-    ~UeMrTask() override = default;
+    explicit NasTask(TaskBase *base);
+    ~NasTask() override = default;
 
   protected:
     void onStart() override;
@@ -43,7 +40,8 @@ class UeMrTask : public NtsTask
     void onQuit() override;
 
   private:
-    void receiveDownlinkPayload(rls::EPayloadType type, OctetString &&payload);
+    void onTimerExpire(nas::NasTimer &timer);
+    void performTick();
 };
 
 } // namespace nr::ue

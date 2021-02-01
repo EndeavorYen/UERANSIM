@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_tun_task.hpp"
-#include "ue/ue_nts.hpp"
+#include "task.hpp"
+#include "ue/nts.hpp"
 
 #include <cstring>
 #include <utils/libc_error.hpp>

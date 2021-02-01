@@ -8,10 +8,10 @@
 
 #include "ue.hpp"
 
-#include "nas/nas_task.hpp"
-#include "ue/app/app_task.hpp"
-#include "ue/mr/ue_mr_task.hpp"
-#include "ue/rrc/ue_rrc_task.hpp"
+#include "nas/task.hpp"
+#include "ue/app/task.hpp"
+#include "ue/mr/task.hpp"
+#include "ue/rrc/task.hpp"
 
 namespace nr::ue
 {

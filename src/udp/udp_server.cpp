@@ -7,7 +7,6 @@
 //
 
 #include "udp_server.hpp"
-#include "udp_error.hpp"
 
 #include <cstring>
 

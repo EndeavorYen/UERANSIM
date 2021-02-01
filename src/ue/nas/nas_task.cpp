@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_nas_task.hpp"
+#include "nas_task.hpp"
 #include "ue_nts.hpp"
 
 static const int NTS_TIMER_ID_NAS_TIMER_CYCLE = 1;
@@ -17,34 +17,34 @@ static const int NTS_TIMER_INTERVAL_MM_CYCLE = 400;
 namespace nr::ue
 {
 
-NasTask::NasTask(TaskBase *base)
-    : base{base}, timers{}, mmCtx{}, smCtx{}, currentNsCtx{}, nonCurrentNsCtx{},
-      emulationMode(base->config->emulationMode)
+NasTask::NasTask(TaskBase *base) : base{base}, timers{}
 {
     logger = base->logBase->makeUniqueLogger(base->config->getLoggerPrefix() + "nas");
+
+    mm = new NasMm(base, this, &timers);
+    sm = new NasSm(base, this, &timers);
 }
 
 void NasTask::onStart()
 {
     logger->debug("NAS layer started");
 
-    auto *statusUpdate = new NwUeStatusUpdate(NwUeStatusUpdate::MM_STATE);
-    statusUpdate->mmState = MmStateName(mmCtx.mmState);
-    statusUpdate->mmSubState = MmSubStateName(mmCtx.mmSubState);
-    base->appTask->push(statusUpdate);
-
-    statusUpdate = new NwUeStatusUpdate(NwUeStatusUpdate::RM_STATE);
-    statusUpdate->rmState = RmStateName(mmCtx.rmState);
-    base->appTask->push(statusUpdate);
+    sm->onStart(mm);
+    mm->onStart(sm);
 
     setTimer(NTS_TIMER_ID_NAS_TIMER_CYCLE, NTS_TIMER_INTERVAL_NAS_TIMER_CYCLE);
     setTimer(NTS_TIMER_ID_MM_CYCLE, NTS_TIMER_INTERVAL_MM_CYCLE);
-    triggerMmCycle();
+
+    mm->triggerMmCycle();
 }
 
 void NasTask::onQuit()
 {
-    // TODO
+    mm->onQuit();
+    sm->onQuit();
+
+    delete mm;
+    delete sm;
 }
 
 void NasTask::onLoop()
@@ -61,7 +61,8 @@ void NasTask::onLoop()
         delete w;
         OctetBuffer buffer{nasPdu};
         std::unique_ptr<nas::NasMessage> nasMessage = nas::DecodeNasMessage(buffer);
-        receiveNasMessage(*nasMessage);
+        if (nasMessage != nullptr)
+            mm->receiveNasMessage(*nasMessage);
         break;
     }
     case NtsMessageType::NAS_TIMER_EXPIRE: {
@@ -78,7 +79,7 @@ void NasTask::onLoop()
     }
     case NtsMessageType::UE_MR_PLMN_SEARCH_RESPONSE: {
         auto *w = dynamic_cast<NwPlmnSearchResponse *>(msg);
-        receivePlmnSearchResponse(*w);
+        mm->receivePlmnSearchResponse(*w);
         delete w;
         break;
     }
@@ -94,17 +95,17 @@ void NasTask::onLoop()
         if (timerId == NTS_TIMER_ID_MM_CYCLE)
         {
             setTimer(NTS_TIMER_ID_MM_CYCLE, NTS_TIMER_INTERVAL_MM_CYCLE);
-            performMmCycle();
+            mm->performMmCycle();
         }
         break;
     }
     case NtsMessageType::NAS_PERFORM_MM_CYCLE: {
         delete msg;
-        performMmCycle();
+        mm->performMmCycle();
         break;
     }
     case NtsMessageType::UE_TRIGGER_INITIAL_SESSION_CREATE: {
-        establishInitialSessions();
+        sm->establishInitialSessions();
         delete msg;
         break;
     }
@@ -113,6 +114,64 @@ void NasTask::onLoop()
         delete msg;
         break;
     }
+}
+
+void NasTask::onTimerExpire(nas::NasTimer &timer)
+{
+    if (timer.isMmTimer())
+        mm->onTimerExpire(timer);
+    else
+    {
+        // TODO
+    }
+}
+
+void NasTask::performTick()
+{
+    auto sendExpireMsg = [this](nas::NasTimer *timer) { push(new NwNasTimerExpire(timer)); };
+
+    if (timers.t3346.performTick())
+        sendExpireMsg(&timers.t3346);
+    if (timers.t3396.performTick())
+        sendExpireMsg(&timers.t3396);
+    if (timers.t3444.performTick())
+        sendExpireMsg(&timers.t3444);
+    if (timers.t3445.performTick())
+        sendExpireMsg(&timers.t3445);
+    if (timers.t3502.performTick())
+        sendExpireMsg(&timers.t3502);
+    if (timers.t3510.performTick())
+        sendExpireMsg(&timers.t3510);
+    if (timers.t3511.performTick())
+        sendExpireMsg(&timers.t3511);
+    if (timers.t3512.performTick())
+        sendExpireMsg(&timers.t3512);
+    if (timers.t3516.performTick())
+        sendExpireMsg(&timers.t3516);
+    if (timers.t3517.performTick())
+        sendExpireMsg(&timers.t3517);
+    if (timers.t3519.performTick())
+        sendExpireMsg(&timers.t3519);
+    if (timers.t3520.performTick())
+        sendExpireMsg(&timers.t3520);
+    if (timers.t3521.performTick())
+        sendExpireMsg(&timers.t3521);
+    if (timers.t3525.performTick())
+        sendExpireMsg(&timers.t3525);
+    if (timers.t3540.performTick())
+        sendExpireMsg(&timers.t3540);
+    if (timers.t3580.performTick())
+        sendExpireMsg(&timers.t3580);
+    if (timers.t3581.performTick())
+        sendExpireMsg(&timers.t3581);
+    if (timers.t3582.performTick())
+        sendExpireMsg(&timers.t3582);
+    if (timers.t3583.performTick())
+        sendExpireMsg(&timers.t3583);
+    if (timers.t3584.performTick())
+        sendExpireMsg(&timers.t3584);
+    if (timers.t3585.performTick())
+        sendExpireMsg(&timers.t3585);
 }
 
 } // namespace nr::ue

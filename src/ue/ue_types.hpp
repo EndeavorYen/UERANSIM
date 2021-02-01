@@ -187,32 +187,6 @@ enum class EMmSubState
     MM_SERVICE_REQUEST_INITIATED_NA
 };
 
-struct MmContext
-{
-    ERmState rmState;
-    ECmState cmState;
-    EMmState mmState;
-    EMmSubState mmSubState;
-
-    std::unique_ptr<nas::RegistrationRequest> registrationRequest{};
-
-    nas::IE5gsMobileIdentity storedSuci{};
-    nas::IE5gsMobileIdentity storedGuti{};
-
-    std::optional<nas::IE5gsTrackingAreaIdentity> lastVisitedRegisteredTai{};
-    std::optional<nas::IE5gsTrackingAreaIdentityList> taiList{};
-
-    long lastPlmnSearchTrigger{};
-
-    OctetString sqn{};
-
-    MmContext()
-        : rmState(ERmState::RM_DEREGISTERED), cmState(ECmState::CM_IDLE), mmState(EMmState::MM_NULL),
-          mmSubState(EMmSubState::MM_NULL_NA)
-    {
-    }
-};
-
 struct PduSession
 {
     static constexpr const int MIN_ID = 1;
@@ -237,12 +211,6 @@ struct ProcedureTransaction
     static constexpr const int MAX_ID = 254;
 
     int id{};
-};
-
-struct SmContext
-{
-    PduSession pduSessions[16]{};
-    ProcedureTransaction procedureTransactions[255]{};
 };
 
 enum class EConnectionIdentifier

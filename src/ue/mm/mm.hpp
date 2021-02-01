@@ -15,63 +15,76 @@
 #include <nas.hpp>
 #include <nas_timer.hpp>
 #include <nts.hpp>
+#include <octet_string.hpp>
 
 namespace nr::ue
 {
 
-class NasTask : public NtsTask
+class NasSm;
+
+class NasMm
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    NtsTask *m_nas;
+    UeTimers *m_timers;
+    std::unique_ptr<Logger> m_logger;
+    NasSm* m_sm;
 
-    UeTimers timers;
-    MmContext mmCtx;
-    SmContext smCtx;
-    std::optional<NasSecurityContext> currentNsCtx;
-    std::optional<NasSecurityContext> nonCurrentNsCtx;
-    bool emulationMode;
+    ERmState m_rmState;
+    ECmState m_cmState;
+    EMmState m_mmState;
+    EMmSubState m_mmSubState;
+
+    std::unique_ptr<nas::RegistrationRequest> m_lastRegistrationRequest{};
+    nas::IE5gsMobileIdentity m_storedSuci{};
+    nas::IE5gsMobileIdentity m_storedGuti{};
+    std::optional<nas::IE5gsTrackingAreaIdentity> m_lastVisitedRegisteredTai{};
+    std::optional<nas::IE5gsTrackingAreaIdentityList> m_taiList{};
+
+    std::optional<NasSecurityContext> m_currentNsCtx;
+    std::optional<NasSecurityContext> m_nonCurrentNsCtx;
+
+    bool m_emulationMode;
+    long m_lastPlmnSearchTrigger{};
+    OctetString m_sqn{};
 
   public:
-    explicit NasTask(TaskBase *base);
-    ~NasTask() override = default;
+    NasMm(TaskBase *base, NtsTask *nas, UeTimers *timers);
 
-  protected:
-    void onStart() override;
-    void onLoop() override;
-    void onQuit() override;
-
-  private:
-    /* NAS transport related */
-    void receiveNasMessage(const nas::NasMessage &msg);
-    void receiveMmMessage(const nas::PlainMmMessage &msg);
-    void receiveDlNasTransport(const nas::DlNasTransport &msg);
-    void receiveSmMessage(const nas::SmMessage &msg);
-    void sendNasMessage(const nas::PlainMmMessage &msg);
-    void sendSmMessage(int psi, const nas::SmMessage &msg);
-    void sendMmStatus(nas::EMmCause cause);
-
-    /* Timer related */
+  public:
+    /* Base */
+    void onStart(NasSm *sm);
+    void onQuit();
     void onTimerExpire(nas::NasTimer &timer);
-    void performTick();
-
-    /* MM base functions */
     void triggerMmCycle();
     void performMmCycle();
+    void receivePlmnSearchResponse(const NwPlmnSearchResponse &msg);
+
+    /* Transport */
+    void receiveNasMessage(const nas::NasMessage &msg);
+    void sendNasMessage(const nas::PlainMmMessage &msg);
+
+  private:
+    /* Base */
     void switchMmState(EMmState state, EMmSubState subState);
     void switchRmState(ERmState state);
     void onSwitchMmState(EMmState oldState, EMmState newState, EMmSubState oldSubState, EMmSubState newSubSate);
     void onSwitchRmState(ERmState oldState, ERmState newState);
-    void receivePlmnSearchResponse(const NwPlmnSearchResponse &msg);
+
+    /* Transport */
+    void sendMmStatus(nas::EMmCause cause);
+    void receiveMmMessage(const nas::PlainMmMessage &msg);
+    void receiveDlNasTransport(const nas::DlNasTransport &msg);
     void receiveMmStatus(const nas::FiveGMmStatus &msg);
     void receiveMmCause(const nas::IE5gMmCause &msg);
 
-    /* MM registration */
+    /* Registration */
     void sendRegistration(nas::ERegistrationType registrationType, nas::EFollowOnRequest followOn);
     void receiveRegistrationAccept(const nas::RegistrationAccept &msg);
     void receiveRegistrationReject(const nas::RegistrationReject &msg);
 
-    /* MM authentication */
+    /* Authentication */
     void receiveAuthenticationRequest(const nas::AuthenticationRequest &msg);
     void receiveAuthenticationRequestEap(const nas::AuthenticationRequest &msg);
     void receiveAuthenticationRequest5gAka(const nas::AuthenticationRequest &msg);
@@ -85,42 +98,26 @@ class NasTask : public NtsTask
     bool checkSqn(const OctetString &sqn);
     crypto::milenage::Milenage calculateMilenage(const OctetString &sqn, const OctetString &rand);
 
-    /* MM security */
+    /* Security */
     void receiveSecurityModeCommand(const nas::SecurityModeCommand &msg);
     nas::IEUeSecurityCapability createSecurityCapabilityIe();
 
-    /* MM configuration */
+    /* Configuration */
     void receiveConfigurationUpdate(const nas::ConfigurationUpdateCommand &msg);
 
-    /* MM de-registration */
+    /* De-registration */
     void sendDeregistration(nas::ESwitchOff switchOff);
     void receiveDeregistrationAccept(const nas::DeRegistrationAcceptUeOriginating &msg);
     void receiveDeregistrationRequest(const nas::DeRegistrationRequestUeTerminated &msg);
 
-    /* MM identity */
+    /* Identity */
     void receiveIdentityRequest(const nas::IdentityRequest &msg);
     nas::IE5gsMobileIdentity getOrGenerateSuci();
     nas::IE5gsMobileIdentity generateSuci();
 
-    /* MM service */
+    /* Service */
     void receiveServiceAccept(const nas::ServiceAccept &msg);
     void receiveServiceReject(const nas::ServiceReject &msg);
-
-    /* SM base functions */
-    int allocatePduSessionId(const SessionConfig &config);
-    int allocateProcedureTransactionId();
-    void releaseProcedureTransactionId(int pti);
-    void releasePduSession(int psi);
-
-    /* SM resource allocation */
-    void receiveSmStatus(const nas::FiveGSmStatus &msg);
-    void receiveSmCause(const nas::IE5gSmCause &msg);
-
-    /* SM session establishment */
-    void establishInitialSessions();
-    void sendEstablishmentRequest(const SessionConfig &config);
-    void receivePduSessionEstablishmentAccept(const nas::PduSessionEstablishmentAccept &msg);
-    void receivePduSessionEstablishmentReject(const nas::PduSessionEstablishmentReject &msg);
 };
 
 } // namespace nr::ue

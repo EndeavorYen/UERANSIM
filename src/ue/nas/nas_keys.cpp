@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "ue_nas_keys.hpp"
+#include "nas_keys.hpp"
 #include <crypt.hpp>
 
 static const int N_NAS_enc_alg = 0x01;

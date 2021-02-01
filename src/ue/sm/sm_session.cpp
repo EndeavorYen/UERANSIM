@@ -7,7 +7,7 @@
 //
 
 #include "sm.hpp"
-#include <nas/nas_utils.hpp>
+#include <nas/utils.hpp>
 #include <nas/proto_conf.hpp>
 
 namespace nr::ue

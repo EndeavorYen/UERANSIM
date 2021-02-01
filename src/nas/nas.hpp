@@ -7,7 +7,7 @@
 //
 
 #include "msg.hpp"
-#include "nas_encode.hpp"
+#include "encode.hpp"
 
 namespace nas
 {

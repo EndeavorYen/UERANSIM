@@ -9,7 +9,7 @@
 #include "ue.hpp"
 
 #include "nas/nas_task.hpp"
-#include "ue/app/ue_app_task.hpp"
+#include "ue/app/app_task.hpp"
 #include "ue/mr/ue_mr_task.hpp"
 #include "ue/rrc/ue_rrc_task.hpp"
 

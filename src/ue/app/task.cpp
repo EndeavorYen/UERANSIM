@@ -7,11 +7,10 @@
 //
 
 #include "task.hpp"
-#include "ue/tun/tun.hpp"
-
+#include <nas/utils.hpp>
+#include <ue/tun/tun.hpp>
 #include <utils/common.hpp>
 #include <utils/constants.hpp>
-#include <nas/utils.hpp>
 
 namespace nr::ue
 {

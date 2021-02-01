@@ -8,12 +8,11 @@
 
 #pragma once
 
-#include <ue/nts.hpp>
-#include <ue/types.hpp>
-
 #include <crypt/milenage.hpp>
 #include <nas/nas.hpp>
 #include <nas/timer.hpp>
+#include <ue/nts.hpp>
+#include <ue/types.hpp>
 #include <utils/nts.hpp>
 #include <utils/octet_string.hpp>
 
@@ -29,7 +28,7 @@ class NasMm
     NtsTask *m_nas;
     UeTimers *m_timers;
     std::unique_ptr<Logger> m_logger;
-    NasSm* m_sm;
+    NasSm *m_sm;
 
     ERmState m_rmState;
     ECmState m_cmState;

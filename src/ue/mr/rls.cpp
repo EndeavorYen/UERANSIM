@@ -7,15 +7,14 @@
 //
 
 #include "rls.hpp"
-#include "ue/nts.hpp"
-
+#include <ue/nts.hpp>
 #include <urs/rls/ue_entity.hpp>
 
 namespace nr::ue
 {
 
-UeRls::UeRls(const std::string &nodeName, const std::vector<InetAddress> &gnbSearchList,
-    std::unique_ptr<Logger> logger, NtsTask *targetTask)
+UeRls::UeRls(const std::string &nodeName, const std::vector<InetAddress> &gnbSearchList, std::unique_ptr<Logger> logger,
+             NtsTask *targetTask)
     : RlsUeEntity(nodeName, gnbSearchList), logger(std::move(logger)), targetTask(targetTask)
 {
 }

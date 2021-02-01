@@ -21,7 +21,7 @@ UeTimers::UeTimers()
 {
 }
 
-const char* RmStateName(ERmState state)
+const char *RmStateName(ERmState state)
 {
     switch (state)
     {
@@ -34,7 +34,7 @@ const char* RmStateName(ERmState state)
     }
 }
 
-const char* MmStateName(EMmState state)
+const char *MmStateName(EMmState state)
 {
     switch (state)
     {
@@ -55,7 +55,7 @@ const char* MmStateName(EMmState state)
     }
 }
 
-const char* MmSubStateName(EMmSubState state)
+const char *MmSubStateName(EMmSubState state)
 {
     switch (state)
     {

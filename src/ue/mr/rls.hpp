@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "ue/types.hpp"
 #include <nas/nas.hpp>
+#include <ue/types.hpp>
 #include <urs/rls/ue_entity.hpp>
 
 namespace nr::ue

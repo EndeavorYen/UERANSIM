@@ -7,12 +7,11 @@
 //
 
 #include "task.hpp"
-#include "ue/nts.hpp"
-
 #include <cstring>
+#include <ue/nts.hpp>
+#include <unistd.h>
 #include <utils/libc_error.hpp>
 #include <utils/scoped_thread.hpp>
-#include <unistd.h>
 
 // TODO: May be reduced to MTU 1500
 #define RECEIVER_BUFFER_SIZE 16000

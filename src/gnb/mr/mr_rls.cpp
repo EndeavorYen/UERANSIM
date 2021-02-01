@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb_mr_rls.hpp"
+#include "mr_rls.hpp"
 #include "gnb/gnb_nts.hpp"
 
 namespace nr::gnb

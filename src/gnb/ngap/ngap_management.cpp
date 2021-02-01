@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
+#include "ngap_task.hpp"
 #include "utils/common.hpp"
-#include "gnb_ngap_task.hpp"
 
 namespace nr::gnb
 {

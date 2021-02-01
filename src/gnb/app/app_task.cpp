@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb_app_task.hpp"
+#include "app_task.hpp"
 #include "gnb/gnb_nts.hpp"
 
 namespace nr::gnb

@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb_ngap_encode.hpp"
+#include "ngap_encode.hpp"
 
 namespace nr::gnb::ngap_encode
 {

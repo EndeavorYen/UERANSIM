@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb_gtp_task.hpp"
+#include "gtp_task.hpp"
 
 #include <gtp/encode.hpp>
 #include <gtp/message.hpp>

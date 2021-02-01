@@ -17,7 +17,7 @@
 #include <vector>
 
 #include "gnb/gnb_nts.hpp"
-#include "gnb_gtp_utils.hpp"
+#include "gtp_utils.hpp"
 
 namespace nr::gnb
 {

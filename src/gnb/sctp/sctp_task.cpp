@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb_sctp_task.hpp"
+#include "sctp_task.hpp"
 
 #include <cstring>
 #include <thread>

@@ -8,8 +8,8 @@
 
 #pragma once
 
+#include "octet.hpp"
 #include <memory>
-#include <utils/octet.hpp>
 #include <optional>
 #include <utility>
 #include <vector>
@@ -114,5 +114,5 @@ struct Supi
     {
     }
 
-    static Supi Parse(const std::string& supi);
+    static Supi Parse(const std::string &supi);
 };

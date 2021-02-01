@@ -8,8 +8,8 @@
 
 #pragma once
 
+#include "octet_string.hpp"
 #include <cstdint>
-#include <utils/octet_string.hpp>
 #include <string>
 #include <sys/socket.h>
 

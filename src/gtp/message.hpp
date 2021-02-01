@@ -8,12 +8,11 @@
 
 #pragma once
 
+#include "ext_header.hpp"
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <vector>
-
-#include "ext_header.hpp"
 
 namespace gtp
 {

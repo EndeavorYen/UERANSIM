@@ -11,8 +11,8 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-#include <utils/octet_string.hpp>
 #include <utility>
+#include <utils/octet_string.hpp>
 #include <vector>
 
 namespace nas

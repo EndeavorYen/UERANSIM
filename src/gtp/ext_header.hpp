@@ -11,7 +11,6 @@
 #include <cstdint>
 #include <memory>
 #include <optional>
-
 #include <utils/octet_buffer.hpp>
 #include <utils/octet_string.hpp>
 

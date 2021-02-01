@@ -8,9 +8,6 @@
 
 #pragma once
 
-#include <asn/utils/utils.hpp>
-#include <utils/octet_string.hpp>
-
 #include <asn/rrc/ASN_RRC_BCCH-BCH-Message.h>
 #include <asn/rrc/ASN_RRC_BCCH-DL-SCH-Message.h>
 #include <asn/rrc/ASN_RRC_DL-CCCH-Message.h>
@@ -19,6 +16,8 @@
 #include <asn/rrc/ASN_RRC_UL-CCCH-Message.h>
 #include <asn/rrc/ASN_RRC_UL-CCCH1-Message.h>
 #include <asn/rrc/ASN_RRC_UL-DCCH-Message.h>
+#include <asn/utils/utils.hpp>
+#include <utils/octet_string.hpp>
 
 namespace rrc::encode
 {

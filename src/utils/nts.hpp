@@ -8,13 +8,13 @@
 
 #pragma once
 
+#include "scoped_thread.hpp"
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
 #include <deque>
 #include <mutex>
 #include <queue>
-#include <utils/scoped_thread.hpp>
 #include <thread>
 #include <vector>
 

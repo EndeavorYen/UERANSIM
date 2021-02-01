@@ -7,7 +7,7 @@
 //
 
 #include "nts.hpp"
-#include <utils/common.hpp>
+#include "common.hpp"
 
 #define WAIT_TIME_IF_NO_TIMER 500
 

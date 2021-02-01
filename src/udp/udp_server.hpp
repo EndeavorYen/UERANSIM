@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <network.hpp>
+#include <utils/network.hpp>
 #include <string>
 
 namespace udp

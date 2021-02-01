@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <octet_buffer.hpp>
-#include <octet_string.hpp>
+#include <utils/octet_buffer.hpp>
+#include <utils/octet_string.hpp>
 
 namespace nas
 {

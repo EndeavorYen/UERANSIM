@@ -8,7 +8,7 @@
 
 #include "mm.hpp"
 
-#include <common.hpp>
+#include <utils/common.hpp>
 
 namespace nr::ue
 {

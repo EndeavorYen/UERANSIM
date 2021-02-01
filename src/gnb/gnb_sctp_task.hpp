@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include <logger.hpp>
+#include <utils/logger.hpp>
 #include <memory>
-#include <nts.hpp>
-#include <scoped_thread.hpp>
+#include <utils/nts.hpp>
+#include <utils/scoped_thread.hpp>
 #include <sctp/sctp.hpp>
 #include <thread>
 #include <unordered_map>

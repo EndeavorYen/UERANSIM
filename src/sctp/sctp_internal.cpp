@@ -10,7 +10,7 @@
 #include "sctp_error.hpp"
 
 #include <arpa/inet.h>
-#include <common.hpp>
+#include <utils/common.hpp>
 #include <cstring>
 #include <netdb.h>
 #include <netinet/in.h>

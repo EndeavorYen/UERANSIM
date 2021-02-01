@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <logger.hpp>
-#include <nts.hpp>
+#include <utils/logger.hpp>
+#include <utils/nts.hpp>
 #include <urs/urs_rls_gnb_entity.hpp>
 
 namespace nr::gnb

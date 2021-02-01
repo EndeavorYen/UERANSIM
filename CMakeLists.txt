@@ -7,6 +7,7 @@ include_directories(src)
 
 #################### SUB DIRECTORIES ####################
 
+add_subdirectory(src/ext)
 add_subdirectory(src/asn/asn1c)
 add_subdirectory(src/asn/rrc)
 add_subdirectory(src/asn/ngap)

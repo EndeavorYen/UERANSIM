@@ -9,8 +9,8 @@
 #include "ue_mr_task.hpp"
 #include "ue_nts.hpp"
 
-#include <common.hpp>
-#include <constants.hpp>
+#include <utils/common.hpp>
+#include <utils/constants.hpp>
 
 static const int TIMER_ID_RLS_WAITING_TIMER = 1;
 static const int TIMER_ID_RLS_HEARTBEAT = 2;

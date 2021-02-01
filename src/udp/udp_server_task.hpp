@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <nts.hpp>
-#include <octet_string.hpp>
+#include <utils/nts.hpp>
+#include <utils/octet_string.hpp>
 #include <udp/udp_server.hpp>
 
 namespace udp

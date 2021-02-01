@@ -10,7 +10,7 @@
 
 #include "rlc.hpp"
 #include "rlc_utils.hpp"
-#include <linked_list.hpp>
+#include <utils/linked_list.hpp>
 
 namespace rlc
 {

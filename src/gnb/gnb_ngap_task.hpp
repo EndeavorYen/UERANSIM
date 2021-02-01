@@ -9,8 +9,8 @@
 #pragma once
 
 #include <app/monitor.hpp>
-#include <logger.hpp>
-#include <nts.hpp>
+#include <utils/logger.hpp>
+#include <utils/nts.hpp>
 #include <optional>
 #include <unordered_map>
 

@@ -9,8 +9,8 @@
 #pragma once
 
 #include <asn_application.h>
-#include <asn_utils.hpp>
-#include <octet_string.hpp>
+#include <asn/utils/asn_utils.hpp>
+#include <utils/octet_string.hpp>
 
 namespace nr::gnb::ngap_encode
 {

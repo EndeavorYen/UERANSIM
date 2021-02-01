@@ -13,7 +13,7 @@
 #include "nas_ie4.hpp"
 #include "nas_values.hpp"
 
-#include <common_types.hpp>
+#include <utils/common_types.hpp>
 
 namespace nas
 {

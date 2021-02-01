@@ -9,7 +9,7 @@
 #pragma once
 
 #include <memory>
-#include <octet.hpp>
+#include <utils/octet.hpp>
 #include <optional>
 #include <utility>
 #include <vector>

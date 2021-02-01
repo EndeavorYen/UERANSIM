@@ -10,12 +10,12 @@
 
 #include "ue_types.hpp"
 #include <nas/nas_timer.hpp>
-#include <network.hpp>
-#include <nts.hpp>
-#include <octet_string.hpp>
 #include <rrc/rrc.hpp>
 #include <urs/urs_rls.hpp>
 #include <utility>
+#include <utils/network.hpp>
+#include <utils/nts.hpp>
+#include <utils/octet_string.hpp>
 
 namespace nr::ue
 {

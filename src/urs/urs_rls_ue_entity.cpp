@@ -8,8 +8,8 @@
 
 #include "urs_rls_ue_entity.hpp"
 
-#include <common.hpp>
-#include <constants.hpp>
+#include <utils/common.hpp>
+#include <utils/constants.hpp>
 #include <utility>
 
 static const octet3 AppVersion = octet3{cons::Major, cons::Minor, cons::Patch};

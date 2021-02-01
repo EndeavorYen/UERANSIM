@@ -11,7 +11,7 @@
 #include "gnb_types.hpp"
 
 #include <app/monitor.hpp>
-#include <logger.hpp>
+#include <utils/logger.hpp>
 #include <string>
 
 namespace nr::gnb

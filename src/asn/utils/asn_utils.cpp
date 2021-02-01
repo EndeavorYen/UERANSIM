@@ -8,7 +8,7 @@
 
 #include "asn_utils.hpp"
 #include <cstring>
-#include <octet_string.hpp>
+#include <utils/octet_string.hpp>
 
 namespace asn
 {

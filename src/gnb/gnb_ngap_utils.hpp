@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include <asn_ngap.hpp>
-#include <asn_utils.hpp>
-#include <common.hpp>
-#include <common_types.hpp>
+#include <asn/utils/asn_ngap.hpp>
+#include <asn/utils/asn_utils.hpp>
+#include <utils/common.hpp>
+#include <utils/common_types.hpp>
 
 #include "gnb_types.hpp"
 

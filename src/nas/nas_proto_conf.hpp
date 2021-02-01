@@ -11,7 +11,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-#include <octet_string.hpp>
+#include <utils/octet_string.hpp>
 #include <utility>
 #include <vector>
 

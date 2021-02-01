@@ -9,7 +9,7 @@
 #include "crypt_eia2.hpp"
 #include "crypt_mac.hpp"
 
-#include <bits.hpp>
+#include <utils/bits.hpp>
 
 static OctetString GenerateMacInput(uint32_t count, int bearer, int direction, const OctetString &message)
 {

@@ -6,14 +6,14 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include <common.hpp>
-#include <constants.hpp>
+#include <utils/common.hpp>
+#include <utils/constants.hpp>
 #include <cxxopts/cxxopts.hpp>
 #include <gnb.hpp>
 #include <iostream>
 #include <unistd.h>
 #include <yaml-cpp/yaml.h>
-#include <yaml_utils.hpp>
+#include <utils/yaml_utils.hpp>
 
 static nr::gnb::GnbConfig *ReadConfigYaml(const std::string &file)
 {

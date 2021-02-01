@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <octet_string.hpp>
+#include <utils/octet_string.hpp>
 
 namespace crypto::eia2
 {

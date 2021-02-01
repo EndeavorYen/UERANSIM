@@ -9,10 +9,10 @@
 #pragma once
 
 #include "common_types.hpp"
-#include <octet.hpp>
-#include <octet_string.hpp>
 #include <string>
-#include <time_stamp.hpp>
+#include <utils/octet.hpp>
+#include <utils/octet_string.hpp>
+#include <utils/time_stamp.hpp>
 #include <vector>
 
 namespace utils

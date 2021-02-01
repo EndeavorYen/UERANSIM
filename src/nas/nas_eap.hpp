@@ -10,8 +10,8 @@
 
 #include <functional>
 #include <map>
-#include <octet_buffer.hpp>
-#include <octet_string.hpp>
+#include <utils/octet_buffer.hpp>
+#include <utils/octet_string.hpp>
 
 namespace eap
 {

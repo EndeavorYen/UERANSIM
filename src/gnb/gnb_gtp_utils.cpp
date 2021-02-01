@@ -8,7 +8,7 @@
 
 #include "gnb_gtp_utils.hpp"
 
-#include <common.hpp>
+#include <utils/common.hpp>
 
 namespace nr::gnb
 {

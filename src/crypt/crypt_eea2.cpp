@@ -8,8 +8,8 @@
 
 #include "crypt_eea2.hpp"
 #include "external/aes.hpp"
-#include <bit_buffer.hpp>
-#include <octet_string.hpp>
+#include <utils/bit_buffer.hpp>
+#include <utils/octet_string.hpp>
 
 namespace crypto::eea2
 {

@@ -9,9 +9,9 @@
 #pragma once
 
 #include "gnb_types.hpp"
-#include <logger.hpp>
+#include <utils/logger.hpp>
 #include <memory>
-#include <nts.hpp>
+#include <utils/nts.hpp>
 #include <thread>
 #include <unordered_map>
 #include <vector>

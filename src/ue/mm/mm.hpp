@@ -14,8 +14,8 @@
 #include <crypt/crypt_milenage.hpp>
 #include <nas/nas.hpp>
 #include <nas/nas_timer.hpp>
-#include <nts.hpp>
-#include <octet_string.hpp>
+#include <utils/nts.hpp>
+#include <utils/octet_string.hpp>
 
 namespace nr::ue
 {

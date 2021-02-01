@@ -14,7 +14,7 @@
 #include <deque>
 #include <mutex>
 #include <queue>
-#include <scoped_thread.hpp>
+#include <utils/scoped_thread.hpp>
 #include <thread>
 #include <vector>
 

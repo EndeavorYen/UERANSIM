@@ -9,8 +9,8 @@
 #include "ue_app_task.hpp"
 #include "ue_tun.hpp"
 
-#include <common.hpp>
-#include <constants.hpp>
+#include <utils/common.hpp>
+#include <utils/constants.hpp>
 #include <nas/nas_utils.hpp>
 
 namespace nr::ue

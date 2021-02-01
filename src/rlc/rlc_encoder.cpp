@@ -7,8 +7,8 @@
 //
 
 #include "rlc_encoder.hpp"
-#include <bit_buffer.hpp>
-#include <bits.hpp>
+#include <utils/bit_buffer.hpp>
+#include <utils/bits.hpp>
 
 namespace rlc
 {

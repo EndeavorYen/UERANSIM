@@ -8,7 +8,7 @@
 
 #include "nas_proto_conf.hpp"
 
-#include <octet_buffer.hpp>
+#include <utils/octet_buffer.hpp>
 
 bool nas::ProtocolConfigurationOptions::IsProtocolId(int id)
 {

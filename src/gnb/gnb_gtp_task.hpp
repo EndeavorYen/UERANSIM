@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include <logger.hpp>
+#include <utils/logger.hpp>
 #include <memory>
-#include <nts.hpp>
+#include <utils/nts.hpp>
 #include <thread>
 #include <udp/udp_server_task.hpp>
 #include <unordered_map>

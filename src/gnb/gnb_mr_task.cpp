@@ -10,8 +10,8 @@
 #include "gnb_mr_rls.hpp"
 #include "gnb_nts.hpp"
 
-#include <constants.hpp>
-#include <libc_error.hpp>
+#include <utils/constants.hpp>
+#include <utils/libc_error.hpp>
 
 static const int TIMER_ID_RLS_HEARTBEAT = 1;
 

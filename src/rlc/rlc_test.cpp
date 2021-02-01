@@ -8,7 +8,7 @@
 
 #include "rlc_test.hpp"
 #include "rlc.hpp"
-#include <nts.hpp>
+#include <utils/nts.hpp>
 
 enum class EntityType
 {

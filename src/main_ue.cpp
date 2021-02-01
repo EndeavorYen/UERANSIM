@@ -6,14 +6,14 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include <common.hpp>
-#include <constants.hpp>
+#include <utils/common.hpp>
+#include <utils/constants.hpp>
 #include <cxxopts/cxxopts.hpp>
 #include <iostream>
 #include <ue.hpp>
 #include <unistd.h>
 #include <yaml-cpp/yaml.h>
-#include <yaml_utils.hpp>
+#include <utils/yaml_utils.hpp>
 
 static nr::ue::UeConfig *ReadConfigYaml(const std::string &file, bool configureRouting, bool prefixLogger)
 {

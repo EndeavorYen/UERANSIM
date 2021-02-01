@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <asn_utils.hpp>
-#include <octet_string.hpp>
+#include <asn/utils/asn_utils.hpp>
+#include <utils/octet_string.hpp>
 
 #include <asn/rrc/ASN_RRC_BCCH-BCH-Message.h>
 #include <asn/rrc/ASN_RRC_BCCH-DL-SCH-Message.h>

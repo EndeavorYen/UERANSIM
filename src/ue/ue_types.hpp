@@ -9,12 +9,12 @@
 #pragma once
 
 #include <app/monitor.hpp>
-#include <common_types.hpp>
-#include <logger.hpp>
+#include <utils/common_types.hpp>
+#include <utils/logger.hpp>
 #include <nas/nas.hpp>
 #include <nas/nas_timer.hpp>
-#include <nts.hpp>
-#include <octet_string.hpp>
+#include <utils/nts.hpp>
+#include <utils/octet_string.hpp>
 
 namespace nr::ue
 {

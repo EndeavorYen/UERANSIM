@@ -14,13 +14,13 @@
 #include <PrintableString.h>
 #include <asn_SEQUENCE_OF.h>
 #include <asn_application.h>
-#include <bit_buffer.hpp>
+#include <utils/bit_buffer.hpp>
 #include <cstdlib>
 #include <cstring>
 #include <functional>
 #include <memory>
-#include <octet.hpp>
-#include <octet_buffer.hpp>
+#include <utils/octet.hpp>
+#include <utils/octet_buffer.hpp>
 #include <stdexcept>
 #include <string>
 #include <type_traits>

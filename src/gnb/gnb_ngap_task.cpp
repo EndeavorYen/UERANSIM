@@ -8,10 +8,8 @@
 
 #include "gnb_ngap_task.hpp"
 #include "gnb_app_task.hpp"
-#include "gnb_gtp_task.hpp"
-#include "gnb_sctp_task.hpp"
 
-#include <common.hpp>
+#include <utils/common.hpp>
 
 namespace nr::gnb
 {

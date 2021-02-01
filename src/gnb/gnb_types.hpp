@@ -10,11 +10,11 @@
 
 #include <asn/ngap/ASN_NGAP_QosFlowSetupRequestList.h>
 #include <app/monitor.hpp>
-#include <asn_utils.hpp>
-#include <common_types.hpp>
-#include <logger.hpp>
-#include <nts.hpp>
-#include <octet_string.hpp>
+#include <asn/utils/asn_utils.hpp>
+#include <utils/common_types.hpp>
+#include <utils/logger.hpp>
+#include <utils/nts.hpp>
+#include <utils/octet_string.hpp>
 #include <string>
 
 namespace nr::gnb

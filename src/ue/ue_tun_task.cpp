@@ -10,8 +10,8 @@
 #include "ue_nts.hpp"
 
 #include <cstring>
-#include <libc_error.hpp>
-#include <scoped_thread.hpp>
+#include <utils/libc_error.hpp>
+#include <utils/scoped_thread.hpp>
 #include <unistd.h>
 
 // TODO: May be reduced to MTU 1500

@@ -9,7 +9,7 @@
 #pragma once
 
 #include <cstdint>
-#include <octet_string.hpp>
+#include <utils/octet_string.hpp>
 #include <string>
 #include <sys/socket.h>
 

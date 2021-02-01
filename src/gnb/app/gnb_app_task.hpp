@@ -8,12 +8,12 @@
 
 #pragma once
 
-#include "gnb_types.hpp"
-#include <utils/logger.hpp>
+#include "gnb/gnb_types.hpp"
 #include <memory>
-#include <utils/nts.hpp>
 #include <thread>
 #include <unordered_map>
+#include <utils/logger.hpp>
+#include <utils/nts.hpp>
 #include <vector>
 
 namespace nr::gnb

@@ -16,8 +16,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "gnb/gnb_nts.hpp"
 #include "gnb_gtp_utils.hpp"
-#include "gnb_nts.hpp"
 
 namespace nr::gnb
 {

@@ -14,8 +14,8 @@
 #include <optional>
 #include <unordered_map>
 
-#include "gnb_nts.hpp"
-#include "gnb_types.hpp"
+#include "gnb/gnb_nts.hpp"
+#include "gnb/gnb_types.hpp"
 
 extern "C" struct ASN_NGAP_NGAP_PDU;
 extern "C" struct ASN_NGAP_NGSetupResponse;

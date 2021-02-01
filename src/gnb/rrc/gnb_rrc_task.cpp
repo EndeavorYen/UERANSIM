@@ -7,7 +7,7 @@
 //
 
 #include "gnb_rrc_task.hpp"
-#include "gnb_nts.hpp"
+#include "gnb/gnb_nts.hpp"
 
 #include <rrc/rrc_encode.hpp>
 

@@ -17,8 +17,8 @@
 #include <utils/nts.hpp>
 #include <vector>
 
+#include "gnb/gnb_nts.hpp"
 #include "gnb_mr_rls.hpp"
-#include "gnb_nts.hpp"
 
 namespace nr::gnb
 {

@@ -7,8 +7,8 @@
 //
 
 #include "gnb_mr_task.hpp"
+#include "gnb/gnb_nts.hpp"
 #include "gnb_mr_rls.hpp"
-#include "gnb_nts.hpp"
 
 #include <utils/constants.hpp>
 #include <utils/libc_error.hpp>

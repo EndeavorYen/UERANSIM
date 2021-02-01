@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb_app_task.hpp"
+#include "gnb/app/gnb_app_task.hpp"
 #include "gnb_ngap_task.hpp"
 #include "gnb_ngap_utils.hpp"
 

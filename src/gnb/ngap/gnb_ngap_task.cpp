@@ -7,7 +7,7 @@
 //
 
 #include "gnb_ngap_task.hpp"
-#include "gnb_app_task.hpp"
+#include "gnb/app/gnb_app_task.hpp"
 
 #include <utils/common.hpp>
 

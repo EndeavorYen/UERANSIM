@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb_ngap_task.hpp"
+#include "gnb/ngap/gnb_ngap_task.hpp"
 #include "gnb_rrc_task.hpp"
 
 #include <rrc/rrc_encode.hpp>

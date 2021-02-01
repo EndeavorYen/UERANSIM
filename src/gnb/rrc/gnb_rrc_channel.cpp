@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb_mr_task.hpp"
+#include "gnb/mr/gnb_mr_task.hpp"
 #include "gnb_rrc_task.hpp"
 
 #include <rrc/rrc_encode.hpp>

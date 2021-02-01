@@ -6,10 +6,10 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
+#include "gnb/rrc/gnb_rrc_task.hpp"
 #include "gnb_ngap_encode.hpp"
 #include "gnb_ngap_task.hpp"
 #include "gnb_ngap_utils.hpp"
-#include "gnb_rrc_task.hpp"
 
 #include <asn/ngap/ASN_NGAP_DownlinkNASTransport.h>
 #include <asn/ngap/ASN_NGAP_InitialUEMessage.h>

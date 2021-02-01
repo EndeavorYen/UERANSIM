@@ -25,13 +25,13 @@ sessions:
   - type: 'IPv4'
     apn: 'internet'
     slice:
-      sst: 1
-      sd: 1
+      sst: 0x01
+      sd: 0x010203
 
 # List of requested S-NSSAIs by this UE
 slices:
-  - sst: 1
-    sd: 1
+  - sst: 0x01
+    sd: 0x010203
 
 # Supported encryption and integrity algorithms by this UE
 integrity:

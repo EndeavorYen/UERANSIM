@@ -8,9 +8,9 @@
 
 #pragma once
 
+#include <urs/rls/urs_rls_gnb_entity.hpp>
 #include <utils/logger.hpp>
 #include <utils/nts.hpp>
-#include <urs/urs_rls_gnb_entity.hpp>
 
 namespace nr::gnb
 {

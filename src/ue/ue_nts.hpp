@@ -11,7 +11,7 @@
 #include "ue_types.hpp"
 #include <nas/nas_timer.hpp>
 #include <rrc/rrc.hpp>
-#include <urs/urs_rls.hpp>
+#include <urs/rls/urs_rls.hpp>
 #include <utility>
 #include <utils/network.hpp>
 #include <utils/nts.hpp>

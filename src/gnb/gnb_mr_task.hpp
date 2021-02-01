@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include <utils/logger.hpp>
 #include <memory>
-#include <utils/nts.hpp>
 #include <thread>
 #include <udp/udp_server_task.hpp>
 #include <unordered_map>
-#include <urs/urs_rls_gnb_entity.hpp>
+#include <urs/rls/urs_rls_gnb_entity.hpp>
+#include <utils/logger.hpp>
+#include <utils/nts.hpp>
 #include <vector>
 
 #include "gnb_mr_rls.hpp"

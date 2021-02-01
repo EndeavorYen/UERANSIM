@@ -206,10 +206,15 @@ void NasTask::sendRegistration(nas::ERegistrationType registrationType, nas::EFo
             if (!timers.t3519.isRunning())
                 timers.t3519.start();
         }
-        else if (base->config->imei.length() > 0)
+        else if (base->config->imei.has_value())
         {
             registrationRequest->mobileIdentity.type = nas::EIdentityType::IMEI;
-            registrationRequest->mobileIdentity.value = base->config->imei;
+            registrationRequest->mobileIdentity.value = *base->config->imei;
+        }
+        else if (base->config->imeiSv.has_value())
+        {
+            registrationRequest->mobileIdentity.type = nas::EIdentityType::IMEISV;
+            registrationRequest->mobileIdentity.value = *base->config->imeiSv;
         }
         else
         {
@@ -853,10 +858,12 @@ void NasTask::receiveSecurityModeCommand(const nas::SecurityModeCommand &msg)
     // Append IMEISV if requested
     if (msg.imeiSvRequest.has_value() && msg.imeiSvRequest->imeiSvRequest == nas::EImeiSvRequest::REQUESTED)
     {
-        // TODO: imei vs imeiSv may be separated.
-        resp.imeiSv = nas::IE5gsMobileIdentity{};
-        resp.imeiSv->type = nas::EIdentityType::IMEISV;
-        resp.imeiSv->value = base->config->imei;
+        if (base->config->imeiSv.has_value())
+        {
+            resp.imeiSv = nas::IE5gsMobileIdentity{};
+            resp.imeiSv->type = nas::EIdentityType::IMEISV;
+            resp.imeiSv->value = *base->config->imeiSv;
+        }
     }
 
     resp.nasMessageContainer = nas::IENasMessageContainer{};
@@ -992,7 +999,12 @@ void NasTask::receiveIdentityRequest(const nas::IdentityRequest &msg)
     else if (msg.identityType.value == nas::EIdentityType::IMEI)
     {
         resp.mobileIdentity.type = nas::EIdentityType::IMEI;
-        resp.mobileIdentity.value = base->config->imei;
+        resp.mobileIdentity.value = *base->config->imei;
+    }
+    else if (msg.identityType.value == nas::EIdentityType::IMEISV)
+    {
+        resp.mobileIdentity.type = nas::EIdentityType::IMEISV;
+        resp.mobileIdentity.value = *base->config->imeiSv;
     }
     else
     {

@@ -25,8 +25,6 @@ static nr::ue::UeConfig *ReadConfigYaml(const std::string &file, bool configureR
     result->plmn.mnc = yaml::GetInt32(config, "mnc", 1, 999);
     result->plmn.isLongMnc = yaml::GetString(config, "mnc", 2, 3).size() == 3;
 
-    result->imei = yaml::GetString(config, "imei", 15, 15);
-
     for (auto &gnbSearchItem : yaml::GetSequence(config, "gnbSearchList"))
         result->gnbSearchList.push_back(gnbSearchItem.as<std::string>());
 
@@ -49,6 +47,10 @@ static nr::ue::UeConfig *ReadConfigYaml(const std::string &file, bool configureR
 
     if (yaml::HasField(config, "supi"))
         result->supi = Supi::Parse(yaml::GetString(config, "supi"));
+    if (yaml::HasField(config, "imei"))
+        result->imei = yaml::GetString(config, "imei", 15, 15);
+    if (yaml::HasField(config, "imeiSv"))
+        result->imeiSv = yaml::GetString(config, "imeiSv", 16, 16);
 
     yaml::AssertHasField(config, "integrity");
     yaml::AssertHasField(config, "ciphering");
@@ -219,6 +221,7 @@ nr::ue::UeConfig *GetConfigByUe(nr::ue::UeConfig *refConfig, int ueIndex)
     c->opType = refConfig->opType;
     c->amf = refConfig->amf.copy();
     c->imei = refConfig->imei;
+    c->imeiSv = refConfig->imeiSv;
     c->supi = refConfig->supi;
     c->plmn = refConfig->plmn;
     c->nssais = refConfig->nssais;
@@ -230,8 +233,10 @@ nr::ue::UeConfig *GetConfigByUe(nr::ue::UeConfig *refConfig, int ueIndex)
 
     if (c->supi.has_value())
         IncrementNumber(c->supi->value, ueIndex);
-
-    IncrementNumber(c->imei, ueIndex);
+    if (c->imei.has_value())
+        IncrementNumber(*c->imei, ueIndex);
+    if (c->imeiSv.has_value())
+        IncrementNumber(*c->imeiSv, ueIndex);
 
     return c;
 }

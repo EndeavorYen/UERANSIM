@@ -50,13 +50,14 @@ struct SessionConfig
 struct UeConfig
 {
     /* Read from config file */
+    std::optional<Supi> supi;
+    Plmn plmn;
     OctetString key;
     OctetString opC;
     OpType opType;
     OctetString amf;
-    std::string imei;
-    std::optional<Supi> supi;
-    Plmn plmn;
+    std::optional<std::string> imei;
+    std::optional<std::string> imeiSv;
     std::vector<SliceSupport> nssais;
     SupportedAlgs supportedAlgs;
     std::vector<std::string> gnbSearchList;
@@ -71,8 +72,10 @@ struct UeConfig
     {
         if (supi.has_value())
             return supi->type + "-" + supi->value;
-        if (imei.length() > 0)
-            return imei;
+        if (imei.has_value())
+            return "imei-" + *imei;
+        if (imeiSv.has_value())
+            return "imeisv-" + *imeiSv;
         return "unknown-ue";
     }
 
@@ -82,8 +85,10 @@ struct UeConfig
             return "";
         if (supi.has_value())
             return supi->value + "|";
-        if (imei.length() > 0)
-            return imei + "|";
+        if (imei.has_value())
+            return *imei + "|";
+        if (imeiSv.has_value())
+            return *imeiSv + "|";
         return "unknown-ue|";
     }
 };

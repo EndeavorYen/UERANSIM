@@ -7,7 +7,7 @@
 //
 
 #include "ue_rrc_task.hpp"
-#include <rrc/rrc_encode.hpp>
+#include <rrc/encode.hpp>
 
 namespace nr::ue
 {

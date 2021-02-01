@@ -6,4 +6,4 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "rrc_encode.hpp"
+#include "encode.hpp"

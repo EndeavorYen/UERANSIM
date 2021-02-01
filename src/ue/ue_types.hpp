@@ -50,18 +50,18 @@ struct SessionConfig
 struct UeConfig
 {
     /* Read from config file */
-    std::optional<Supi> supi;
-    Plmn plmn;
-    OctetString key;
-    OctetString opC;
-    OpType opType;
-    OctetString amf;
-    std::optional<std::string> imei;
-    std::optional<std::string> imeiSv;
-    std::vector<SliceSupport> nssais;
-    SupportedAlgs supportedAlgs;
-    std::vector<std::string> gnbSearchList;
-    std::vector<SessionConfig> initSessions;
+    std::optional<Supi> supi{};
+    Plmn plmn{};
+    OctetString key{};
+    OctetString opC{};
+    OpType opType{};
+    OctetString amf{};
+    std::optional<std::string> imei{};
+    std::optional<std::string> imeiSv{};
+    std::vector<SliceSupport> nssais{};
+    SupportedAlgs supportedAlgs{};
+    std::vector<std::string> gnbSearchList{};
+    std::vector<SessionConfig> initSessions{};
 
     /* Assigned by program */
     bool emulationMode;
@@ -95,14 +95,14 @@ struct UeConfig
 
 struct TaskBase
 {
-    UeConfig *config;
-    LogBase *logBase;
-    app::INodeListener *nodeListener;
+    UeConfig *config{};
+    LogBase *logBase{};
+    app::INodeListener *nodeListener{};
 
-    NtsTask *appTask;
-    NtsTask *mrTask;
-    NtsTask *nasTask;
-    NtsTask *rrcTask;
+    NtsTask *appTask{};
+    NtsTask *mrTask{};
+    NtsTask *nasTask{};
+    NtsTask *rrcTask{};
 };
 
 struct UeTimers
@@ -218,7 +218,7 @@ struct PduSession
     static constexpr const int MIN_ID = 1;
     static constexpr const int MAX_ID = 15;
 
-    int id;
+    int id{};
     bool isEstablished{};
 
     nas::EPduSessionType sessionType{};
@@ -236,7 +236,7 @@ struct ProcedureTransaction
     static constexpr const int MIN_ID = 1;
     static constexpr const int MAX_ID = 254;
 
-    int id;
+    int id{};
 };
 
 struct SmContext
@@ -361,15 +361,15 @@ struct UeStatusInfo
 {
     struct UePduSessionInfo
     {
-        std::string type;
-        std::string address;
+        std::string type{};
+        std::string address{};
     };
 
-    bool isConnected;
-    std::string connectedGnb;
-    std::string mmState;
-    std::string rmState;
-    std::optional<UePduSessionInfo> pduSessions[16];
+    bool isConnected{};
+    std::string connectedGnb{};
+    std::string mmState{};
+    std::string rmState{};
+    std::optional<UePduSessionInfo> pduSessions[16]{};
 };
 
 const char *RmStateName(ERmState state);

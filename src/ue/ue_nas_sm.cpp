@@ -46,7 +46,7 @@ int NasTask::allocatePduSessionId(const SessionConfig &config)
     arr[id].sessionType = config.type;
     arr[id].sNssai = config.sNssai;
 
-    logger->debug("PSI allocated: %d", id);
+    logger->debug("PSI[%d] allocated", id);
     return id;
 }
 

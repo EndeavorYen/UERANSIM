@@ -12,7 +12,7 @@
 #include <thread>
 #include <udp/server_task.hpp>
 #include <unordered_map>
-#include <urs/rls/urs_rls_gnb_entity.hpp>
+#include <urs/rls/gnb_entity.hpp>
 #include <utils/logger.hpp>
 #include <utils/nts.hpp>
 #include <vector>

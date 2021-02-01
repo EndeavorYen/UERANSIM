@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "urs_rls_gnb_entity.hpp"
+#include "gnb_entity.hpp"
 
 #include <utils/common.hpp>
 #include <utils/constants.hpp>

@@ -9,7 +9,7 @@
 #include "ue_mr_rls.hpp"
 #include "ue/ue_nts.hpp"
 
-#include <urs/rls/urs_rls_ue_entity.hpp>
+#include <urs/rls/ue_entity.hpp>
 
 namespace nr::ue
 {

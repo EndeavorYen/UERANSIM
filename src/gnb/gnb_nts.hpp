@@ -10,7 +10,7 @@
 
 #include <rrc/rrc.hpp>
 #include <sctp/sctp.hpp>
-#include <urs/rls/urs_rls.hpp>
+#include <urs/rls/rls.hpp>
 #include <utility>
 #include <utils/network.hpp>
 #include <utils/nts.hpp>

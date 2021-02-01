@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "urs_rls_ue_entity.hpp"
+#include "ue_entity.hpp"
 
 #include <utils/common.hpp>
 #include <utils/constants.hpp>

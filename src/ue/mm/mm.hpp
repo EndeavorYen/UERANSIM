@@ -12,8 +12,8 @@
 #include "ue_types.hpp"
 
 #include <crypt_milenage.hpp>
-#include <nas.hpp>
-#include <nas_timer.hpp>
+#include <nas/nas.hpp>
+#include <nas/nas_timer.hpp>
 #include <nts.hpp>
 #include <octet_string.hpp>
 

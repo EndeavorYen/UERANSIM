@@ -10,7 +10,7 @@
 
 #include "gnb_types.hpp"
 
-#include <app_monitor.hpp>
+#include <app/monitor.hpp>
 #include <logger.hpp>
 #include <string>
 

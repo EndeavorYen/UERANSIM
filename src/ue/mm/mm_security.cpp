@@ -8,7 +8,7 @@
 
 #include "mm.hpp"
 #include "nas/nas_keys.hpp"
-#include <nas_utils.hpp>
+#include <nas/nas_utils.hpp>
 
 namespace nr::ue
 {

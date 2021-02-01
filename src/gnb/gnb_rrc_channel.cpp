@@ -9,7 +9,7 @@
 #include "gnb_mr_task.hpp"
 #include "gnb_rrc_task.hpp"
 
-#include <rrc_encode.hpp>
+#include <rrc/rrc_encode.hpp>
 
 #include <ASN_RRC_UL-CCCH-Message.h>
 #include <ASN_RRC_UL-DCCH-Message.h>

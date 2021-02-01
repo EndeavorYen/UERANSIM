@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include <nas.hpp>
-#include <nas_timer.hpp>
+#include <nas/nas.hpp>
+#include <nas/nas_timer.hpp>
 #include <nts.hpp>
 #include <ue_nts.hpp>
 #include <ue_types.hpp>

@@ -11,7 +11,7 @@
 #include <network.hpp>
 #include <nts.hpp>
 #include <octet_string.hpp>
-#include <rrc.hpp>
+#include <rrc/rrc.hpp>
 #include <sctp.hpp>
 #include <urs_rls.hpp>
 #include <utility>

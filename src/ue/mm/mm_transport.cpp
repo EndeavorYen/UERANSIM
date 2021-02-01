@@ -9,7 +9,7 @@
 #include "mm.hpp"
 #include "nas/nas_enc.hpp"
 #include "sm/sm.hpp"
-#include <nas_utils.hpp>
+#include <nas/nas_utils.hpp>
 
 namespace nr::ue
 {

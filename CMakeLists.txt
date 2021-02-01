@@ -3,6 +3,8 @@ project(ueransim)
 
 set(CMAKE_CXX_STANDARD 17)
 
+include_directories(src)
+
 #################### SUB DIRECTORIES ####################
 
 add_subdirectory(src/asn/asn1c)

@@ -10,7 +10,7 @@
 #include "ue_rrc_task.hpp"
 
 #include <asn_utils.hpp>
-#include <rrc_encode.hpp>
+#include <rrc/rrc_encode.hpp>
 
 #include <ASN_RRC_DLInformationTransfer-IEs.h>
 #include <ASN_RRC_DLInformationTransfer.h>

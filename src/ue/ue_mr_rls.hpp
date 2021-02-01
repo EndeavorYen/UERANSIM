@@ -9,7 +9,7 @@
 #pragma once
 
 #include "ue_types.hpp"
-#include <nas.hpp>
+#include <nas/nas.hpp>
 #include <urs_rls_ue_entity.hpp>
 
 namespace nr::ue

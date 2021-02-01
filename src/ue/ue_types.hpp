@@ -8,11 +8,11 @@
 
 #pragma once
 
-#include <app_monitor.hpp>
+#include <app/monitor.hpp>
 #include <common_types.hpp>
 #include <logger.hpp>
-#include <nas.hpp>
-#include <nas_timer.hpp>
+#include <nas/nas.hpp>
+#include <nas/nas_timer.hpp>
 #include <nts.hpp>
 #include <octet_string.hpp>
 

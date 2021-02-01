@@ -7,15 +7,13 @@
 //
 
 #include "gnb_gtp_task.hpp"
-#include "gnb_mr_task.hpp"
 
 #include <constants.hpp>
-#include <gtp_encode.hpp>
-#include <gtp_message.hpp>
+#include <gtp/gtp_encode.hpp>
+#include <gtp/gtp_message.hpp>
 #include <libc_error.hpp>
 
 #include <ASN_NGAP_QosFlowSetupRequestItem.h>
-#include <ASN_NGAP_QosFlowSetupRequestList.h>
 
 namespace nr::gnb
 {

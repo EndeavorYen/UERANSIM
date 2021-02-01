@@ -10,4 +10,3 @@ target_compile_options(rlc PRIVATE -Wall -Wextra -pedantic -Wno-unused-parameter
 target_link_libraries(rlc utils)
 target_link_libraries(rlc sctp)
 
-target_include_directories(rlc PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

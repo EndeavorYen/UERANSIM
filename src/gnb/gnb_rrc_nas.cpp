@@ -9,7 +9,7 @@
 #include "gnb_ngap_task.hpp"
 #include "gnb_rrc_task.hpp"
 
-#include <rrc_encode.hpp>
+#include <rrc/rrc_encode.hpp>
 
 #include <ASN_RRC_DL-DCCH-Message.h>
 #include <ASN_RRC_DLInformationTransfer-IEs.h>

@@ -7,7 +7,7 @@
 //
 
 #include "nas_task.hpp"
-#include "ue_nts.hpp"
+#include <ue/ue_nts.hpp>
 
 static const int NTS_TIMER_ID_NAS_TIMER_CYCLE = 1;
 static const int NTS_TIMER_ID_MM_CYCLE = 2;

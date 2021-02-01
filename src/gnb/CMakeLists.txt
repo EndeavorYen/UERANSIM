@@ -6,7 +6,6 @@ file(GLOB SRC_FILES *.cpp)
 add_library(gnb ${HDR_FILES} ${SRC_FILES})
 
 target_compile_options(gnb PRIVATE -Wall -Wextra -pedantic -Wno-unused-parameter)
-target_include_directories(gnb PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(gnb utils)
 target_link_libraries(gnb sctp-cxx)

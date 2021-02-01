@@ -10,9 +10,9 @@
 
 #include <nas/nas.hpp>
 #include <nas/nas_timer.hpp>
+#include <ue/ue_nts.hpp>
+#include <ue/ue_types.hpp>
 #include <utils/nts.hpp>
-#include <ue_nts.hpp>
-#include <ue_types.hpp>
 
 namespace nr::ue
 {

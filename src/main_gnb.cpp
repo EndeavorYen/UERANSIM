@@ -9,7 +9,7 @@
 #include <utils/common.hpp>
 #include <utils/constants.hpp>
 #include <cxxopts/cxxopts.hpp>
-#include <gnb.hpp>
+#include <gnb/gnb.hpp>
 #include <iostream>
 #include <unistd.h>
 #include <yaml-cpp/yaml.h>

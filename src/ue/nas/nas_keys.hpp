@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "ue_types.hpp"
+#include <ue/ue_types.hpp>
 
 namespace nr::ue::keys
 {

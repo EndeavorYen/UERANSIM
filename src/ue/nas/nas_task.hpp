@@ -8,15 +8,13 @@
 
 #pragma once
 
-#include "mm/mm.hpp"
-#include "sm/sm.hpp"
-
-#include "ue_nts.hpp"
-#include "ue_types.hpp"
-
 #include <crypt/crypt_milenage.hpp>
 #include <nas/nas.hpp>
 #include <nas/nas_timer.hpp>
+#include <ue/mm/mm.hpp>
+#include <ue/sm/sm.hpp>
+#include <ue/ue_nts.hpp>
+#include <ue/ue_types.hpp>
 #include <utils/nts.hpp>
 
 namespace nr::ue

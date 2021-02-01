@@ -7,8 +7,8 @@
 //
 
 #include "mm.hpp"
-#include "nas/nas_enc.hpp"
-#include "sm/sm.hpp"
+#include <ue/nas/nas_enc.hpp>
+#include <ue/sm/sm.hpp>
 #include <nas/nas_utils.hpp>
 
 namespace nr::ue

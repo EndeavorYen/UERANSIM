@@ -16,11 +16,6 @@
 #include <nts.hpp>
 #include <octet_string.hpp>
 
-namespace nas
-{
-
-} // namespace nas
-
 namespace nr::ue
 {
 

@@ -6,9 +6,9 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "mr_task.hpp"
-#include "gnb/gnb_nts.hpp"
-#include "mr_rls.hpp"
+#include "task.hpp"
+#include "gnb/nts.hpp"
+#include "rls.hpp"
 
 #include <utils/constants.hpp>
 #include <utils/libc_error.hpp>

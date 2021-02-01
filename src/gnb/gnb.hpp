@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "gnb_types.hpp"
+#include "types.hpp"
 
 #include <app/monitor.hpp>
 #include <utils/logger.hpp>

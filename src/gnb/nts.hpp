@@ -16,7 +16,7 @@
 #include <utils/nts.hpp>
 #include <utils/octet_string.hpp>
 
-#include "gnb_types.hpp"
+#include "types.hpp"
 
 namespace nr::gnb
 {

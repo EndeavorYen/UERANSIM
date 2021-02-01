@@ -7,12 +7,12 @@
 //
 
 #include "gnb.hpp"
-#include "gnb/app/app_task.hpp"
-#include "gnb/gtp/gtp_task.hpp"
-#include "gnb/mr/mr_task.hpp"
-#include "gnb/ngap/ngap_task.hpp"
-#include "gnb/rrc/rrc_task.hpp"
-#include "gnb/sctp/sctp_task.hpp"
+#include "gnb/app/task.hpp"
+#include "gnb/gtp/task.hpp"
+#include "gnb/mr/task.hpp"
+#include "gnb/ngap/task.hpp"
+#include "gnb/rrc/task.hpp"
+#include "gnb/sctp/task.hpp"
 
 nr::gnb::GNodeB::GNodeB(GnbConfig *config, app::INodeListener *nodeListener)
 {

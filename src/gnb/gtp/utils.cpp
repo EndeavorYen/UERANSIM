@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gtp_utils.hpp"
+#include "utils.hpp"
 
 #include <utils/common.hpp>
 

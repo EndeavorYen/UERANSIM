@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "rrc_task.hpp"
-#include "gnb/gnb_nts.hpp"
+#include "task.hpp"
+#include "gnb/nts.hpp"
 
 #include <rrc/encode.hpp>
 

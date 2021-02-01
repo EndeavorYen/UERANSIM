@@ -16,8 +16,8 @@
 #include <utils/nts.hpp>
 #include <vector>
 
-#include "gnb/gnb_nts.hpp"
-#include "gtp_utils.hpp"
+#include "gnb/nts.hpp"
+#include "utils.hpp"
 
 namespace nr::gnb
 {

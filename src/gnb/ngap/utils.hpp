@@ -13,7 +13,7 @@
 #include <utils/common.hpp>
 #include <utils/common_types.hpp>
 
-#include "gnb/gnb_types.hpp"
+#include "gnb/types.hpp"
 
 #include <asn/ngap/ASN_NGAP_Cause.h>
 #include <asn/ngap/ASN_NGAP_GUAMI.h>

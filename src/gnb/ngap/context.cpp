@@ -6,9 +6,9 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb/gtp/gtp_task.hpp"
-#include "ngap_task.hpp"
-#include "ngap_utils.hpp"
+#include "gnb/gtp/task.hpp"
+#include "task.hpp"
+#include "utils.hpp"
 
 #include <asn/ngap/ASN_NGAP_AMF-UE-NGAP-ID.h>
 #include <asn/ngap/ASN_NGAP_SuccessfulOutcome.h>

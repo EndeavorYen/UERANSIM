@@ -27,7 +27,7 @@ add_subdirectory(src/ue)
 
 #################### GNB EXECUTABLE ####################
 
-add_executable(nr-gnb src/main_gnb.cpp)
+add_executable(nr-gnb src/gnb.cpp)
 
 target_link_libraries(nr-gnb pthread)
 
@@ -47,7 +47,7 @@ target_link_libraries(nr-gnb crypt)
 
 #################### UE EXECUTABLE ####################
 
-add_executable(nr-ue src/main_ue.cpp)
+add_executable(nr-ue src/ue.cpp)
 target_link_libraries(nr-ue pthread)
 target_compile_options(nr-ue PRIVATE -Wall -Wextra -pedantic)
 
@@ -62,7 +62,7 @@ target_link_libraries(nr-ue crypt)
 target_link_libraries(nr-ue ue)
 
 ###################### IF BINDER ######################
-add_library(devbnd SHARED src/main_binder.cpp)
+add_library(devbnd SHARED src/binder.cpp)
 target_compile_options(devbnd PRIVATE -D_GNU_SOURCE -Wall -Wextra)
 target_link_options(devbnd PRIVATE -nostartfiles)
 target_link_libraries(devbnd dl)

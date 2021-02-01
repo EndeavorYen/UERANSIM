@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
+#include "msg.hpp"
 #include "nas_encode.hpp"
-#include "nas_msg.hpp"
 
 namespace nas
 {

@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "nas_ie4.hpp"
+#include "ie4.hpp"
 
 namespace nas
 {

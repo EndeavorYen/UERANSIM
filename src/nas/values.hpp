@@ -13,7 +13,7 @@
 #include <optional>
 #include <utility>
 
-#include "nas_enums.hpp"
+#include "enums.hpp"
 
 namespace nas
 {

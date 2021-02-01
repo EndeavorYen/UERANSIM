@@ -13,7 +13,7 @@
 
 #include <crypt/milenage.hpp>
 #include <nas/nas.hpp>
-#include <nas/nas_timer.hpp>
+#include <nas/timer.hpp>
 #include <utils/nts.hpp>
 #include <utils/octet_string.hpp>
 

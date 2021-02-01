@@ -10,7 +10,7 @@
 
 #include <crypt/milenage.hpp>
 #include <nas/nas.hpp>
-#include <nas/nas_timer.hpp>
+#include <nas/timer.hpp>
 #include <ue/mm/mm.hpp>
 #include <ue/sm/sm.hpp>
 #include <ue/ue_nts.hpp>

@@ -8,11 +8,11 @@
 
 #pragma once
 
-#include "nas_ie1.hpp"
-#include "nas_ie2.hpp"
-#include "nas_ie3.hpp"
-#include "nas_ie4.hpp"
-#include "nas_ie6.hpp"
+#include "ie1.hpp"
+#include "ie2.hpp"
+#include "ie3.hpp"
+#include "ie4.hpp"
+#include "ie6.hpp"
 
 namespace nas
 {

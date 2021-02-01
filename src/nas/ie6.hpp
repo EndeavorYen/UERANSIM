@@ -8,10 +8,10 @@
 
 #pragma once
 
+#include "base.hpp"
 #include "eap.hpp"
-#include "nas_base.hpp"
-#include "nas_ie4.hpp"
-#include "nas_values.hpp"
+#include "ie4.hpp"
+#include "values.hpp"
 
 #include <utils/common_types.hpp>
 

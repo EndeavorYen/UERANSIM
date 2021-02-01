@@ -9,7 +9,7 @@
 #pragma once
 
 #include <nas/nas.hpp>
-#include <nas/nas_timer.hpp>
+#include <nas/timer.hpp>
 #include <ue/ue_nts.hpp>
 #include <ue/ue_types.hpp>
 #include <utils/nts.hpp>

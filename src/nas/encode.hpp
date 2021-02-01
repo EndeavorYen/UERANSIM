@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "nas_msg.hpp"
+#include "msg.hpp"
 
 namespace nas
 {

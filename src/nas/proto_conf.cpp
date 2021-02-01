@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "nas_proto_conf.hpp"
+#include "proto_conf.hpp"
 
 #include <utils/octet_buffer.hpp>
 

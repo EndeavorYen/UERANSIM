@@ -9,10 +9,10 @@
 #pragma once
 
 #include <app/monitor.hpp>
+#include <nas/nas.hpp>
+#include <nas/timer.hpp>
 #include <utils/common_types.hpp>
 #include <utils/logger.hpp>
-#include <nas/nas.hpp>
-#include <nas/nas_timer.hpp>
 #include <utils/nts.hpp>
 #include <utils/octet_string.hpp>
 

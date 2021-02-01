@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "nas_base.hpp"
-#include "nas_values.hpp"
+#include "base.hpp"
+#include "values.hpp"
 
 #include <optional>
 #include <utility>

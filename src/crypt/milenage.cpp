@@ -7,7 +7,7 @@
 //
 
 #include "milenage.hpp"
-#include "external/milenage.hpp"
+#include <crypt-ext/milenage.hpp>
 
 namespace crypto::milenage
 {
@@ -41,4 +41,4 @@ OctetString CalculateOpC(const OctetString &op, const OctetString &key)
     return opc;
 }
 
-} // namespace crypt::milenage
+} // namespace crypto::milenage

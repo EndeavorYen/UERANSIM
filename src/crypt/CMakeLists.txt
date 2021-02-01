@@ -12,3 +12,4 @@ add_library(crypt ${EXT_C_HDR_FILES} ${EXT_C_SRC_FILES} ${EXT_CXX_HDR_FILES} ${E
 target_compile_options(crypt PUBLIC -Wno-format-security)
 
 target_link_libraries(crypt utils)
+target_link_libraries(crypt ext)

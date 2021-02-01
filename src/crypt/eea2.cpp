@@ -7,7 +7,7 @@
 //
 
 #include "eea2.hpp"
-#include "external/aes.hpp"
+#include <crypt-ext/aes.hpp>
 #include <utils/bit_buffer.hpp>
 #include <utils/octet_string.hpp>
 
@@ -44,4 +44,4 @@ void Decrypt(uint32_t count, int bearer, int direction, OctetString &message, co
     Cipher(key.data(), iv, message.data(), message.length());
 }
 
-} // namespace crypt::eea2
+} // namespace crypto::eea2

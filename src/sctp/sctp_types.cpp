@@ -6,14 +6,4 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#pragma once
-
-namespace sctp
-{
-
-enum class PayloadProtocolId
-{
-    NGAP = 60
-};
-
-} // namespace sctp
+#include "sctp_types.hpp"

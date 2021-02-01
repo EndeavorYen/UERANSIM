@@ -8,8 +8,7 @@
 
 #pragma once
 
-#include "sctp_handler.hpp"
-#include "sctp_protocol_id.hpp"
+#include "sctp_types.hpp"
 
 #include <string>
 #include <vector>

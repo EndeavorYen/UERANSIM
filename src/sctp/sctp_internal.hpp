@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "sctp_handler.hpp"
+#include "sctp_types.hpp"
 #include <string>
 
 namespace sctp

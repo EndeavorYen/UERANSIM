@@ -161,7 +161,7 @@ void SctpTask::receiveSctpConnectionSetupRequest(NwSctpConnectionRequest *msg)
     {
         client->bind(msg->localAddress, msg->localPort);
     }
-    catch (const SctpError &exc)
+    catch (const sctp::SctpError &exc)
     {
         logger->err("Binding to %s:%d failed. %s", msg->localAddress.c_str(), msg->localPort, exc.what());
         delete msg;
@@ -173,7 +173,7 @@ void SctpTask::receiveSctpConnectionSetupRequest(NwSctpConnectionRequest *msg)
     {
         client->connect(msg->remoteAddress, msg->remotePort);
     }
-    catch (const SctpError &exc)
+    catch (const sctp::SctpError &exc)
     {
         logger->err("Connecting to %s:%d failed. %s", msg->remoteAddress.c_str(), msg->remotePort, exc.what());
         delete msg;

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "sctp_types.hpp"
+#include "types.hpp"
 
 #include <string>
 #include <vector>

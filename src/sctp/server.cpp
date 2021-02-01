@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "sctp_server.hpp"
-#include "sctp_internal.hpp"
+#include "server.hpp"
+#include "internal.hpp"
 
 sctp::SctpServer::SctpServer(const std::string &address, uint16_t port) : sd(0)
 {

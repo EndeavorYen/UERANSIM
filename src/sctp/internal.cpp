@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "sctp_types.hpp"
-#include "sctp_internal.hpp"
+#include "internal.hpp"
+#include "types.hpp"
 
 #include <arpa/inet.h>
 #include <utils/common.hpp>

@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "sctp_client.hpp"
-#include "sctp_internal.hpp"
+#include "client.hpp"
+#include "internal.hpp"
 
 sctp::SctpClient::SctpClient(PayloadProtocolId ppid) : sd(CreateSocket()), ppid(ppid)
 {

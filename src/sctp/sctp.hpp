@@ -8,6 +8,6 @@
 
 #pragma once
 
-#include "sctp_types.hpp"
-#include "sctp_client.hpp"
-#include "sctp_server.hpp"
+#include "client.hpp"
+#include "server.hpp"
+#include "types.hpp"

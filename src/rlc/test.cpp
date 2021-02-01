@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "rlc_test.hpp"
+#include "test.hpp"
 #include "rlc.hpp"
 #include <utils/nts.hpp>
 

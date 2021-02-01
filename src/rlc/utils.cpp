@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "rlc_utils.hpp"
-#include "rlc_encoder.hpp"
+#include "utils.hpp"
+#include "encoder.hpp"
 
 int rlc::StatusPdu::calculatedSize(bool isShortSn) const
 {

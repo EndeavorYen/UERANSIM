@@ -6,9 +6,9 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "rlc_entity_am.hpp"
-#include "rlc_encoder.hpp"
-#include "rlc_func.hpp"
+#include "entity_am.hpp"
+#include "encoder.hpp"
+#include "func.hpp"
 
 #include <cassert>
 

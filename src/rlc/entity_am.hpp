@@ -9,7 +9,7 @@
 #pragma once
 
 #include "rlc.hpp"
-#include "rlc_utils.hpp"
+#include "utils.hpp"
 #include <bitset>
 #include <utils/linked_list.hpp>
 

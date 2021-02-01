@@ -7,9 +7,9 @@
 //
 
 #include "rlc.hpp"
-#include "rlc_entity_am.hpp"
-#include "rlc_entity_tm.hpp"
-#include "rlc_entity_um.hpp"
+#include "entity_am.hpp"
+#include "entity_tm.hpp"
+#include "entity_um.hpp"
 
 namespace rlc
 {

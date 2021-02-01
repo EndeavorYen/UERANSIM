@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "rlc_entity_tm.hpp"
-#include "rlc_func.hpp"
+#include "entity_tm.hpp"
+#include "func.hpp"
 
 #include <cstring>
 

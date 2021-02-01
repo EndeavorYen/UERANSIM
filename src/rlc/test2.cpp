@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "rlc_test2.hpp"
+#include "test2.hpp"
 #include "rlc.hpp"
 
 #include <cinttypes>

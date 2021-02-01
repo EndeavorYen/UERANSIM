@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "crypt_uea2.hpp"
-#include "crypt_snow3g.hpp"
+#include "uea2.hpp"
+#include "snow3g.hpp"
 
 using u8 = uint8_t;
 using u32 = uint32_t;

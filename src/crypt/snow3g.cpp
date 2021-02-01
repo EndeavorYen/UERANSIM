@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "crypt_snow3g.hpp"
+#include "snow3g.hpp"
 
 static thread_local uint32_t LFSR_S0 = 0x00;
 static thread_local uint32_t LFSR_S1 = 0x00;

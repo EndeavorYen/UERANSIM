@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "nas_eap.hpp"
+#include "eap.hpp"
 
 #include <memory>
 

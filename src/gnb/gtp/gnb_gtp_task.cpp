@@ -8,9 +8,9 @@
 
 #include "gnb_gtp_task.hpp"
 
+#include <gtp/encode.hpp>
+#include <gtp/message.hpp>
 #include <utils/constants.hpp>
-#include <gtp/gtp_encode.hpp>
-#include <gtp/gtp_message.hpp>
 #include <utils/libc_error.hpp>
 
 #include <asn/ngap/ASN_NGAP_QosFlowSetupRequestItem.h>

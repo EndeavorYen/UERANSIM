@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <crypt/crypt_milenage.hpp>
+#include <crypt/milenage.hpp>
 #include <nas/nas.hpp>
 #include <nas/nas_timer.hpp>
 #include <ue/mm/mm.hpp>

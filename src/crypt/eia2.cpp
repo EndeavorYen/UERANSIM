@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "crypt_eia2.hpp"
-#include "crypt_mac.hpp"
+#include "eia2.hpp"
+#include "mac.hpp"
 
 #include <utils/bits.hpp>
 

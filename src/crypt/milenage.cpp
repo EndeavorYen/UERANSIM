@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "crypt_milenage.hpp"
+#include "milenage.hpp"
 #include "external/milenage.hpp"
 
 namespace crypto::milenage

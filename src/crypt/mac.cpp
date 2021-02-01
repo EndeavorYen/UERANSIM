@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "crypt_mac.hpp"
+#include "mac.hpp"
 #include "external/cmac.hpp"
 #include "external/hmac-sha256.h"
 

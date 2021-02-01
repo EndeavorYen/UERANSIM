@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "crypt_zuc.hpp"
+#include "zuc.hpp"
 
 static thread_local uint32_t LFSR_S[16];
 

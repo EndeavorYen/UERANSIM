@@ -6,7 +6,7 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "crypt_eea2.hpp"
+#include "eea2.hpp"
 #include "external/aes.hpp"
 #include <utils/bit_buffer.hpp>
 #include <utils/octet_string.hpp>

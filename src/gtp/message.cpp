@@ -6,14 +6,4 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#pragma once
-
-#include "gtp_message.hpp"
-
-namespace gtp
-{
-
-bool EncodeGtpMessage(const GtpMessage &msg, OctetString &stream);
-GtpMessage *DecodeGtpMessage(const OctetBuffer &stream);
-
-} // namespace gtp
+#include "message.hpp"

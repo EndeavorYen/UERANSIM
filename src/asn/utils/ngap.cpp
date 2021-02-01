@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "asn_ngap.hpp"
-#include "asn_utils.hpp"
+#include "ngap.hpp"
+#include "utils.hpp"
 
 #include <algorithm>
 #include <functional>

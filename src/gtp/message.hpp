@@ -13,7 +13,7 @@
 #include <optional>
 #include <vector>
 
-#include "gtp_ext_header.hpp"
+#include "ext_header.hpp"
 
 namespace gtp
 {

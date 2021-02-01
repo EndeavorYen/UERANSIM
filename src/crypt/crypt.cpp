@@ -7,13 +7,13 @@
 //
 
 #include "crypt.hpp"
-#include "crypt_eea2.hpp"
-#include "crypt_eea3.hpp"
-#include "crypt_eia2.hpp"
-#include "crypt_mac.hpp"
-#include "crypt_snow3g.hpp"
-#include "crypt_uea2.hpp"
-#include "crypt_zuc.hpp"
+#include "eea2.hpp"
+#include "eea3.hpp"
+#include "eia2.hpp"
+#include "mac.hpp"
+#include "snow3g.hpp"
+#include "uea2.hpp"
+#include "zuc.hpp"
 
 namespace crypto
 {

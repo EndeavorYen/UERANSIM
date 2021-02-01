@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "asn_ngap_msg.hpp"
+#include "ngap_msg.hpp"
 
 #include <algorithm>
 #include <asn_SEQUENCE_OF.h>

@@ -12,8 +12,8 @@
 #include "gnb_ngap_task.hpp"
 #include "gnb_ngap_utils.hpp"
 
-#include <asn/utils/asn_ngap.hpp>
-#include <asn/utils/asn_utils.hpp>
+#include <asn/utils/ngap.hpp>
+#include <asn/utils/utils.hpp>
 
 #include <asn/ngap/ASN_NGAP_AMF-UE-NGAP-ID.h>
 #include <asn/ngap/ASN_NGAP_InitiatingMessage.h>

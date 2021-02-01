@@ -6,8 +6,8 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "crypt_eea3.hpp"
-#include "crypt_zuc.hpp"
+#include "eea3.hpp"
+#include "zuc.hpp"
 
 namespace crypto::eea3
 {

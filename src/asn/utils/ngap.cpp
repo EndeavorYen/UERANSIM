@@ -68,6 +68,7 @@
 #include <asn/ngap/ASN_NGAP_PathSwitchRequestAcknowledge.h>
 #include <asn/ngap/ASN_NGAP_PathSwitchRequestFailure.h>
 #include <asn/ngap/ASN_NGAP_PrivateMessage.h>
+#include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
 #include <asn/ngap/ASN_NGAP_RANConfigurationUpdate.h>
 #include <asn/ngap/ASN_NGAP_RANConfigurationUpdateAcknowledge.h>
 #include <asn/ngap/ASN_NGAP_RANConfigurationUpdateFailure.h>
@@ -95,8 +96,6 @@
 #include <asn/ngap/ASN_NGAP_UplinkUEAssociatedNRPPaTransport.h>
 #include <asn/ngap/ASN_NGAP_WriteReplaceWarningRequest.h>
 #include <asn/ngap/ASN_NGAP_WriteReplaceWarningResponse.h>
-
-#include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
 
 namespace asn::ngap
 {

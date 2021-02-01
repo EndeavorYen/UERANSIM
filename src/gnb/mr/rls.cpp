@@ -7,13 +7,13 @@
 //
 
 #include "rls.hpp"
-#include "gnb/nts.hpp"
+#include <gnb/nts.hpp>
 
 namespace nr::gnb
 {
 
 GnbRls::GnbRls(std::string nodeName, std::unique_ptr<Logger> logger, NtsTask *targetTask)
-    : RlsGnbEntity(std::move(nodeName)), logger(std::move(logger)), targetTask(targetTask)
+    : RlsGnbEntity(std::move(nodeName)), logger(std::move(logger)), targetTask(targetTask), isN1Ready{}
 {
 }
 

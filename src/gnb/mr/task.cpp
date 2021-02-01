@@ -7,9 +7,8 @@
 //
 
 #include "task.hpp"
-#include "gnb/nts.hpp"
 #include "rls.hpp"
-
+#include <gnb/nts.hpp>
 #include <utils/constants.hpp>
 #include <utils/libc_error.hpp>
 

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "gnb/types.hpp"
+#include <gnb/types.hpp>
 #include <memory>
 #include <thread>
 #include <unordered_map>

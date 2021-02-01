@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include <utils/logger.hpp>
 #include <memory>
-#include <utils/nts.hpp>
-#include <utils/scoped_thread.hpp>
 #include <sctp/sctp.hpp>
 #include <thread>
 #include <unordered_map>
+#include <utils/logger.hpp>
+#include <utils/nts.hpp>
+#include <utils/scoped_thread.hpp>
 #include <vector>
 
 #include "gnb/nts.hpp"

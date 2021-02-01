@@ -7,7 +7,6 @@
 //
 
 #include "task.hpp"
-
 #include <asn/rrc/ASN_RRC_RRCSetupRequest.h>
 #include <asn/rrc/ASN_RRC_ULInformationTransfer-IEs.h>
 #include <asn/rrc/ASN_RRC_ULInformationTransfer.h>

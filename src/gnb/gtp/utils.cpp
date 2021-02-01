@@ -7,7 +7,6 @@
 //
 
 #include "utils.hpp"
-
 #include <utils/common.hpp>
 
 namespace nr::gnb

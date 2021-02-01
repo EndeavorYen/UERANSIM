@@ -8,8 +8,7 @@
 
 #pragma once
 
-#include "gnb/types.hpp"
-
+#include <gnb/types.hpp>
 #include <memory>
 #include <unordered_map>
 
@@ -89,4 +88,4 @@ class RateLimiter : public IRateLimiter
     void updateSessionDownlinkLimit(uint64_t pduSession, int64_t limit) override;
 };
 
-} // namespace nr::gtp
+} // namespace nr::gnb

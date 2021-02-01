@@ -6,16 +6,15 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb/gtp/task.hpp"
 #include "task.hpp"
 #include "utils.hpp"
 
 #include <asn/ngap/ASN_NGAP_AMF-UE-NGAP-ID.h>
-#include <asn/ngap/ASN_NGAP_SuccessfulOutcome.h>
 #include <asn/ngap/ASN_NGAP_InitialContextSetupRequest.h>
 #include <asn/ngap/ASN_NGAP_InitialContextSetupResponse.h>
 #include <asn/ngap/ASN_NGAP_NGAP-PDU.h>
 #include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
+#include <asn/ngap/ASN_NGAP_SuccessfulOutcome.h>
 #include <asn/ngap/ASN_NGAP_UE-NGAP-ID-pair.h>
 #include <asn/ngap/ASN_NGAP_UE-NGAP-IDs.h>
 #include <asn/ngap/ASN_NGAP_UEAggregateMaximumBitRate.h>

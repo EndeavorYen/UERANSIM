@@ -9,13 +9,13 @@
 #pragma once
 
 #include <app/monitor.hpp>
-#include <utils/logger.hpp>
-#include <utils/nts.hpp>
 #include <optional>
 #include <unordered_map>
+#include <utils/logger.hpp>
+#include <utils/nts.hpp>
 
-#include "gnb/nts.hpp"
-#include "gnb/types.hpp"
+#include <gnb/nts.hpp>
+#include <gnb/types.hpp>
 
 extern "C" struct ASN_NGAP_NGAP_PDU;
 extern "C" struct ASN_NGAP_NGSetupResponse;

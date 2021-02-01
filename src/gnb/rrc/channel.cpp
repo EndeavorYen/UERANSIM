@@ -6,13 +6,10 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb/mr/task.hpp"
-#include "gnb/rrc/task.hpp"
-
-#include <rrc/encode.hpp>
-
+#include "task.hpp"
 #include <asn/rrc/ASN_RRC_UL-CCCH-Message.h>
 #include <asn/rrc/ASN_RRC_UL-DCCH-Message.h>
+#include <rrc/encode.hpp>
 
 namespace nr::gnb
 {

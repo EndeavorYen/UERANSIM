@@ -6,14 +6,13 @@
 // and subject to the terms and conditions defined in LICENSE file.
 //
 
-#include "gnb/app/task.hpp"
-#include "gnb/nts.hpp"
 #include "encode.hpp"
 #include "task.hpp"
 #include "utils.hpp"
-
 #include <asn/utils/ngap.hpp>
 #include <asn/utils/utils.hpp>
+#include <gnb/app/task.hpp>
+#include <gnb/nts.hpp>
 
 #include <asn/ngap/ASN_NGAP_AMF-UE-NGAP-ID.h>
 #include <asn/ngap/ASN_NGAP_InitiatingMessage.h>

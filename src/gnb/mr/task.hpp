@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "rls.hpp"
+#include <gnb/nts.hpp>
 #include <memory>
 #include <thread>
 #include <udp/server_task.hpp>
@@ -16,9 +18,6 @@
 #include <utils/logger.hpp>
 #include <utils/nts.hpp>
 #include <vector>
-
-#include "gnb/nts.hpp"
-#include "rls.hpp"
 
 namespace nr::gnb
 {

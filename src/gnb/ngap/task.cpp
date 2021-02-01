@@ -7,7 +7,7 @@
 //
 
 #include "task.hpp"
-#include "gnb/app/task.hpp"
+#include <gnb/app/task.hpp>
 
 #include <utils/common.hpp>
 

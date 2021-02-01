@@ -17,15 +17,15 @@
 #include <asn_ngap.hpp>
 #include <asn_utils.hpp>
 
-#include <ASN_NGAP_AMF-UE-NGAP-ID.h>
-#include <ASN_NGAP_InitiatingMessage.h>
-#include <ASN_NGAP_NGAP-PDU.h>
-#include <ASN_NGAP_ProtocolIE-Field.h>
-#include <ASN_NGAP_RAN-UE-NGAP-ID.h>
-#include <ASN_NGAP_SuccessfulOutcome.h>
-#include <ASN_NGAP_UnsuccessfulOutcome.h>
-#include <ASN_NGAP_UserLocationInformation.h>
-#include <ASN_NGAP_UserLocationInformationNR.h>
+#include <asn/ngap/ASN_NGAP_AMF-UE-NGAP-ID.h>
+#include <asn/ngap/ASN_NGAP_InitiatingMessage.h>
+#include <asn/ngap/ASN_NGAP_NGAP-PDU.h>
+#include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
+#include <asn/ngap/ASN_NGAP_RAN-UE-NGAP-ID.h>
+#include <asn/ngap/ASN_NGAP_SuccessfulOutcome.h>
+#include <asn/ngap/ASN_NGAP_UnsuccessfulOutcome.h>
+#include <asn/ngap/ASN_NGAP_UserLocationInformation.h>
+#include <asn/ngap/ASN_NGAP_UserLocationInformationNR.h>
 
 namespace nr::gnb
 {

@@ -12,10 +12,10 @@
 #include <asn_utils.hpp>
 #include <rrc/rrc_encode.hpp>
 
-#include <ASN_RRC_DLInformationTransfer-IEs.h>
-#include <ASN_RRC_DLInformationTransfer.h>
-#include <ASN_RRC_ULInformationTransfer-IEs.h>
-#include <ASN_RRC_ULInformationTransfer.h>
+#include <asn/rrc/ASN_RRC_DLInformationTransfer-IEs.h>
+#include <asn/rrc/ASN_RRC_DLInformationTransfer.h>
+#include <asn/rrc/ASN_RRC_ULInformationTransfer-IEs.h>
+#include <asn/rrc/ASN_RRC_ULInformationTransfer.h>
 
 namespace nr::ue
 {

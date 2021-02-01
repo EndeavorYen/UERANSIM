@@ -13,7 +13,7 @@
 #include <gtp/gtp_message.hpp>
 #include <libc_error.hpp>
 
-#include <ASN_NGAP_QosFlowSetupRequestItem.h>
+#include <asn/ngap/ASN_NGAP_QosFlowSetupRequestItem.h>
 
 namespace nr::gnb
 {

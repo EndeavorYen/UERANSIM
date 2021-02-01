@@ -11,9 +11,9 @@
 
 #include <rrc/rrc_encode.hpp>
 
-#include <ASN_RRC_DL-DCCH-Message.h>
-#include <ASN_RRC_DLInformationTransfer-IEs.h>
-#include <ASN_RRC_DLInformationTransfer.h>
+#include <asn/rrc/ASN_RRC_DL-DCCH-Message.h>
+#include <asn/rrc/ASN_RRC_DLInformationTransfer-IEs.h>
+#include <asn/rrc/ASN_RRC_DLInformationTransfer.h>
 
 namespace nr::gnb
 {

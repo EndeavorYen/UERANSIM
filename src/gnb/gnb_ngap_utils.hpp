@@ -15,12 +15,12 @@
 
 #include "gnb_types.hpp"
 
-#include <ASN_NGAP_Cause.h>
-#include <ASN_NGAP_GUAMI.h>
-#include <ASN_NGAP_PagingDRX.h>
-#include <ASN_NGAP_ProtocolIE-Field.h>
-#include <ASN_NGAP_SliceSupportItem.h>
-#include <ASN_NGAP_UE-NGAP-ID-pair.h>
+#include <asn/ngap/ASN_NGAP_Cause.h>
+#include <asn/ngap/ASN_NGAP_GUAMI.h>
+#include <asn/ngap/ASN_NGAP_PagingDRX.h>
+#include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
+#include <asn/ngap/ASN_NGAP_SliceSupportItem.h>
+#include <asn/ngap/ASN_NGAP_UE-NGAP-ID-pair.h>
 
 namespace nr::gnb::ngap_utils
 {

@@ -7,7 +7,7 @@
 //
 
 #include "nas_keys.hpp"
-#include <crypt.hpp>
+#include <crypt/crypt.hpp>
 
 static const int N_NAS_enc_alg = 0x01;
 static const int N_NAS_int_alg = 0x02;

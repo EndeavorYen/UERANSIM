@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <ASN_NGAP_QosFlowSetupRequestList.h>
+#include <asn/ngap/ASN_NGAP_QosFlowSetupRequestList.h>
 #include <app/monitor.hpp>
 #include <asn_utils.hpp>
 #include <common_types.hpp>

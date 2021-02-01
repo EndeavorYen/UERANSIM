@@ -10,8 +10,8 @@
 
 #include <rrc/rrc_encode.hpp>
 
-#include <ASN_RRC_UL-CCCH-Message.h>
-#include <ASN_RRC_UL-DCCH-Message.h>
+#include <asn/rrc/ASN_RRC_UL-CCCH-Message.h>
+#include <asn/rrc/ASN_RRC_UL-DCCH-Message.h>
 
 namespace nr::ue
 {

@@ -8,7 +8,6 @@ file(GLOB HDR_FILES *.hpp)
 file(GLOB SRC_FILES *.cpp)
 
 add_library(crypt ${EXT_C_HDR_FILES} ${EXT_C_SRC_FILES} ${EXT_CXX_HDR_FILES} ${EXT_CXX_SRC_FILES} ${HDR_FILES} ${SRC_FILES})
-target_include_directories(crypt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_compile_options(crypt PUBLIC -Wno-format-security)
 

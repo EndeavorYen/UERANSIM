@@ -9,5 +9,3 @@ target_compile_options(udp PRIVATE -Wall -Wextra -pedantic -Wno-unused-parameter
 
 target_link_libraries(udp utils)
 target_link_libraries(udp sctp)
-
-target_include_directories(udp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

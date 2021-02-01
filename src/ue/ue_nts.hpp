@@ -14,7 +14,7 @@
 #include <nts.hpp>
 #include <octet_string.hpp>
 #include <rrc/rrc.hpp>
-#include <urs_rls.hpp>
+#include <urs/urs_rls.hpp>
 #include <utility>
 
 namespace nr::ue

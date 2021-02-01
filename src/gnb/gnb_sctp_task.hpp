@@ -12,7 +12,7 @@
 #include <memory>
 #include <nts.hpp>
 #include <scoped_thread.hpp>
-#include <sctp.hpp>
+#include <sctp/sctp.hpp>
 #include <thread>
 #include <unordered_map>
 #include <vector>

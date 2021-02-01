@@ -11,14 +11,14 @@
 #include "gnb_ngap_utils.hpp"
 #include "gnb_rrc_task.hpp"
 
-#include <ASN_NGAP_DownlinkNASTransport.h>
-#include <ASN_NGAP_InitialUEMessage.h>
-#include <ASN_NGAP_InitiatingMessage.h>
-#include <ASN_NGAP_NASNonDeliveryIndication.h>
-#include <ASN_NGAP_NGAP-PDU.h>
-#include <ASN_NGAP_ProtocolIE-Field.h>
-#include <ASN_NGAP_RerouteNASRequest.h>
-#include <ASN_NGAP_UplinkNASTransport.h>
+#include <asn/ngap/ASN_NGAP_DownlinkNASTransport.h>
+#include <asn/ngap/ASN_NGAP_InitialUEMessage.h>
+#include <asn/ngap/ASN_NGAP_InitiatingMessage.h>
+#include <asn/ngap/ASN_NGAP_NASNonDeliveryIndication.h>
+#include <asn/ngap/ASN_NGAP_NGAP-PDU.h>
+#include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
+#include <asn/ngap/ASN_NGAP_RerouteNASRequest.h>
+#include <asn/ngap/ASN_NGAP_UplinkNASTransport.h>
 
 namespace nr::gnb
 {

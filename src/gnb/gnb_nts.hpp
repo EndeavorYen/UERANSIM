@@ -12,8 +12,8 @@
 #include <nts.hpp>
 #include <octet_string.hpp>
 #include <rrc/rrc.hpp>
-#include <sctp.hpp>
-#include <urs_rls.hpp>
+#include <sctp/sctp.hpp>
+#include <urs/urs_rls.hpp>
 #include <utility>
 
 #include "gnb_types.hpp"

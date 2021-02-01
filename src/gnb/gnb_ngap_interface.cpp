@@ -10,18 +10,18 @@
 #include "gnb_ngap_task.hpp"
 #include "gnb_ngap_utils.hpp"
 
-#include <ASN_NGAP_AMFName.h>
-#include <ASN_NGAP_BroadcastPLMNItem.h>
-#include <ASN_NGAP_ErrorIndication.h>
-#include <ASN_NGAP_GlobalGNB-ID.h>
-#include <ASN_NGAP_InitiatingMessage.h>
-#include <ASN_NGAP_NGAP-PDU.h>
-#include <ASN_NGAP_NGSetupRequest.h>
-#include <ASN_NGAP_PLMNSupportItem.h>
-#include <ASN_NGAP_ProtocolIE-Field.h>
-#include <ASN_NGAP_ServedGUAMIItem.h>
-#include <ASN_NGAP_SliceSupportItem.h>
-#include <ASN_NGAP_SupportedTAItem.h>
+#include <asn/ngap/ASN_NGAP_AMFName.h>
+#include <asn/ngap/ASN_NGAP_BroadcastPLMNItem.h>
+#include <asn/ngap/ASN_NGAP_ErrorIndication.h>
+#include <asn/ngap/ASN_NGAP_GlobalGNB-ID.h>
+#include <asn/ngap/ASN_NGAP_InitiatingMessage.h>
+#include <asn/ngap/ASN_NGAP_NGAP-PDU.h>
+#include <asn/ngap/ASN_NGAP_NGSetupRequest.h>
+#include <asn/ngap/ASN_NGAP_PLMNSupportItem.h>
+#include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
+#include <asn/ngap/ASN_NGAP_ServedGUAMIItem.h>
+#include <asn/ngap/ASN_NGAP_SliceSupportItem.h>
+#include <asn/ngap/ASN_NGAP_SupportedTAItem.h>
 
 namespace nr::gnb
 {

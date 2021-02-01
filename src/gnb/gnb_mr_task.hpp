@@ -12,9 +12,9 @@
 #include <memory>
 #include <nts.hpp>
 #include <thread>
-#include <udp_server_task.hpp>
+#include <udp/udp_server_task.hpp>
 #include <unordered_map>
-#include <urs_rls_gnb_entity.hpp>
+#include <urs/urs_rls_gnb_entity.hpp>
 #include <vector>
 
 #include "gnb_mr_rls.hpp"

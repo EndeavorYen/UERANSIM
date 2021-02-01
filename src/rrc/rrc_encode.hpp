@@ -11,14 +11,14 @@
 #include <asn_utils.hpp>
 #include <octet_string.hpp>
 
-#include <ASN_RRC_BCCH-BCH-Message.h>
-#include <ASN_RRC_BCCH-DL-SCH-Message.h>
-#include <ASN_RRC_DL-CCCH-Message.h>
-#include <ASN_RRC_DL-DCCH-Message.h>
-#include <ASN_RRC_PCCH-Message.h>
-#include <ASN_RRC_UL-CCCH-Message.h>
-#include <ASN_RRC_UL-CCCH1-Message.h>
-#include <ASN_RRC_UL-DCCH-Message.h>
+#include <asn/rrc/ASN_RRC_BCCH-BCH-Message.h>
+#include <asn/rrc/ASN_RRC_BCCH-DL-SCH-Message.h>
+#include <asn/rrc/ASN_RRC_DL-CCCH-Message.h>
+#include <asn/rrc/ASN_RRC_DL-DCCH-Message.h>
+#include <asn/rrc/ASN_RRC_PCCH-Message.h>
+#include <asn/rrc/ASN_RRC_UL-CCCH-Message.h>
+#include <asn/rrc/ASN_RRC_UL-CCCH1-Message.h>
+#include <asn/rrc/ASN_RRC_UL-DCCH-Message.h>
 
 namespace rrc::encode
 {

@@ -10,7 +10,7 @@
 
 #include <nts.hpp>
 #include <octet_string.hpp>
-#include <udp_server.hpp>
+#include <udp/udp_server.hpp>
 
 namespace udp
 {

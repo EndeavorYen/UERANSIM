@@ -10,20 +10,20 @@
 #include "gnb_ngap_task.hpp"
 #include "gnb_ngap_utils.hpp"
 
-#include <ASN_NGAP_AMF-UE-NGAP-ID.h>
-#include <ASN_NGAP_SuccessfulOutcome.h>
-#include <ASN_NGAP_InitialContextSetupRequest.h>
-#include <ASN_NGAP_InitialContextSetupResponse.h>
-#include <ASN_NGAP_NGAP-PDU.h>
-#include <ASN_NGAP_ProtocolIE-Field.h>
-#include <ASN_NGAP_UE-NGAP-ID-pair.h>
-#include <ASN_NGAP_UE-NGAP-IDs.h>
-#include <ASN_NGAP_UEAggregateMaximumBitRate.h>
-#include <ASN_NGAP_UEContextModificationRequest.h>
-#include <ASN_NGAP_UEContextModificationResponse.h>
-#include <ASN_NGAP_UEContextReleaseCommand.h>
-#include <ASN_NGAP_UEContextReleaseComplete.h>
-#include <ASN_NGAP_UESecurityCapabilities.h>
+#include <asn/ngap/ASN_NGAP_AMF-UE-NGAP-ID.h>
+#include <asn/ngap/ASN_NGAP_SuccessfulOutcome.h>
+#include <asn/ngap/ASN_NGAP_InitialContextSetupRequest.h>
+#include <asn/ngap/ASN_NGAP_InitialContextSetupResponse.h>
+#include <asn/ngap/ASN_NGAP_NGAP-PDU.h>
+#include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
+#include <asn/ngap/ASN_NGAP_UE-NGAP-ID-pair.h>
+#include <asn/ngap/ASN_NGAP_UE-NGAP-IDs.h>
+#include <asn/ngap/ASN_NGAP_UEAggregateMaximumBitRate.h>
+#include <asn/ngap/ASN_NGAP_UEContextModificationRequest.h>
+#include <asn/ngap/ASN_NGAP_UEContextModificationResponse.h>
+#include <asn/ngap/ASN_NGAP_UEContextReleaseCommand.h>
+#include <asn/ngap/ASN_NGAP_UEContextReleaseComplete.h>
+#include <asn/ngap/ASN_NGAP_UESecurityCapabilities.h>
 
 namespace nr::gnb
 {

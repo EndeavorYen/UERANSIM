@@ -8,9 +8,9 @@
 
 #include "gnb_rrc_task.hpp"
 
-#include <ASN_RRC_RRCSetupRequest.h>
-#include <ASN_RRC_ULInformationTransfer-IEs.h>
-#include <ASN_RRC_ULInformationTransfer.h>
+#include <asn/rrc/ASN_RRC_RRCSetupRequest.h>
+#include <asn/rrc/ASN_RRC_ULInformationTransfer-IEs.h>
+#include <asn/rrc/ASN_RRC_ULInformationTransfer.h>
 
 namespace nr::gnb
 {

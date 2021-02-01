@@ -10,22 +10,22 @@
 #include "gnb_ngap_task.hpp"
 #include "gnb_ngap_utils.hpp"
 
-#include <ASN_NGAP_AssociatedQosFlowItem.h>
-#include <ASN_NGAP_AssociatedQosFlowList.h>
-#include <ASN_NGAP_GTPTunnel.h>
-#include <ASN_NGAP_PDUSessionResourceFailedToSetupItemSURes.h>
-#include <ASN_NGAP_PDUSessionResourceSetupItemSUReq.h>
-#include <ASN_NGAP_PDUSessionResourceSetupItemSURes.h>
-#include <ASN_NGAP_PDUSessionResourceSetupRequest.h>
-#include <ASN_NGAP_PDUSessionResourceSetupRequestTransfer.h>
-#include <ASN_NGAP_PDUSessionResourceSetupResponse.h>
-#include <ASN_NGAP_PDUSessionResourceSetupResponseTransfer.h>
-#include <ASN_NGAP_PDUSessionResourceSetupUnsuccessfulTransfer.h>
-#include <ASN_NGAP_ProtocolIE-Field.h>
-#include <ASN_NGAP_QosFlowPerTNLInformationItem.h>
-#include <ASN_NGAP_QosFlowPerTNLInformationList.h>
-#include <ASN_NGAP_QosFlowSetupRequestItem.h>
-#include <ASN_NGAP_QosFlowSetupRequestList.h>
+#include <asn/ngap/ASN_NGAP_AssociatedQosFlowItem.h>
+#include <asn/ngap/ASN_NGAP_AssociatedQosFlowList.h>
+#include <asn/ngap/ASN_NGAP_GTPTunnel.h>
+#include <asn/ngap/ASN_NGAP_PDUSessionResourceFailedToSetupItemSURes.h>
+#include <asn/ngap/ASN_NGAP_PDUSessionResourceSetupItemSUReq.h>
+#include <asn/ngap/ASN_NGAP_PDUSessionResourceSetupItemSURes.h>
+#include <asn/ngap/ASN_NGAP_PDUSessionResourceSetupRequest.h>
+#include <asn/ngap/ASN_NGAP_PDUSessionResourceSetupRequestTransfer.h>
+#include <asn/ngap/ASN_NGAP_PDUSessionResourceSetupResponse.h>
+#include <asn/ngap/ASN_NGAP_PDUSessionResourceSetupResponseTransfer.h>
+#include <asn/ngap/ASN_NGAP_PDUSessionResourceSetupUnsuccessfulTransfer.h>
+#include <asn/ngap/ASN_NGAP_ProtocolIE-Field.h>
+#include <asn/ngap/ASN_NGAP_QosFlowPerTNLInformationItem.h>
+#include <asn/ngap/ASN_NGAP_QosFlowPerTNLInformationList.h>
+#include <asn/ngap/ASN_NGAP_QosFlowSetupRequestItem.h>
+#include <asn/ngap/ASN_NGAP_QosFlowSetupRequestList.h>
 
 namespace nr::gnb
 {

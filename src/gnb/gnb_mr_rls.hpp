@@ -10,7 +10,7 @@
 
 #include <logger.hpp>
 #include <nts.hpp>
-#include <urs_rls_gnb_entity.hpp>
+#include <urs/urs_rls_gnb_entity.hpp>
 
 namespace nr::gnb
 {

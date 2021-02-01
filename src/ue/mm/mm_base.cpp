@@ -173,16 +173,6 @@ void NasMm::receivePlmnSearchResponse(const NwPlmnSearchResponse &msg)
     switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NORMAL_SERVICE);
 }
 
-void NasMm::receiveMmStatus(const nas::FiveGMmStatus &msg)
-{
-    receiveMmCause(msg.mmCause);
-}
-
-void NasMm::receiveMmCause(const nas::IE5gMmCause &msg)
-{
-    m_logger->err("MM cause received: %s", nas::utils::EnumToString(msg.value));
-}
-
 void NasMm::onTimerExpire(nas::NasTimer &timer)
 {
     switch (timer.getCode())

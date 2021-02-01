@@ -14,6 +14,26 @@
 namespace nr::ue
 {
 
+void NasMm::sendNasMessage(const nas::PlainMmMessage &msg)
+{
+    // TODO trigger on send
+
+    OctetString pdu{};
+
+    if (m_currentNsCtx.has_value() && (m_currentNsCtx->integrity != nas::ETypeOfIntegrityProtectionAlgorithm::IA0 ||
+                                       m_currentNsCtx->ciphering != nas::ETypeOfCipheringAlgorithm::EA0))
+    {
+        auto secured = nas_enc::Encrypt(*m_currentNsCtx, msg);
+        nas::EncodeNasMessage(*secured, pdu);
+    }
+    else
+    {
+        nas::EncodeNasMessage(msg, pdu);
+    }
+
+    m_base->rrcTask->push(new NwUplinkNasDelivery(std::move(pdu)));
+}
+
 void NasMm::receiveNasMessage(const nas::NasMessage &msg)
 {
     if (msg.epd == nas::EExtendedProtocolDiscriminator::SESSION_MANAGEMENT_MESSAGES)
@@ -181,26 +201,6 @@ void NasMm::receiveDlNasTransport(const nas::DlNasTransport &msg)
     m_sm->receiveSmMessage((const nas::SmMessage &)(*sm));
 }
 
-void NasMm::sendNasMessage(const nas::PlainMmMessage &msg)
-{
-    // TODO trigger on send
-
-    OctetString pdu{};
-
-    if (m_currentNsCtx.has_value() && (m_currentNsCtx->integrity != nas::ETypeOfIntegrityProtectionAlgorithm::IA0 ||
-                                       m_currentNsCtx->ciphering != nas::ETypeOfCipheringAlgorithm::EA0))
-    {
-        auto secured = nas_enc::Encrypt(*m_currentNsCtx, msg);
-        nas::EncodeNasMessage(*secured, pdu);
-    }
-    else
-    {
-        nas::EncodeNasMessage(msg, pdu);
-    }
-
-    m_base->rrcTask->push(new NwUplinkNasDelivery(std::move(pdu)));
-}
-
 void NasMm::sendMmStatus(nas::EMmCause cause)
 {
     m_logger->warn("Sending MM Status with cause %s", nas::utils::EnumToString(cause));
@@ -208,6 +208,16 @@ void NasMm::sendMmStatus(nas::EMmCause cause)
     nas::FiveGMmStatus m;
     m.mmCause.value = cause;
     sendNasMessage(m);
+}
+
+void NasMm::receiveMmStatus(const nas::FiveGMmStatus &msg)
+{
+    receiveMmCause(msg.mmCause);
+}
+
+void NasMm::receiveMmCause(const nas::IE5gMmCause &msg)
+{
+    m_logger->err("MM cause received: %s", nas::utils::EnumToString(msg.value));
 }
 
 } // namespace nr::ue

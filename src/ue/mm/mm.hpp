@@ -56,14 +56,14 @@ class NasMm
     /* Base */
     void onStart(NasSm *sm);
     void onQuit();
-    void onTimerExpire(nas::NasTimer &timer);
     void triggerMmCycle();
     void performMmCycle();
+    void onTimerExpire(nas::NasTimer &timer);
     void receivePlmnSearchResponse(const NwPlmnSearchResponse &msg);
 
     /* Transport */
-    void receiveNasMessage(const nas::NasMessage &msg);
     void sendNasMessage(const nas::PlainMmMessage &msg);
+    void receiveNasMessage(const nas::NasMessage &msg);
 
   private:
     /* Base */

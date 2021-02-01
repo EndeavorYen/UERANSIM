@@ -13,20 +13,6 @@
 namespace nr::ue
 {
 
-void NasSm::establishInitialSessions()
-{
-    if (m_base->config->initSessions.empty())
-    {
-        m_logger->warn("No initial PDU sessions are configured");
-        return;
-    }
-
-    m_logger->info("Initial PDU sessions are establishing [%d#]", m_base->config->initSessions.size());
-
-    for (auto &sess : m_base->config->initSessions)
-        sendEstablishmentRequest(sess);
-}
-
 void NasSm::sendEstablishmentRequest(const SessionConfig &config)
 {
     m_logger->debug("Sending PDU session establishment request");

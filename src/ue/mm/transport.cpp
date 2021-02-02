@@ -33,11 +33,16 @@ void NasMm::sendNasMessage(const nas::PlainMmMessage &msg)
 
     if (m_cmState == ECmState::CM_IDLE)
     {
-        m_base->rrcTask->push(new NwInitialNasDelivery(std::move(pdu), ASN_RRC_EstablishmentCause_mo_Data));
+        auto *nw = new NwUeNasToRrc(NwUeNasToRrc::INITIAL_NAS_DELIVERY);
+        nw->nasPdu = std::move(pdu);
+        nw->rrcEstablishmentCause = ASN_RRC_EstablishmentCause_mo_Data;
+        m_base->rrcTask->push(nw);
     }
     else
     {
-        m_base->rrcTask->push(new NwUplinkNasDelivery(std::move(pdu)));
+        auto *nw = new NwUeNasToRrc(NwUeNasToRrc::UPLINK_NAS_DELIVERY);
+        nw->nasPdu = std::move(pdu);
+        m_base->rrcTask->push(nw);
     }
 }
 

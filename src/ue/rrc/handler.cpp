@@ -28,12 +28,12 @@
 namespace nr::ue
 {
 
-void UeRrcTask::deliverInitialNas(NwInitialNasDelivery &msg)
+void UeRrcTask::deliverInitialNas(OctetString &&nasPdu, long establishmentCause)
 {
     if (m_state != ERrcState::RRC_IDLE)
     {
         m_logger->warn("Initial NAS delivery while not in RRC_IDLE, treating as uplink delivery");
-        deliverUplinkNas(std::move(msg.nasPdu));
+        deliverUplinkNas(std::move(nasPdu));
         return;
     }
 
@@ -48,13 +48,13 @@ void UeRrcTask::deliverInitialNas(NwInitialNasDelivery &msg)
     asn::SetBitStringLong<39>(utils::Random64(), m_initialId.choice.randomValue);
 
     auto &r = pdu->message.choice.c1->choice.rrcSetupRequest = asn::New<ASN_RRC_RRCSetupRequest>();
-    r->rrcSetupRequest.establishmentCause = msg.rrcEstablishmentCause;
+    r->rrcSetupRequest.establishmentCause = establishmentCause;
     asn::SetSpareBits<1>(r->rrcSetupRequest.spare);
     asn::DeepCopy(asn_DEF_ASN_RRC_InitialUE_Identity, m_initialId, &r->rrcSetupRequest.ue_Identity);
 
     // TODO: Start T300
 
-    m_initialNasPdu = std::move(msg.nasPdu);
+    m_initialNasPdu = std::move(nasPdu);
     m_lastSetupReq = ERrcLastSetupRequest::SETUP_REQUEST;
     sendRrcMessage(pdu);
 }
@@ -102,7 +102,8 @@ void UeRrcTask::receiveRrcSetup(const ASN_RRC_RRCSetup &msg)
 
     m_logger->info("RRC connection established");
 
-    m_base->nasTask->push(new NwUeRrcConnectionSetup());
+    m_base->nasTask->push(new NwUeRrcToNas(NwUeRrcToNas::RRC_CONNECTION_SETUP));
+
     sendRrcMessage(pdu);
 }
 
@@ -116,7 +117,10 @@ void UeRrcTask::receiveDownlinkInformationTransfer(const ASN_RRC_DLInformationTr
 {
     OctetString nasPdu =
         asn::GetOctetString(*msg.criticalExtensions.choice.dlInformationTransfer->dedicatedNAS_Message);
-    m_base->nasTask->push(new NwDownlinkNasDelivery(std::move(nasPdu)));
+
+    auto *nw = new NwUeRrcToNas(NwUeRrcToNas::NAS_DELIVERY);
+    nw->nasPdu = std::move(nasPdu);
+    m_base->nasTask->push(nw);
 }
 
 } // namespace nr::ue

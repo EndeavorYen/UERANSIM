@@ -59,7 +59,7 @@ class NasMm
     void triggerMmCycle();
     void performMmCycle();
     void onTimerExpire(nas::NasTimer &timer);
-    void receivePlmnSearchResponse(const NwPlmnSearchResponse &msg);
+    void receivePlmnSearchResponse(const NwUeRrcToNas &msg);
     void receivePlmnSearchFailure();
     void receiveRrcConnectionSetup();
 

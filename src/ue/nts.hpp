@@ -20,74 +20,126 @@
 namespace nr::ue
 {
 
-struct NwDownlinkNasDelivery : NtsMessage
+struct NwUeMrToMr : NtsMessage
 {
-    OctetString nasPdu;
+    enum PR
+    {
+        RLS_CONNECTED,
+        RLS_RELEASED,
+        RLS_SEARCH_FAILURE,
+        RLS_START_WAITING_TIMER,
+        RLS_SEND_OVER_UDP,
+        RLS_RECEIVE_OVER_UDP
+    } present;
 
-    explicit NwDownlinkNasDelivery(OctetString &&nasPdu)
-        : NtsMessage(NtsMessageType::UE_DOWNLINK_NAS_DELIVERY), nasPdu(std::move(nasPdu))
+    // RLS_CONNECTED
+    std::string gnbName{};
+
+    // RLS_RELEASED
+    // RLS_SEARCH_FAILURE
+    rls::ECause cause{};
+
+    // RLS_START_WAITING_TIMER
+    int period{};
+
+    // RLS_SEND_OVER_UDP
+    InetAddress address{};
+
+    // RLS_RECEIVE_OVER_UDP
+    rls::EPayloadType type{};
+
+    // RLS_SEND_OVER_UDP
+    // RLS_RECEIVE_OVER_UDP
+    OctetString pdu{};
+
+    explicit NwUeMrToMr(PR present) : NtsMessage(NtsMessageType::UE_MR_TO_MR), present(present)
     {
     }
 };
 
-struct NwUplinkNasDelivery : NtsMessage
+struct NwUeMrToRrc : NtsMessage
 {
-    OctetString nasPdu;
+    enum PR
+    {
+        PLMN_SEARCH_RESPONSE,
+        PLMN_SEARCH_FAILURE,
+    } present;
 
-    explicit NwUplinkNasDelivery(OctetString &&nasPdu)
-        : NtsMessage(NtsMessageType::UE_UPLINK_NAS_DELIVERY), nasPdu(std::move(nasPdu))
+    // PLMN_SEARCH_RESPONSE
+    std::string gnbName{};
+
+    explicit NwUeMrToRrc(PR present) : NtsMessage(NtsMessageType::UE_MR_TO_RRC), present(present)
     {
     }
 };
 
-struct NwInitialNasDelivery : NtsMessage
+struct NwUeRrcToNas : NtsMessage
 {
-    OctetString nasPdu;
-    long rrcEstablishmentCause;
+    enum PR
+    {
+        NAS_DELIVERY,
+        PLMN_SEARCH_RESPONSE,
+        PLMN_SEARCH_FAILURE,
+        RRC_CONNECTION_SETUP,
+    } present;
 
-    NwInitialNasDelivery(OctetString &&nasPdu, long rrcEstablishmentCause)
-        : NtsMessage(NtsMessageType::UE_INITIAL_NAS_DELIVERY), nasPdu(std::move(nasPdu)),
-          rrcEstablishmentCause(rrcEstablishmentCause)
+    // NAS_DELIVERY
+    OctetString nasPdu{};
+
+    // PLMN_SEARCH_RESPONSE
+    std::string gnbName{};
+
+    explicit NwUeRrcToNas(PR present) : NtsMessage(NtsMessageType::UE_RRC_TO_NAS), present(present)
     {
     }
 };
 
-struct NwNasTimerExpire : NtsMessage
+struct NwUeNasToRrc : NtsMessage
 {
-    nas::NasTimer *timer;
+    enum PR
+    {
+        PLMN_SEARCH_REQUEST,
+        INITIAL_NAS_DELIVERY,
+        UPLINK_NAS_DELIVERY
+    } present;
 
-    explicit NwNasTimerExpire(nas::NasTimer *timer) : NtsMessage(NtsMessageType::NAS_TIMER_EXPIRE), timer(timer)
+    // INITIAL_NAS_DELIVERY
+    // UPLINK_NAS_DELIVERY
+    OctetString nasPdu{};
+
+    // INITIAL_NAS_DELIVERY
+    long rrcEstablishmentCause{};
+
+    explicit NwUeNasToRrc(PR present) : NtsMessage(NtsMessageType::UE_NAS_TO_RRC), present(present)
     {
     }
 };
 
-struct NwPlmnSearchRequest : NtsMessage
+struct NwUeRrcToMr : NtsMessage
 {
-    NwPlmnSearchRequest() : NtsMessage(NtsMessageType::UE_MR_PLMN_SEARCH_REQUEST)
+    enum PR
+    {
+        PLMN_SEARCH_REQUEST,
+    } present;
+
+    explicit NwUeRrcToMr(PR present) : NtsMessage(NtsMessageType::UE_RRC_TO_MR), present(present)
     {
     }
 };
 
-struct NwPlmnSearchResponse : NtsMessage
+struct NwUeNasToNas : NtsMessage
 {
-    std::string gnbName;
-
-    explicit NwPlmnSearchResponse(std::string gnbName)
-        : NtsMessage(NtsMessageType::UE_MR_PLMN_SEARCH_RESPONSE), gnbName(std::move(gnbName))
+    enum PR
     {
-    }
-};
+        PERFORM_MM_CYCLE,
+        NAS_TIMER_EXPIRE,
+        ESTABLISH_INITIAL_SESSIONS
+    } present;
 
-struct NwPlmnSearchFailure : NtsMessage
-{
-    NwPlmnSearchFailure() : NtsMessage(NtsMessageType::UE_MR_PLMN_SEARCH_FAILURE)
-    {
-    }
-};
+    // NAS_TIMER_EXPIRE
+    nas::NasTimer *timer{};
 
-struct NwPerformMmCycle : NtsMessage
-{
-    NwPerformMmCycle() : NtsMessage(NtsMessageType::NAS_PERFORM_MM_CYCLE)
+    explicit NwUeNasToNas(PR present) : NtsMessage(NtsMessageType::UE_NAS_TO_NAS), present(present)
     {
     }
 };
@@ -110,72 +162,6 @@ struct NwUeDownlinkRrc : NtsMessage
 
     NwUeDownlinkRrc(rrc::RrcChannel channel, OctetString &&rrcPdu)
         : NtsMessage(NtsMessageType::UE_MR_DOWNLINK_RRC), channel(channel), rrcPdu(std::move(rrcPdu))
-    {
-    }
-};
-
-struct NwRlsConnected : NtsMessage
-{
-    std::string gnbName;
-
-    explicit NwRlsConnected(std::string gnbName)
-        : NtsMessage(NtsMessageType::UE_RLS_CONNECTED), gnbName(std::move(gnbName))
-    {
-    }
-};
-
-struct NwRlsReleased : NtsMessage
-{
-    rls::ECause cause;
-
-    explicit NwRlsReleased(rls::ECause cause) : NtsMessage(NtsMessageType::UE_RLS_RELEASED), cause(cause)
-    {
-    }
-};
-
-struct NwRlsSearchFailure : NtsMessage
-{
-    rls::ECause cause;
-
-    explicit NwRlsSearchFailure(rls::ECause cause) : NtsMessage(NtsMessageType::UE_RLS_SEARCH_FAILURE), cause(cause)
-    {
-    }
-};
-
-struct NwRlsStartWaitingTimer : NtsMessage
-{
-    int period;
-
-    explicit NwRlsStartWaitingTimer(int period) : NtsMessage(NtsMessageType::UE_RLS_START_WAITING_TIMER), period(period)
-    {
-    }
-};
-
-struct NwDownlinkPayload : NtsMessage
-{
-    rls::EPayloadType type;
-    OctetString payload;
-
-    NwDownlinkPayload(rls::EPayloadType type, OctetString &&payload)
-        : NtsMessage(NtsMessageType::UE_RLS_DOWNLINK_PAYLOAD), type(type), payload(std::move(payload))
-    {
-    }
-};
-
-struct NwRlsSendPdu : NtsMessage
-{
-    InetAddress address;
-    OctetString pdu;
-
-    NwRlsSendPdu(const InetAddress &address, OctetString &&pdu)
-        : NtsMessage(NtsMessageType::UE_RLS_SEND_PDU), address(address), pdu(std::move(pdu))
-    {
-    }
-};
-
-struct NwTriggerInitialSessionCreate : NtsMessage
-{
-    NwTriggerInitialSessionCreate() : NtsMessage(NtsMessageType::UE_TRIGGER_INITIAL_SESSION_CREATE)
     {
     }
 };
@@ -249,13 +235,6 @@ struct NwUeDownlinkData : NtsMessage
 
     NwUeDownlinkData(int psi, OctetString &&data)
         : NtsMessage(NtsMessageType::UE_MR_DOWNLINK_DATA), psi(psi), data(std::move(data))
-    {
-    }
-};
-
-struct NwUeRrcConnectionSetup : NtsMessage
-{
-    NwUeRrcConnectionSetup() : NtsMessage(NtsMessageType::UE_RRC_CONNECTION_SETUP)
     {
     }
 };

@@ -47,7 +47,7 @@ void NasMm::onQuit()
 
 void NasMm::triggerMmCycle()
 {
-    m_nas->push(new NwPerformMmCycle());
+    m_nas->push(new NwUeNasToNas(NwUeNasToNas::PERFORM_MM_CYCLE));
 }
 
 void NasMm::performMmCycle()
@@ -75,7 +75,7 @@ void NasMm::performMmCycle()
         long elapsedMs = current - m_lastPlmnSearchTrigger;
         if (elapsedMs > 50)
         {
-            m_base->rrcTask->push(new NwPlmnSearchRequest());
+            m_base->rrcTask->push(new NwUeNasToRrc(NwUeNasToRrc::PLMN_SEARCH_REQUEST));
             m_lastPlmnSearchTrigger = current;
         }
         return;
@@ -204,7 +204,7 @@ void NasMm::onSwitchCmState(ECmState oldState, ECmState newState)
 {
 }
 
-void NasMm::receivePlmnSearchResponse(const NwPlmnSearchResponse &msg)
+void NasMm::receivePlmnSearchResponse(const NwUeRrcToNas &msg)
 {
     if (m_base->nodeListener)
         m_base->nodeListener->onConnected(app::NodeType::UE, m_base->config->getNodeName(), app::NodeType::GNB,

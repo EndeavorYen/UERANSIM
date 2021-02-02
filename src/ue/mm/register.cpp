@@ -127,7 +127,7 @@ void NasMm::receiveRegistrationAccept(const nas::RegistrationAccept &msg)
     if (regType == nas::ERegistrationType::INITIAL_REGISTRATION ||
         regType == nas::ERegistrationType::EMERGENCY_REGISTRATION)
     {
-        m_nas->push(new NwTriggerInitialSessionCreate());
+        m_nas->push(new NwUeNasToNas(NwUeNasToNas::ESTABLISH_INITIAL_SESSIONS));
     }
 }
 
@@ -144,11 +144,11 @@ void NasMm::receiveRegistrationReject(const nas::RegistrationReject &msg)
             receiveEapFailureMessage(*msg.eapMessage->eap);
         else
             m_logger->warn("Network sent EAP with type of %s in RegistrationReject, ignoring EAP IE.",
-                         nas::utils::EnumToString(msg.eapMessage->eap->code));
+                           nas::utils::EnumToString(msg.eapMessage->eap->code));
     }
 
     auto unhandledRejectCase = [cause, this]() {
-      m_logger->err("Registration rejected with unhandled MMCause: %s", nas::utils::EnumToString(cause));
+        m_logger->err("Registration rejected with unhandled MMCause: %s", nas::utils::EnumToString(cause));
         switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NA);
         switchRmState(ERmState::RM_DEREGISTERED);
     };

@@ -55,43 +55,55 @@ void NasTask::onLoop()
 
     switch (msg->msgType)
     {
-    case NtsMessageType::UE_DOWNLINK_NAS_DELIVERY: {
-        auto *w = dynamic_cast<NwDownlinkNasDelivery *>(msg);
-        OctetString nasPdu = std::move(w->nasPdu);
-        delete w;
-        OctetBuffer buffer{nasPdu};
-        std::unique_ptr<nas::NasMessage> nasMessage = nas::DecodeNasMessage(buffer);
-        if (nasMessage != nullptr)
-            mm->receiveNasMessage(*nasMessage);
+    case NtsMessageType::UE_RRC_TO_NAS: {
+        auto *w = dynamic_cast<NwUeRrcToNas *>(msg);
+        switch (w->present)
+        {
+        case NwUeRrcToNas::RRC_CONNECTION_SETUP: {
+            mm->receiveRrcConnectionSetup();
+            break;
+        }
+        case NwUeRrcToNas::PLMN_SEARCH_RESPONSE: {
+            mm->receivePlmnSearchResponse(*w);
+            break;
+        }
+        case NwUeRrcToNas::PLMN_SEARCH_FAILURE: {
+            mm->receivePlmnSearchFailure();
+            break;
+        }
+        case NwUeRrcToNas::NAS_DELIVERY: {
+            OctetBuffer buffer{w->nasPdu};
+            auto nasMessage = nas::DecodeNasMessage(buffer);
+            if (nasMessage != nullptr)
+                mm->receiveNasMessage(*nasMessage);
+            break;
+        }
+        }
         break;
     }
-    case NtsMessageType::NAS_TIMER_EXPIRE: {
-        auto *w = dynamic_cast<NwNasTimerExpire *>(msg);
-        nas::NasTimer *timer = w->timer;
-        delete w;
-        onTimerExpire(*timer);
+    case NtsMessageType::UE_NAS_TO_NAS: {
+        auto *w = dynamic_cast<NwUeNasToNas *>(msg);
+        switch (w->present)
+        {
+        case NwUeNasToNas::PERFORM_MM_CYCLE:
+            mm->performMmCycle();
+            break;
+        case NwUeNasToNas::NAS_TIMER_EXPIRE:
+            onTimerExpire(*w->timer);
+            break;
+        case NwUeNasToNas::ESTABLISH_INITIAL_SESSIONS:
+            sm->establishInitialSessions();
+            break;
+        }
         break;
     }
     case NtsMessageType::UE_EXTERNAL_COMMAND: {
         // TODO
-        delete msg;
-        break;
-    }
-    case NtsMessageType::UE_MR_PLMN_SEARCH_RESPONSE: {
-        auto *w = dynamic_cast<NwPlmnSearchResponse *>(msg);
-        mm->receivePlmnSearchResponse(*w);
-        delete w;
-        break;
-    }
-    case NtsMessageType::UE_MR_PLMN_SEARCH_FAILURE: {
-        mm->receivePlmnSearchFailure();
-        delete msg;
         break;
     }
     case NtsMessageType::TIMER_EXPIRED: {
         auto *w = dynamic_cast<NwTimerExpired *>(msg);
         int timerId = w->timerId;
-        delete w;
         if (timerId == NTS_TIMER_ID_NAS_TIMER_CYCLE)
         {
             setTimer(NTS_TIMER_ID_NAS_TIMER_CYCLE, NTS_TIMER_INTERVAL_NAS_TIMER_CYCLE);
@@ -104,26 +116,12 @@ void NasTask::onLoop()
         }
         break;
     }
-    case NtsMessageType::NAS_PERFORM_MM_CYCLE: {
-        delete msg;
-        mm->performMmCycle();
-        break;
-    }
-    case NtsMessageType::UE_TRIGGER_INITIAL_SESSION_CREATE: {
-        sm->establishInitialSessions();
-        delete msg;
-        break;
-    }
-    case NtsMessageType::UE_RRC_CONNECTION_SETUP: {
-        mm->receiveRrcConnectionSetup();
-        delete msg;
-        break;
-    }
     default:
         logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
-        delete msg;
         break;
     }
+
+    delete msg;
 }
 
 void NasTask::onTimerExpire(nas::NasTimer &timer)
@@ -138,7 +136,11 @@ void NasTask::onTimerExpire(nas::NasTimer &timer)
 
 void NasTask::performTick()
 {
-    auto sendExpireMsg = [this](nas::NasTimer *timer) { push(new NwNasTimerExpire(timer)); };
+    auto sendExpireMsg = [this](nas::NasTimer *timer) {
+        auto *nw = new NwUeNasToNas(NwUeNasToNas::NAS_TIMER_EXPIRE);
+        nw->timer = timer;
+        push(nw);
+    };
 
     if (timers.t3346.performTick())
         sendExpireMsg(&timers.t3346);

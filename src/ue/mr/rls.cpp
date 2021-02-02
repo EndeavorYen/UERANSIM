@@ -31,32 +31,46 @@ void UeRls::logError(const std::string &msg)
 
 void UeRls::startWaitingTimer(int period)
 {
-    m_targetTask->push(new NwRlsStartWaitingTimer(period));
+    auto *w = new NwUeMrToMr(NwUeMrToMr::RLS_START_WAITING_TIMER);
+    w->period = period;
+    m_targetTask->push(w);
 }
 
 void UeRls::searchFailure(rls::ECause cause)
 {
-    m_targetTask->push(new NwRlsSearchFailure(cause));
+    auto *w = new NwUeMrToMr(NwUeMrToMr::RLS_SEARCH_FAILURE);
+    w->cause = cause;
+    m_targetTask->push(w);
 }
 
 void UeRls::onRelease(rls::ECause cause)
 {
-    m_targetTask->push(new NwRlsReleased(cause));
+    auto *w = new NwUeMrToMr(NwUeMrToMr::RLS_RELEASED);
+    w->cause = cause;
+    m_targetTask->push(w);
 }
 
 void UeRls::onConnect(const std::string &gnbName)
 {
-    m_targetTask->push(new NwRlsConnected(gnbName));
+    auto *w = new NwUeMrToMr(NwUeMrToMr::RLS_CONNECTED);
+    w->gnbName = gnbName;
+    m_targetTask->push(w);
 }
 
 void UeRls::sendRlsPdu(const InetAddress &address, OctetString &&pdu)
 {
-    m_targetTask->push(new NwRlsSendPdu(address, std::move(pdu)));
+    auto *w = new NwUeMrToMr(NwUeMrToMr::RLS_SEND_OVER_UDP);
+    w->address = address;
+    w->pdu = std::move(pdu);
+    m_targetTask->push(w);
 }
 
 void UeRls::deliverPayload(rls::EPayloadType type, OctetString &&payload)
 {
-    m_targetTask->push(new NwDownlinkPayload(type, std::move(payload)));
+    auto *w = new NwUeMrToMr(NwUeMrToMr::RLS_RECEIVE_OVER_UDP);
+    w->type = type;
+    w->pdu = std::move(payload);
+    m_targetTask->push(w);
 }
 
 } // namespace nr::ue

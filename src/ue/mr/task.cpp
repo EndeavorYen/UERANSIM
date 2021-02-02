@@ -55,20 +55,55 @@ void UeMrTask::onLoop()
 
     switch (msg->msgType)
     {
-    case NtsMessageType::UE_MR_PLMN_SEARCH_REQUEST: {
-        m_rlsEntity->startGnbSearch();
-        delete msg;
-        break;
-    }
-    case NtsMessageType::UE_RLS_SEND_PDU: {
-        auto *w = dynamic_cast<NwRlsSendPdu *>(msg);
-        m_udpTask->send(w->address, w->pdu);
+    case NtsMessageType::UE_MR_TO_MR: {
+        auto *w = dynamic_cast<NwUeMrToMr *>(msg);
+        switch (w->present)
+        {
+        case NwUeMrToMr::RLS_CONNECTED: {
+            auto tw = new NwUeMrToRrc(NwUeMrToRrc::PLMN_SEARCH_RESPONSE);
+            tw->gnbName = std::move(w->gnbName);
+            m_base->rrcTask->push(tw);
+            break;
+        }
+        case NwUeMrToMr::RLS_RELEASED: {
+            m_logger->warn("UE disconnected from gNB, RLS released [%s]", rls::CauseToString(w->cause));
+            break;
+        }
+        case NwUeMrToMr::RLS_SEARCH_FAILURE: {
+            long current = utils::CurrentTimeMillis();
+            if (current - m_lastPlmnSearchFailurePrinted > PLMN_SEARCH_FAILED_PRINT_THRESHOLD)
+            {
+                m_logger->err("PLMN search failed [%s]", rls::CauseToString(w->cause));
+                m_lastPlmnSearchFailurePrinted = current;
+                m_base->rrcTask->push(new NwUeMrToRrc(NwUeMrToRrc::PLMN_SEARCH_FAILURE));
+            }
+            break;
+        }
+        case NwUeMrToMr::RLS_START_WAITING_TIMER: {
+            setTimer(TIMER_ID_RLS_WAITING_TIMER, w->period);
+            break;
+        }
+        case NwUeMrToMr::RLS_SEND_OVER_UDP: {
+            m_udpTask->send(w->address, w->pdu);
+            break;
+        }
+        case NwUeMrToMr::RLS_RECEIVE_OVER_UDP: {
+            receiveDownlinkPayload(w->type, std::move(w->pdu));
+            break;
+        }
+        }
         delete w;
         break;
     }
-    case NtsMessageType::UE_RLS_START_WAITING_TIMER: {
-        auto *w = dynamic_cast<NwRlsStartWaitingTimer *>(msg);
-        setTimer(TIMER_ID_RLS_WAITING_TIMER, w->period);
+    case NtsMessageType::UE_RRC_TO_MR: {
+        auto *w = dynamic_cast<NwUeRrcToMr *>(msg);
+        switch (w->present)
+        {
+        case NwUeRrcToMr::PLMN_SEARCH_REQUEST: {
+            m_rlsEntity->startGnbSearch();
+            break;
+        }
+        }
         delete w;
         break;
     }
@@ -86,33 +121,9 @@ void UeMrTask::onLoop()
         delete w;
         break;
     }
-    case NtsMessageType::UE_RLS_SEARCH_FAILURE: {
-        auto *w = dynamic_cast<NwRlsSearchFailure *>(msg);
-        long current = utils::CurrentTimeMillis();
-        if (current - m_lastPlmnSearchFailurePrinted > PLMN_SEARCH_FAILED_PRINT_THRESHOLD)
-        {
-            m_logger->err("PLMN search failed [%s]", rls::CauseToString(w->cause));
-            m_lastPlmnSearchFailurePrinted = current;
-            m_base->rrcTask->push(new NwPlmnSearchFailure());
-        }
-        delete w;
-        break;
-    }
-    case NtsMessageType::UE_RLS_RELEASED: {
-        auto *w = dynamic_cast<NwRlsReleased *>(msg);
-        m_logger->warn("UE disconnected from gNB, RLS released [%s]", rls::CauseToString(w->cause));
-        delete w;
-        break;
-    }
     case NtsMessageType::UDP_SERVER_RECEIVE: {
         auto *w = dynamic_cast<udp::NwUdpServerReceive *>(msg);
         m_rlsEntity->onReceive(w->fromAddress, w->packet);
-        delete w;
-        break;
-    }
-    case NtsMessageType::UE_RLS_CONNECTED: {
-        auto *w = dynamic_cast<NwRlsConnected *>(msg);
-        m_base->rrcTask->push(new NwPlmnSearchResponse(std::move(w->gnbName)));
         delete w;
         break;
     }
@@ -137,12 +148,6 @@ void UeMrTask::onLoop()
         stream.append(w->data);
 
         m_rlsEntity->onUplinkDelivery(rls::EPayloadType::DATA, std::move(stream));
-        delete w;
-        break;
-    }
-    case NtsMessageType::UE_RLS_DOWNLINK_PAYLOAD: {
-        auto *w = dynamic_cast<NwDownlinkPayload *>(msg);
-        receiveDownlinkPayload(w->type, std::move(w->payload));
         delete w;
         break;
     }

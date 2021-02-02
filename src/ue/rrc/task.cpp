@@ -42,30 +42,41 @@ void UeRrcTask::onLoop()
 
     switch (msg->msgType)
     {
+    case NtsMessageType::UE_MR_TO_RRC: {
+        auto *w = dynamic_cast<NwUeMrToRrc *>(msg);
+        if (w->present == NwUeMrToRrc::PLMN_SEARCH_RESPONSE)
+        {
+            auto *nw = new NwUeRrcToNas(NwUeRrcToNas::PLMN_SEARCH_RESPONSE);
+            nw->gnbName = std::move(w->gnbName);
+            m_base->nasTask->push(nw);
+        }
+        else if (w->present == NwUeMrToRrc::PLMN_SEARCH_FAILURE)
+        {
+            m_base->nasTask->push(new NwUeRrcToNas(NwUeRrcToNas::PLMN_SEARCH_FAILURE));
+        }
+        delete msg;
+        break;
+    }
+    case NtsMessageType::UE_NAS_TO_RRC: {
+        auto *w = dynamic_cast<NwUeNasToRrc *>(msg);
+        switch (w->present)
+        {
+        case NwUeNasToRrc::PLMN_SEARCH_REQUEST: {
+            m_base->mrTask->push(new NwUeRrcToMr(NwUeRrcToMr::PLMN_SEARCH_REQUEST));
+            break;
+        }
+        case NwUeNasToRrc::INITIAL_NAS_DELIVERY:
+            deliverInitialNas(std::move(w->nasPdu), w->rrcEstablishmentCause);
+            break;
+        case NwUeNasToRrc::UPLINK_NAS_DELIVERY:
+            deliverUplinkNas(std::move(w->nasPdu));
+            break;
+        }
+        delete msg;
+        break;
+    }
     case NtsMessageType::UE_MR_DOWNLINK_RRC: {
         handleDownlinkRrc(dynamic_cast<NwUeDownlinkRrc *>(msg));
-        break;
-    }
-    case NtsMessageType::UE_UPLINK_NAS_DELIVERY: {
-        deliverUplinkNas(std::move(dynamic_cast<NwUplinkNasDelivery *>(msg)->nasPdu));
-        delete msg;
-        break;
-    }
-    case NtsMessageType::UE_INITIAL_NAS_DELIVERY: {
-        deliverInitialNas(*dynamic_cast<NwInitialNasDelivery *>(msg));
-        delete msg;
-        break;
-    }
-    case NtsMessageType::UE_MR_PLMN_SEARCH_REQUEST: {
-        m_base->mrTask->push(msg);
-        break;
-    }
-    case NtsMessageType::UE_MR_PLMN_SEARCH_RESPONSE: {
-        m_base->nasTask->push(msg);
-        break;
-    }
-    case NtsMessageType::UE_MR_PLMN_SEARCH_FAILURE: {
-        m_base->nasTask->push(msg);
         break;
     }
     default:

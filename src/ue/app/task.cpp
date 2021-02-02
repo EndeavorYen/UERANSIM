@@ -45,29 +45,48 @@ void UeAppTask::onLoop()
 
     switch (msg->msgType)
     {
+    case NtsMessageType::UE_MR_TO_APP: {
+        auto *w = dynamic_cast<NwUeMrToApp *>(msg);
+        switch (w->present)
+        {
+        case NwUeMrToApp::DATA_PDU_DELIVERY: {
+            auto *tunTask = m_tunTasks[w->psi];
+            if (tunTask)
+            {
+                auto *nw = new NwAppToTun(NwAppToTun::DATA_PDU_DELIVERY);
+                nw->psi = w->psi;
+                nw->data = std::move(w->data);
+                tunTask->push(nw);
+            }
+            break;
+        }
+        }
+
+        delete w;
+        break;
+    }
+    case NtsMessageType::UE_TUN_TO_APP: {
+        auto *w = dynamic_cast<NwUeTunToApp *>(msg);
+        switch (w->present)
+        {
+        case NwUeTunToApp::DATA_PDU_DELIVERY: {
+            auto *nw = new NwAppToMr(NwAppToMr::DATA_PDU_DELIVERY);
+            nw->psi = w->psi;
+            nw->data = std::move(w->data);
+            m_base->mrTask->push(nw);
+            break;
+        }
+        case NwUeTunToApp::TUN_ERROR: {
+            m_logger->err("TUN failure [%s]", w->error.c_str());
+            break;
+        }
+        }
+        delete w;
+        break;
+    }
     case NtsMessageType::UE_STATUS_UPDATE: {
         receiveStatusUpdate(*dynamic_cast<NwUeStatusUpdate *>(msg));
         delete msg;
-        break;
-    }
-    case NtsMessageType::UE_TUN_RECEIVE: {
-        auto *w = dynamic_cast<NwTunReceive *>(msg);
-        m_base->mrTask->push(new NwUeUplinkData(w->psi, std::move(w->data)));
-        delete msg;
-        break;
-    }
-    case NtsMessageType::UE_TUN_ERROR: {
-        m_logger->err("TUN failure [%s]", dynamic_cast<NwTunError *>(msg)->error.c_str());
-        delete msg;
-        break;
-    }
-    case NtsMessageType::UE_MR_DOWNLINK_DATA: {
-        auto *w = dynamic_cast<NwUeDownlinkData *>(msg);
-        auto *tunTask = m_tunTasks[w->psi];
-        if (tunTask)
-            tunTask->push(w);
-        else
-            delete w;
         break;
     }
     default:

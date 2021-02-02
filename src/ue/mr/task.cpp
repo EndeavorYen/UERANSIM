@@ -103,7 +103,34 @@ void UeMrTask::onLoop()
             m_rlsEntity->startGnbSearch();
             break;
         }
+        case NwUeRrcToMr::RRC_PDU_DELIVERY: {
+            // Append channel information
+            OctetString stream{};
+            stream.appendOctet(static_cast<int>(w->channel));
+            stream.append(w->pdu);
+
+            m_rlsEntity->onUplinkDelivery(rls::EPayloadType::RRC, std::move(stream));
+            break;
         }
+        }
+        delete w;
+        break;
+    }
+    case NtsMessageType::UE_APP_TO_MR: {
+        auto *w = dynamic_cast<NwAppToMr *>(msg);
+        switch (w->present)
+        {
+        case NwAppToMr::DATA_PDU_DELIVERY: {
+            // Append PDU session information
+            OctetString stream{};
+            stream.appendOctet4(w->psi);
+            stream.append(w->data);
+
+            m_rlsEntity->onUplinkDelivery(rls::EPayloadType::DATA, std::move(stream));
+            break;
+        }
+        }
+
         delete w;
         break;
     }
@@ -127,30 +154,6 @@ void UeMrTask::onLoop()
         delete w;
         break;
     }
-    case NtsMessageType::UE_MR_UPLINK_RRC: {
-        auto *w = dynamic_cast<NwUeUplinkRrc *>(msg);
-
-        // Append channel information
-        OctetString stream{};
-        stream.appendOctet(static_cast<int>(w->channel));
-        stream.append(w->rrcPdu);
-
-        m_rlsEntity->onUplinkDelivery(rls::EPayloadType::RRC, std::move(stream));
-        delete w;
-        break;
-    }
-    case NtsMessageType::UE_MR_UPLINK_DATA: {
-        auto *w = dynamic_cast<NwUeUplinkData *>(msg);
-
-        // Append PDU session information
-        OctetString stream{};
-        stream.appendOctet4(w->psi);
-        stream.append(w->data);
-
-        m_rlsEntity->onUplinkDelivery(rls::EPayloadType::DATA, std::move(stream));
-        delete w;
-        break;
-    }
     default:
         m_logger->err("Unhandled NTS message received with type [%d]", (int)msg->msgType);
         delete msg;
@@ -162,15 +165,17 @@ void UeMrTask::receiveDownlinkPayload(rls::EPayloadType type, OctetString &&payl
 {
     if (type == rls::EPayloadType::RRC)
     {
-        auto ch = static_cast<rrc::RrcChannel>(payload.getI(0));
-        OctetString rrcPayload = payload.subCopy(1);
-        m_base->rrcTask->push(new NwUeDownlinkRrc(ch, std::move(rrcPayload)));
+        auto *nw = new NwUeMrToRrc(NwUeMrToRrc::RRC_PDU_DELIVERY);
+        nw->channel = static_cast<rrc::RrcChannel>(payload.getI(0));
+        nw->pdu = payload.subCopy(1);
+        m_base->rrcTask->push(nw);
     }
     else if (type == rls::EPayloadType::DATA)
     {
-        int psi = payload.get4I(0);
-        OctetString dataPayload = payload.subCopy(4);
-        m_base->appTask->push(new NwUeDownlinkData(psi, std::move(dataPayload)));
+        auto *nw = new NwUeMrToApp(NwUeMrToApp::DATA_PDU_DELIVERY);
+        nw->psi = payload.get4I(0);
+        nw->data = payload.subCopy(4);
+        m_base->appTask->push(nw);
     }
 }
 

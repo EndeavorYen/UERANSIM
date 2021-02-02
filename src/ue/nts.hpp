@@ -63,12 +63,85 @@ struct NwUeMrToRrc : NtsMessage
     {
         PLMN_SEARCH_RESPONSE,
         PLMN_SEARCH_FAILURE,
+        RRC_PDU_DELIVERY,
     } present;
 
     // PLMN_SEARCH_RESPONSE
     std::string gnbName{};
 
+    // RRC_PDU_DELIVERY
+    rrc::RrcChannel channel{};
+    OctetString pdu{};
+
     explicit NwUeMrToRrc(PR present) : NtsMessage(NtsMessageType::UE_MR_TO_RRC), present(present)
+    {
+    }
+};
+
+struct NwUeMrToApp : NtsMessage
+{
+    enum PR
+    {
+        DATA_PDU_DELIVERY
+    } present;
+
+    // DATA_PDU_DELIVERY
+    int psi{};
+    OctetString data{};
+
+    explicit NwUeMrToApp(PR present) : NtsMessage(NtsMessageType::UE_MR_TO_APP), present(present)
+    {
+    }
+};
+
+struct NwAppToMr : NtsMessage
+{
+    enum PR
+    {
+        DATA_PDU_DELIVERY
+    } present;
+
+    // DATA_PDU_DELIVERY
+    int psi{};
+    OctetString data{};
+
+    explicit NwAppToMr(PR present) : NtsMessage(NtsMessageType::UE_APP_TO_MR), present(present)
+    {
+    }
+};
+
+struct NwAppToTun : NtsMessage
+{
+    enum PR
+    {
+        DATA_PDU_DELIVERY
+    } present;
+
+    // DATA_PDU_DELIVERY
+    int psi{};
+    OctetString data{};
+
+    explicit NwAppToTun(PR present) : NtsMessage(NtsMessageType::UE_APP_TO_TUN), present(present)
+    {
+    }
+};
+
+struct NwUeTunToApp : NtsMessage
+{
+    enum PR
+    {
+        DATA_PDU_DELIVERY,
+        TUN_ERROR
+    } present;
+
+    // DATA_PDU_DELIVERY
+    int psi{};
+    OctetString data{};
+
+    // TUN_ERROR
+    std::string error{};
+
+    explicit NwUeTunToApp(PR present) : NtsMessage(NtsMessageType::UE_TUN_TO_APP), present(present)
     {
     }
 };
@@ -120,7 +193,12 @@ struct NwUeRrcToMr : NtsMessage
     enum PR
     {
         PLMN_SEARCH_REQUEST,
+        RRC_PDU_DELIVERY
     } present;
+
+    // RRC_PDU_DELIVERY
+    rrc::RrcChannel channel{};
+    OctetString pdu{};
 
     explicit NwUeRrcToMr(PR present) : NtsMessage(NtsMessageType::UE_RRC_TO_MR), present(present)
     {
@@ -140,28 +218,6 @@ struct NwUeNasToNas : NtsMessage
     nas::NasTimer *timer{};
 
     explicit NwUeNasToNas(PR present) : NtsMessage(NtsMessageType::UE_NAS_TO_NAS), present(present)
-    {
-    }
-};
-
-struct NwUeUplinkRrc : NtsMessage
-{
-    rrc::RrcChannel channel;
-    OctetString rrcPdu;
-
-    NwUeUplinkRrc(rrc::RrcChannel channel, OctetString &&rrcPdu)
-        : NtsMessage(NtsMessageType::UE_MR_UPLINK_RRC), channel(channel), rrcPdu(std::move(rrcPdu))
-    {
-    }
-};
-
-struct NwUeDownlinkRrc : NtsMessage
-{
-    rrc::RrcChannel channel;
-    OctetString rrcPdu;
-
-    NwUeDownlinkRrc(rrc::RrcChannel channel, OctetString &&rrcPdu)
-        : NtsMessage(NtsMessageType::UE_MR_DOWNLINK_RRC), channel(channel), rrcPdu(std::move(rrcPdu))
     {
     }
 };
@@ -193,48 +249,6 @@ struct NwUeStatusUpdate : NtsMessage
     PduSession *pduSession{};
 
     explicit NwUeStatusUpdate(const int what) : NtsMessage(NtsMessageType::UE_STATUS_UPDATE), what(what)
-    {
-    }
-};
-
-struct NwTunReceive : NtsMessage
-{
-    int psi;
-    OctetString data;
-
-    NwTunReceive(int psi, OctetString &&data)
-        : NtsMessage(NtsMessageType::UE_TUN_RECEIVE), psi(psi), data(std::move(data))
-    {
-    }
-};
-
-struct NwTunError : NtsMessage
-{
-    std::string error;
-
-    explicit NwTunError(std::string error) : NtsMessage(NtsMessageType::UE_TUN_ERROR), error(std::move(error))
-    {
-    }
-};
-
-struct NwUeUplinkData : NtsMessage
-{
-    int psi;
-    OctetString data;
-
-    explicit NwUeUplinkData(int psi, OctetString &&data)
-        : NtsMessage(NtsMessageType::UE_MR_UPLINK_DATA), psi(psi), data(std::move(data))
-    {
-    }
-};
-
-struct NwUeDownlinkData : NtsMessage
-{
-    int psi;
-    OctetString data;
-
-    NwUeDownlinkData(int psi, OctetString &&data)
-        : NtsMessage(NtsMessageType::UE_MR_DOWNLINK_DATA), psi(psi), data(std::move(data))
     {
     }
 };

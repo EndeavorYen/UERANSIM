@@ -44,15 +44,22 @@ void UeRrcTask::onLoop()
     {
     case NtsMessageType::UE_MR_TO_RRC: {
         auto *w = dynamic_cast<NwUeMrToRrc *>(msg);
-        if (w->present == NwUeMrToRrc::PLMN_SEARCH_RESPONSE)
+        switch (w->present)
         {
+        case NwUeMrToRrc::PLMN_SEARCH_RESPONSE: {
             auto *nw = new NwUeRrcToNas(NwUeRrcToNas::PLMN_SEARCH_RESPONSE);
             nw->gnbName = std::move(w->gnbName);
             m_base->nasTask->push(nw);
+            break;
         }
-        else if (w->present == NwUeMrToRrc::PLMN_SEARCH_FAILURE)
-        {
+        case NwUeMrToRrc::PLMN_SEARCH_FAILURE: {
             m_base->nasTask->push(new NwUeRrcToNas(NwUeRrcToNas::PLMN_SEARCH_FAILURE));
+            break;
+        }
+        case NwUeMrToRrc::RRC_PDU_DELIVERY: {
+            handleDownlinkRrc(w->channel, w->pdu);
+            break;
+        }
         }
         delete msg;
         break;
@@ -73,10 +80,6 @@ void UeRrcTask::onLoop()
             break;
         }
         delete msg;
-        break;
-    }
-    case NtsMessageType::UE_MR_DOWNLINK_RRC: {
-        handleDownlinkRrc(dynamic_cast<NwUeDownlinkRrc *>(msg));
         break;
     }
     default:

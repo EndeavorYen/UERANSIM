@@ -97,10 +97,6 @@ void NasTask::onLoop()
         }
         break;
     }
-    case NtsMessageType::UE_EXTERNAL_COMMAND: {
-        // TODO
-        break;
-    }
     case NtsMessageType::TIMER_EXPIRED: {
         auto *w = dynamic_cast<NwTimerExpired *>(msg);
         int timerId = w->timerId;

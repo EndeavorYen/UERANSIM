@@ -62,7 +62,7 @@ class UeRrcTask : public NtsTask
 
   private:
     /* Handlers */
-    void handleDownlinkRrc(NwUeDownlinkRrc *msg);
+    void handleDownlinkRrc(rrc::RrcChannel channel, const OctetString& pdu);
     void deliverInitialNas(OctetString &&nasPdu, long establishmentCause);
     void deliverUplinkNas(OctetString &&nasPdu);
 

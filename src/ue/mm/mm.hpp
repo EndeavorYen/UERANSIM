@@ -61,6 +61,7 @@ class NasMm
     void onTimerExpire(nas::NasTimer &timer);
     void receivePlmnSearchResponse(const NwPlmnSearchResponse &msg);
     void receivePlmnSearchFailure();
+    void receiveRrcConnectionSetup();
 
     /* Transport */
     void sendNasMessage(const nas::PlainMmMessage &msg);
@@ -70,8 +71,10 @@ class NasMm
     /* Base */
     void switchMmState(EMmState state, EMmSubState subState);
     void switchRmState(ERmState state);
+    void switchCmState(ECmState state);
     void onSwitchMmState(EMmState oldState, EMmState newState, EMmSubState oldSubState, EMmSubState newSubSate);
     void onSwitchRmState(ERmState oldState, ERmState newState);
+    void onSwitchCmState(ECmState oldState, ECmState newState);
 
     /* Transport */
     void sendMmStatus(nas::EMmCause cause);

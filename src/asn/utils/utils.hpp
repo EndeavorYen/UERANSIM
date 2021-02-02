@@ -35,6 +35,13 @@ inline T *New()
 }
 
 template <typename T>
+inline T *NewFor(T *p)
+{
+    (void)p;
+    return New<typename std::remove_pointer<T>::type>();
+}
+
+template <typename T>
 inline void Free(asn_TYPE_descriptor_t &desc, T *ptr)
 {
     ASN_STRUCT_FREE(desc, ptr);
@@ -90,6 +97,12 @@ inline void SetBitStringLong(int64_t value, BIT_STRING_t &target)
     target.buf = static_cast<uint8_t *>(calloc(1, target.size));
     target.bits_unused = (8 - (static_cast<int>(BitCount) % 8)) % 8;
     BitBuffer{target.buf}.writeBits(value, BitCount);
+}
+
+template <size_t BitCount>
+inline void SetSpareBits(BIT_STRING_t &target)
+{
+    SetBitStringLong<BitCount>(0, target);
 }
 
 template <size_t BitCount>

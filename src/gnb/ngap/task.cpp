@@ -14,24 +14,24 @@
 namespace nr::gnb
 {
 
-NgapTask::NgapTask(TaskBase *base) : base{base}, ueNgapIdCounter{}, waitingSctpClients{}, downlinkTeidCounter{}
+NgapTask::NgapTask(TaskBase *base) : m_base{base}, m_ueNgapIdCounter{}, m_waitingSctpClients{}, m_downlinkTeidCounter{}
 {
-    logger = base->logBase->makeUniqueLogger("ngap");
+    m_logger = base->logBase->makeUniqueLogger("ngap");
 }
 
 void NgapTask::onStart()
 {
-    for (auto &amfConfig : base->config->amfConfigs)
+    for (auto &amfConfig : m_base->config->amfConfigs)
         createAmfContext(amfConfig);
-    if (amfContexts.empty())
-        logger->warn("No AMF configuration is provided");
+    if (m_amfCtx.empty())
+        m_logger->warn("No AMF configuration is provided");
 
-    for (auto &amfCtx : amfContexts)
+    for (auto &amfCtx : m_amfCtx)
     {
-        base->sctpTask->push(new NwSctpConnectionRequest(amfCtx.second->ctxId, base->config->ngapIp, 0,
-                                                         amfCtx.second->address, amfCtx.second->port,
-                                                         sctp::PayloadProtocolId::NGAP, this));
-        waitingSctpClients++;
+        m_base->sctpTask->push(new NwSctpConnectionRequest(amfCtx.second->ctxId, m_base->config->ngapIp, 0,
+                                                           amfCtx.second->address, amfCtx.second->port,
+                                                           sctp::PayloadProtocolId::NGAP, this));
+        m_waitingSctpClients++;
     }
 }
 
@@ -43,30 +43,42 @@ void NgapTask::onLoop()
 
     switch (msg->msgType)
     {
-    case NtsMessageType::SCTP_ASSOCIATION_SETUP:
+    case NtsMessageType::SCTP_ASSOCIATION_SETUP: {
         handleAssociationSetup(dynamic_cast<NwSctpAssociationSetup *>(msg));
         break;
-    case NtsMessageType::SCTP_CLIENT_RECEIVE:
+    }
+    case NtsMessageType::SCTP_CLIENT_RECEIVE: {
         handleSctpMessage(dynamic_cast<NwSctpClientReceive *>(msg));
         break;
-    case NtsMessageType::NGAP_UPLINK_NAS_DELIVERY:
-        deliverUplinkNas(dynamic_cast<NwUplinkNasDelivery *>(msg));
+    }
+    case NtsMessageType::NGAP_INITIAL_NAS_DELIVERY: {
+        auto *w = dynamic_cast<NwInitialNasDelivery *>(msg);
+        handleInitialNasTransport(w->ueId, w->nasPdu, w->rrcEstablishmentCause);
+        delete w;
         break;
-    default:
-        logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+    }
+    case NtsMessageType::NGAP_UPLINK_NAS_DELIVERY: {
+        auto *w = dynamic_cast<NwUplinkNasDelivery *>(msg);
+        handleUplinkNasTransport(w->ueId, w->nasPdu);
+        delete w;
+        break;
+    }
+    default: {
+        m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
         delete msg;
         break;
+    }
     }
 }
 
 void NgapTask::onQuit()
 {
-    for (auto &i : ueContexts)
+    for (auto &i : m_ueCtx)
         delete i.second;
-    for (auto &i : amfContexts)
+    for (auto &i : m_amfCtx)
         delete i.second;
-    ueContexts.clear();
-    amfContexts.clear();
+    m_ueCtx.clear();
+    m_amfCtx.clear();
 }
 
 } // namespace nr::gnb

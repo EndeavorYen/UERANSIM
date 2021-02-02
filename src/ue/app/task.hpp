@@ -24,11 +24,11 @@ namespace nr::ue
 class UeAppTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    std::unique_ptr<Logger> m_logger;
 
-    UeStatusInfo statusInfo;
-    TunTask *tunTasks[16];
+    UeStatusInfo m_statusInfo;
+    TunTask *m_tunTasks[16];
 
   public:
     explicit UeAppTask(TaskBase *base);

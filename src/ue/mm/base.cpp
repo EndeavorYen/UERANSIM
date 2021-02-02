@@ -67,7 +67,9 @@ void NasMm::performMmCycle()
         }
     }
 
-    if (m_mmSubState == EMmSubState::MM_DEREGISTERED_PLMN_SEARCH)
+    if (m_mmSubState == EMmSubState::MM_DEREGISTERED_PLMN_SEARCH ||
+        m_mmSubState == EMmSubState::MM_DEREGISTERED_NO_CELL_AVAILABLE ||
+        m_mmSubState == EMmSubState::MM_REGISTERED_NO_CELL_AVAILABLE)
     {
         long current = utils::CurrentTimeMillis();
         long elapsedMs = current - m_lastPlmnSearchTrigger;
@@ -95,10 +97,6 @@ void NasMm::performMmCycle()
     if (m_mmSubState == EMmSubState::MM_DEREGISTERED_NA)
         return;
     if (m_mmSubState == EMmSubState::MM_DEREGISTERED_NO_SUPI)
-        return;
-    if (m_mmSubState == EMmSubState::MM_DEREGISTERED_NO_CELL_AVAILABLE)
-        return;
-    if (m_mmSubState == EMmSubState::MM_REGISTERED_NO_CELL_AVAILABLE)
         return;
 
     if (m_emulationMode)
@@ -153,7 +151,30 @@ void NasMm::switchRmState(ERmState state)
     statusUpdate->rmState = RmStateName(state);
     m_base->appTask->push(statusUpdate);
 
-    m_logger->info("UE switches to state: %s", RmStateName(state));
+    // No need to log it
+    // m_logger->info("UE switches to state: %s", RmStateName(state));
+
+    triggerMmCycle();
+}
+
+void NasMm::switchCmState(ECmState state)
+{
+    ECmState oldState = m_cmState;
+    m_cmState = state;
+
+    onSwitchCmState(oldState, m_cmState);
+
+    if (m_base->nodeListener)
+    {
+        m_base->nodeListener->onSwitch(app::NodeType::UE, m_base->config->getNodeName(), app::StateType::CM,
+                                       CmStateName(oldState), CmStateName(m_cmState));
+    }
+
+    auto *statusUpdate = new NwUeStatusUpdate(NwUeStatusUpdate::CM_STATE);
+    statusUpdate->rmState = CmStateName(state);
+    m_base->appTask->push(statusUpdate);
+
+    m_logger->info("UE switches to state: %s", CmStateName(state));
 
     triggerMmCycle();
 }
@@ -179,6 +200,10 @@ void NasMm::onSwitchRmState(ERmState oldState, ERmState newState)
 {
 }
 
+void NasMm::onSwitchCmState(ECmState oldState, ECmState newState)
+{
+}
+
 void NasMm::receivePlmnSearchResponse(const NwPlmnSearchResponse &msg)
 {
     if (m_base->nodeListener)
@@ -187,9 +212,11 @@ void NasMm::receivePlmnSearchResponse(const NwPlmnSearchResponse &msg)
 
     m_logger->info("UE connected to gNB");
 
-    if (m_mmSubState == EMmSubState::MM_REGISTERED_PLMN_SEARCH)
+    if (m_mmSubState == EMmSubState::MM_REGISTERED_PLMN_SEARCH ||
+        m_mmSubState == EMmSubState::MM_REGISTERED_NO_CELL_AVAILABLE)
         switchMmState(EMmState::MM_REGISTERED, EMmSubState::MM_REGISTERED_NORMAL_SERVICE);
-    else if (m_mmSubState == EMmSubState::MM_DEREGISTERED_PLMN_SEARCH)
+    else if (m_mmSubState == EMmSubState::MM_DEREGISTERED_PLMN_SEARCH ||
+             m_mmSubState == EMmSubState::MM_DEREGISTERED_NO_CELL_AVAILABLE)
         switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NORMAL_SERVICE);
 }
 
@@ -199,6 +226,11 @@ void NasMm::receivePlmnSearchFailure()
         switchMmState(EMmState::MM_REGISTERED, EMmSubState::MM_REGISTERED_NO_CELL_AVAILABLE);
     else if (m_mmSubState == EMmSubState::MM_DEREGISTERED_PLMN_SEARCH)
         switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NO_CELL_AVAILABLE);
+}
+
+void NasMm::receiveRrcConnectionSetup()
+{
+    switchCmState(ECmState::CM_CONNECTED);
 }
 
 void NasMm::onTimerExpire(nas::NasTimer &timer)

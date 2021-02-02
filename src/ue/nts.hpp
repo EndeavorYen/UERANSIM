@@ -40,6 +40,18 @@ struct NwUplinkNasDelivery : NtsMessage
     }
 };
 
+struct NwInitialNasDelivery : NtsMessage
+{
+    OctetString nasPdu;
+    long rrcEstablishmentCause;
+
+    NwInitialNasDelivery(OctetString &&nasPdu, long rrcEstablishmentCause)
+        : NtsMessage(NtsMessageType::UE_INITIAL_NAS_DELIVERY), nasPdu(std::move(nasPdu)),
+          rrcEstablishmentCause(rrcEstablishmentCause)
+    {
+    }
+};
+
 struct NwNasTimerExpire : NtsMessage
 {
     nas::NasTimer *timer;
@@ -173,7 +185,8 @@ struct NwUeStatusUpdate : NtsMessage
     static constexpr const int CONNECTED_GNB = 1;
     static constexpr const int MM_STATE = 2;
     static constexpr const int RM_STATE = 3;
-    static constexpr const int SESSION_ESTABLISHMENT = 4;
+    static constexpr const int CM_STATE = 4;
+    static constexpr const int SESSION_ESTABLISHMENT = 5;
 
     const int what{};
 
@@ -186,6 +199,9 @@ struct NwUeStatusUpdate : NtsMessage
 
     // RM_STATE
     std::string rmState{};
+
+    // CM_STATE
+    std::string cmState{};
 
     // SESSION_ESTABLISHMENT
     PduSession *pduSession{};
@@ -233,6 +249,13 @@ struct NwUeDownlinkData : NtsMessage
 
     NwUeDownlinkData(int psi, OctetString &&data)
         : NtsMessage(NtsMessageType::UE_MR_DOWNLINK_DATA), psi(psi), data(std::move(data))
+    {
+    }
+};
+
+struct NwUeRrcConnectionSetup : NtsMessage
+{
+    NwUeRrcConnectionSetup() : NtsMessage(NtsMessageType::UE_RRC_CONNECTION_SETUP)
     {
     }
 };

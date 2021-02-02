@@ -41,7 +41,7 @@ void NgapTask::sendNgapNonUe(int associatedAmf, ASN_NGAP_NGAP_PDU *pdu)
 
     if (asn_check_constraints(&asn_DEF_ASN_NGAP_NGAP_PDU, pdu, errorBuffer, &len) != 0)
     {
-        logger->err("NGAP PDU ASN constraint validation failed");
+        m_logger->err("NGAP PDU ASN constraint validation failed");
         asn::Free(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
         return;
     }
@@ -49,18 +49,18 @@ void NgapTask::sendNgapNonUe(int associatedAmf, ASN_NGAP_NGAP_PDU *pdu)
     ssize_t encoded;
     uint8_t *buffer;
     if (!ngap_encode::Encode(asn_DEF_ASN_NGAP_NGAP_PDU, pdu, encoded, buffer))
-        logger->err("NGAP APER encoding failed");
+        m_logger->err("NGAP APER encoding failed");
     else
     {
         auto *msg = new NwSctpSendMessage(amf->ctxId, 0, buffer, 0, static_cast<size_t>(encoded));
-        base->sctpTask->push(msg);
+        m_base->sctpTask->push(msg);
 
-        if (base->nodeListener)
+        if (m_base->nodeListener)
         {
             std::string xer = ngap_encode::EncodeXer(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
             if (xer.length() > 0)
             {
-                base->nodeListener->onSend(app::NodeType::GNB, base->config->name, app::NodeType::AMF, amf->amfName,
+                m_base->nodeListener->onSend(app::NodeType::GNB, m_base->config->name, app::NodeType::AMF, amf->amfName,
                                            app::ConnectionType::NGAP, xer);
             }
         }
@@ -114,10 +114,10 @@ void NgapTask::sendNgapUeAssociated(int ueId, ASN_NGAP_NGAP_PDU *pdu)
                 auto &nr = loc->choice.userLocationInformationNR;
                 nr->timeStamp = asn::New<ASN_NGAP_TimeStamp_t>();
 
-                ngap_utils::ToPlmnAsn_Ref(base->config->plmn, nr->nR_CGI.pLMNIdentity);
-                asn::SetBitStringLong<36>(base->config->nci, nr->nR_CGI.nRCellIdentity);
-                ngap_utils::ToPlmnAsn_Ref(base->config->plmn, nr->tAI.pLMNIdentity);
-                asn::SetOctetString3(nr->tAI.tAC, octet3{base->config->tac});
+                ngap_utils::ToPlmnAsn_Ref(m_base->config->plmn, nr->nR_CGI.pLMNIdentity);
+                asn::SetBitStringLong<36>(m_base->config->nci, nr->nR_CGI.nRCellIdentity);
+                ngap_utils::ToPlmnAsn_Ref(m_base->config->plmn, nr->tAI.pLMNIdentity);
+                asn::SetOctetString3(nr->tAI.tAC, octet3{m_base->config->tac});
                 asn::SetOctetString4(*nr->timeStamp, octet4{utils::CurrentTimeStamp().seconds32()});
             });
     }
@@ -129,7 +129,7 @@ void NgapTask::sendNgapUeAssociated(int ueId, ASN_NGAP_NGAP_PDU *pdu)
 
     if (asn_check_constraints(&asn_DEF_ASN_NGAP_NGAP_PDU, pdu, errorBuffer, &len) != 0)
     {
-        logger->err("NGAP PDU ASN constraint validation failed");
+        m_logger->err("NGAP PDU ASN constraint validation failed");
         asn::Free(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
         return;
     }
@@ -137,18 +137,18 @@ void NgapTask::sendNgapUeAssociated(int ueId, ASN_NGAP_NGAP_PDU *pdu)
     ssize_t encoded;
     uint8_t *buffer;
     if (!ngap_encode::Encode(asn_DEF_ASN_NGAP_NGAP_PDU, pdu, encoded, buffer))
-        logger->err("NGAP APER encoding failed");
+        m_logger->err("NGAP APER encoding failed");
     else
     {
         auto *msg = new NwSctpSendMessage(amf->ctxId, 0, buffer, 0, static_cast<size_t>(encoded));
-        base->sctpTask->push(msg);
+        m_base->sctpTask->push(msg);
 
-        if (base->nodeListener)
+        if (m_base->nodeListener)
         {
             std::string xer = ngap_encode::EncodeXer(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
             if (xer.length() > 0)
             {
-                base->nodeListener->onSend(app::NodeType::GNB, base->config->name, app::NodeType::AMF, amf->amfName,
+                m_base->nodeListener->onSend(app::NodeType::GNB, m_base->config->name, app::NodeType::AMF, amf->amfName,
                                            app::ConnectionType::NGAP, xer);
             }
         }
@@ -169,19 +169,19 @@ void NgapTask::handleSctpMessage(NwSctpClientReceive *msg)
     auto *pdu = ngap_encode::Decode<ASN_NGAP_NGAP_PDU>(asn_DEF_ASN_NGAP_NGAP_PDU, msg->buffer, msg->length);
     if (pdu == nullptr)
     {
-        logger->err("APER decoding failed for SCTP message");
+        m_logger->err("APER decoding failed for SCTP message");
         asn::Free(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
         sendErrorIndication(msg->clientId, NgapCause::Protocol_transfer_syntax_error);
         delete msg;
         return;
     }
 
-    if (base->nodeListener)
+    if (m_base->nodeListener)
     {
         std::string xer = ngap_encode::EncodeXer(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
         if (xer.length() > 0)
         {
-            base->nodeListener->onReceive(app::NodeType::GNB, base->config->name, app::NodeType::AMF, amf->amfName,
+            m_base->nodeListener->onReceive(app::NodeType::GNB, m_base->config->name, app::NodeType::AMF, amf->amfName,
                                           app::ConnectionType::NGAP, xer);
         }
     }
@@ -220,7 +220,7 @@ void NgapTask::handleSctpMessage(NwSctpClientReceive *msg)
             receiveDownlinkNasTransport(amf->ctxId, &value.choice.DownlinkNASTransport);
             break;
         default:
-            logger->err("Unhandled NGAP initiating-message received (%d)", value.present);
+            m_logger->err("Unhandled NGAP initiating-message received (%d)", value.present);
             break;
         }
     }
@@ -233,7 +233,7 @@ void NgapTask::handleSctpMessage(NwSctpClientReceive *msg)
             receiveNgSetupResponse(amf->ctxId, &value.choice.NGSetupResponse);
             break;
         default:
-            logger->err("Unhandled NGAP successful-outcome received (%d)", value.present);
+            m_logger->err("Unhandled NGAP successful-outcome received (%d)", value.present);
             break;
         }
     }
@@ -246,13 +246,13 @@ void NgapTask::handleSctpMessage(NwSctpClientReceive *msg)
             receiveNgSetupFailure(amf->ctxId, &value.choice.NGSetupFailure);
             break;
         default:
-            logger->err("Unhandled NGAP unsuccessful-outcome received (%d)", value.present);
+            m_logger->err("Unhandled NGAP unsuccessful-outcome received (%d)", value.present);
             break;
         }
     }
     else
     {
-        logger->warn("Empty NGAP PDU ignored");
+        m_logger->warn("Empty NGAP PDU ignored");
     }
 
     asn::Free(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
@@ -261,7 +261,7 @@ void NgapTask::handleSctpMessage(NwSctpClientReceive *msg)
 
 bool NgapTask::handleSctpStreamId(int amfId, int stream, const ASN_NGAP_NGAP_PDU &pdu)
 {
-    if (base->config->ignoreStreamIds)
+    if (m_base->config->ignoreStreamIds)
         return true;
 
     auto *ptr =
@@ -270,7 +270,7 @@ bool NgapTask::handleSctpStreamId(int amfId, int stream, const ASN_NGAP_NGAP_PDU
     {
         if (stream == 0)
         {
-            logger->err("Received stream number == 0 in UE-associated signalling");
+            m_logger->err("Received stream number == 0 in UE-associated signalling");
             sendErrorIndication(amfId, NgapCause::Protocol_unspecified);
             return false;
         }
@@ -284,7 +284,7 @@ bool NgapTask::handleSctpStreamId(int amfId, int stream, const ASN_NGAP_NGAP_PDU
             ue->downlinkStream = stream;
         else if (ue->downlinkStream != stream)
         {
-            logger->err("received stream number is inconsistent. received %d, expected :%d", stream,
+            m_logger->err("received stream number is inconsistent. received %d, expected :%d", stream,
                         ue->downlinkStream);
             sendErrorIndication(amfId, NgapCause::Protocol_unspecified);
             return false;
@@ -298,7 +298,7 @@ bool NgapTask::handleSctpStreamId(int amfId, int stream, const ASN_NGAP_NGAP_PDU
         {
             if (stream == 0)
             {
-                logger->err("Received stream number == 0 in UE-associated signalling");
+                m_logger->err("Received stream number == 0 in UE-associated signalling");
                 sendErrorIndication(amfId, NgapCause::Protocol_unspecified);
                 return false;
             }
@@ -312,7 +312,7 @@ bool NgapTask::handleSctpStreamId(int amfId, int stream, const ASN_NGAP_NGAP_PDU
                 ue->downlinkStream = stream;
             else if (ue->downlinkStream != stream)
             {
-                logger->err("received stream number is inconsistent. received %d, expected :%d", stream,
+                m_logger->err("received stream number is inconsistent. received %d, expected :%d", stream,
                             ue->downlinkStream);
                 sendErrorIndication(amfId, NgapCause::Protocol_unspecified);
                 return false;
@@ -322,7 +322,7 @@ bool NgapTask::handleSctpStreamId(int amfId, int stream, const ASN_NGAP_NGAP_PDU
         {
             if (stream != 0)
             {
-                logger->err("Received stream number != 0 in non-UE-associated signalling");
+                m_logger->err("Received stream number != 0 in non-UE-associated signalling");
                 sendErrorIndication(amfId, NgapCause::Protocol_unspecified);
                 return false;
             }

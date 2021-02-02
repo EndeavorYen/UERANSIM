@@ -23,9 +23,15 @@
 namespace nr::gnb
 {
 
-void NgapTask::handleInitialNasTransport(int ueId, const OctetString &nasPdu)
+void NgapTask::handleInitialNasTransport(int ueId, const OctetString &nasPdu, long rrcEstablishmentCause)
 {
-    logger->debug("Initial NAS message received from UE %d", ueId);
+    m_logger->debug("Initial NAS message received from UE %d", ueId);
+
+    if (m_ueCtx.count(ueId))
+    {
+        m_logger->err("UE context[%d] already exists", ueId);
+        return;
+    }
 
     createUeContext(ueId);
 
@@ -38,7 +44,7 @@ void NgapTask::handleInitialNasTransport(int ueId, const OctetString &nasPdu)
 
     if (amfCtx->state != EAmfState::CONNECTED)
     {
-        logger->err("Initial NAS transport failure. AMF is not in connected state.");
+        m_logger->err("Initial NAS transport failure. AMF is not in connected state.");
         return;
     }
 
@@ -51,7 +57,7 @@ void NgapTask::handleInitialNasTransport(int ueId, const OctetString &nasPdu)
     ieEstablishmentCause->id = ASN_NGAP_ProtocolIE_ID_id_RRCEstablishmentCause;
     ieEstablishmentCause->criticality = ASN_NGAP_Criticality_ignore;
     ieEstablishmentCause->value.present = ASN_NGAP_InitialUEMessage_IEs__value_PR_RRCEstablishmentCause;
-    ieEstablishmentCause->value.choice.RRCEstablishmentCause = ASN_NGAP_RRCEstablishmentCause_mo_Data; // TODO
+    ieEstablishmentCause->value.choice.RRCEstablishmentCause = rrcEstablishmentCause;
 
     auto *ieCtxRequest = asn::New<ASN_NGAP_InitialUEMessage_IEs>();
     ieCtxRequest->id = ASN_NGAP_ProtocolIE_ID_id_UEContextRequest;
@@ -71,20 +77,15 @@ void NgapTask::handleInitialNasTransport(int ueId, const OctetString &nasPdu)
 
 void NgapTask::deliverDownlinkNas(int ueId, OctetString &&nasPdu)
 {
-    base->rrcTask->push(new NwDownlinkNasDelivery(ueId, std::move(nasPdu)));
-}
-
-void NgapTask::deliverUplinkNas(NwUplinkNasDelivery *msg)
-{
-    if (ueContexts.count(msg->ueId))
-        handleUplinkNasTransport(msg->ueId, msg->nasPdu);
-    else
-        handleInitialNasTransport(msg->ueId, msg->nasPdu);
-    delete msg;
+    m_base->rrcTask->push(new NwDownlinkNasDelivery(ueId, std::move(nasPdu)));
 }
 
 void NgapTask::handleUplinkNasTransport(int ueId, const OctetString &nasPdu)
 {
+    auto *ue = findUeContext(ueId);
+    if (ue == nullptr)
+        return;
+
     auto *ieNasPdu = asn::New<ASN_NGAP_UplinkNASTransport_IEs>();
     ieNasPdu->id = ASN_NGAP_ProtocolIE_ID_id_NAS_PDU;
     ieNasPdu->criticality = ASN_NGAP_Criticality_reject;
@@ -97,7 +98,7 @@ void NgapTask::handleUplinkNasTransport(int ueId, const OctetString &nasPdu)
 
 void NgapTask::sendNasNonDeliveryIndication(int ueId, const OctetString &nasPdu, NgapCause cause)
 {
-    logger->debug("Sending non-delivery indication for UE[%d]", ueId);
+    m_logger->debug("Sending non-delivery indication for UE[%d]", ueId);
 
     auto *ieNasPdu = asn::New<ASN_NGAP_NASNonDeliveryIndication_IEs>();
     ieNasPdu->id = ASN_NGAP_ProtocolIE_ID_id_NAS_PDU;
@@ -128,7 +129,7 @@ void NgapTask::receiveDownlinkNasTransport(int amfId, ASN_NGAP_DownlinkNASTransp
 
 void NgapTask::receiveRerouteNasRequest(int amfId, ASN_NGAP_RerouteNASRequest *msg)
 {
-    logger->debug("Reroute NAS request received");
+    m_logger->debug("Reroute NAS request received");
 
     auto *ue = findUeByNgapIdPair(amfId, ngap_utils::FindNgapIdPair(msg));
     if (ue == nullptr)
@@ -148,7 +149,7 @@ void NgapTask::receiveRerouteNasRequest(int amfId, ASN_NGAP_RerouteNASRequest *m
 
     if (!ngap_encode::DecodeInPlace(asn_DEF_ASN_NGAP_InitialUEMessage, ieNgapMessage->OCTET_STRING, &initialUeMessage))
     {
-        logger->err("APER decoding failed in Reroute NAS Request");
+        m_logger->err("APER decoding failed in Reroute NAS Request");
         asn::Free(asn_DEF_ASN_NGAP_NGAP_PDU, ngapPdu);
         sendErrorIndication(amfId, NgapCause::Protocol_transfer_syntax_error);
         return;
@@ -173,7 +174,7 @@ void NgapTask::receiveRerouteNasRequest(int amfId, ASN_NGAP_RerouteNASRequest *m
     auto *newAmf = selectNewAmfForReAllocation(amfId, asn::GetBitStringInt<10>(ieAmfSetId->AMFSetID));
     if (newAmf == nullptr)
     {
-        logger->err("AMF selection for re-allocation failed. Could not find a suitable AMF.");
+        m_logger->err("AMF selection for re-allocation failed. Could not find a suitable AMF.");
         return;
     }
 

@@ -21,6 +21,19 @@ UeTimers::UeTimers()
 {
 }
 
+const char *CmStateName(ECmState state)
+{
+    switch (state)
+    {
+    case ECmState::CM_IDLE:
+        return "CM-IDLE";
+    case ECmState::CM_CONNECTED:
+        return "CM-CONNECTED";
+    default:
+        return "?";
+    }
+}
+
 const char *RmStateName(ERmState state)
 {
     switch (state)

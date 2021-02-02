@@ -18,8 +18,8 @@ namespace nr::ue
 class UeRls : public rls::RlsUeEntity
 {
   private:
-    std::unique_ptr<Logger> logger;
-    NtsTask *targetTask;
+    std::unique_ptr<Logger> m_logger;
+    NtsTask *m_targetTask;
 
   public:
     UeRls(const std::string &nodeName, const std::vector<InetAddress> &gnbSearchList, std::unique_ptr<Logger> logger,

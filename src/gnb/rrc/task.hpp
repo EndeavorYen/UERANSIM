@@ -28,6 +28,7 @@ extern "C"
     struct ASN_RRC_UL_DCCH_Message;
 
     struct ASN_RRC_RRCSetupRequest;
+    struct ASN_RRC_RRCSetupComplete;
     struct ASN_RRC_ULInformationTransfer;
 }
 
@@ -40,8 +41,10 @@ class GnbMrTask;
 class GnbRrcTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    std::unique_ptr<Logger> m_logger;
+    std::unordered_map<int, RrcUeContext *> m_ueCtx;
+    int m_tidCounter;
 
   public:
     explicit GnbRrcTask(TaskBase *base);
@@ -53,16 +56,21 @@ class GnbRrcTask : public NtsTask
     void onQuit() override;
 
   private:
-    /* Handle NTS messages */
-    void handleUplinkRrc(NwGnbUplinkRrc *msg);
+    /* Management */
+    RrcUeContext *tryFindUe(int id);
+    RrcUeContext *findUe(int id);
+    RrcUeContext *createUe(int id);
+    RrcUeContext *tryFindByInitialRandomId(int64_t id);
+    int getNextTid();
 
-    /* NAS transport */
+    /* Handlers */
+    void handleUplinkRrc(NwGnbUplinkRrc *msg);
     void handleDownlinkNasDelivery(NwDownlinkNasDelivery *msg);
     void deliverUplinkNas(int ueId, OctetString &&nasPdu);
 
-    /* Procedure handlers */
-    void receiveUplinkInformationTransfer(int ueId, ASN_RRC_ULInformationTransfer *msg);
-    void receiveRrcSetupRequest(int ueId, ASN_RRC_RRCSetupRequest *msg);
+    void receiveUplinkInformationTransfer(int ueId, const ASN_RRC_ULInformationTransfer &msg);
+    void receiveRrcSetupRequest(int ueId, const ASN_RRC_RRCSetupRequest &msg);
+    void receiveRrcSetupComplete(int ueId, const ASN_RRC_RRCSetupComplete &msg);
 
     /* RRC channel send message */
     void sendRrcMessage(int ueId, ASN_RRC_BCCH_BCH_Message *msg);

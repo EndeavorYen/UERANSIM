@@ -142,11 +142,26 @@ enum class ECmState
     CM_CONNECTED
 };
 
-enum E5UState
+enum class E5UState
 {
     U1_UPDATED,
     U2_NOT_UPDATED,
     U3_ROAMING_NOT_ALLOWED
+};
+
+enum class ERrcState
+{
+    RRC_IDLE,
+    RRC_CONNECTED,
+    RRC_INACTIVE,
+};
+
+enum class ERrcLastSetupRequest
+{
+    SETUP_REQUEST,
+    REESTABLISHMENT_REQUEST,
+    RESUME_REQUEST,
+    RESUME_REQUEST1,
 };
 
 enum class EMmState
@@ -339,9 +354,11 @@ struct UeStatusInfo
     std::string connectedGnb{};
     std::string mmState{};
     std::string rmState{};
+    std::string cmState{};
     std::optional<UePduSessionInfo> pduSessions[16]{};
 };
 
+const char *CmStateName(ECmState state);
 const char *RmStateName(ERmState state);
 const char *MmStateName(EMmState state);
 const char *MmSubStateName(EMmSubState state);

@@ -23,10 +23,10 @@ namespace nr::ue
 class TunTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    int psi;
-    int fd;
-    ScopedThread *receiver;
+    TaskBase *m_base;
+    int m_psi;
+    int m_fd;
+    ScopedThread *m_receiver;
 
   public:
     explicit TunTask(TaskBase *taskBase, int psi, int fd);

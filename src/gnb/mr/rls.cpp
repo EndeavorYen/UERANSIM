@@ -13,48 +13,48 @@ namespace nr::gnb
 {
 
 GnbRls::GnbRls(std::string nodeName, std::unique_ptr<Logger> logger, NtsTask *targetTask)
-    : RlsGnbEntity(std::move(nodeName)), logger(std::move(logger)), targetTask(targetTask), isN1Ready{}
+    : RlsGnbEntity(std::move(nodeName)), m_logger(std::move(logger)), m_targetTask(targetTask), m_isN1Ready{}
 {
 }
 
 void GnbRls::logWarn(const std::string &msg)
 {
-    logger->warn(msg);
+    m_logger->warn(msg);
 }
 
 void GnbRls::logError(const std::string &msg)
 {
-    logger->err(msg);
+    m_logger->err(msg);
 }
 
 bool GnbRls::isInReadyState()
 {
-    return isN1Ready;
+    return m_isN1Ready;
 }
 
 void GnbRls::onUeConnected(int ue, std::string name)
 {
-    targetTask->push(new NwUeConnected(ue, std::move(name)));
+    m_targetTask->push(new NwUeConnected(ue, std::move(name)));
 }
 
 void GnbRls::onUeReleased(int ue, rls::ECause cause)
 {
-    targetTask->push(new NwUeReleased(ue, cause));
+    m_targetTask->push(new NwUeReleased(ue, cause));
 }
 
 void GnbRls::deliverUplinkPayload(int ue, rls::EPayloadType type, OctetString &&payload)
 {
-    targetTask->push(new NwUplinkPayload(ue, type, std::move(payload)));
+    m_targetTask->push(new NwUplinkPayload(ue, type, std::move(payload)));
 }
 
 void GnbRls::sendRlsPdu(const InetAddress &address, OctetString &&pdu)
 {
-    targetTask->push(new NwRlsSendPdu(address, std::move(pdu)));
+    m_targetTask->push(new NwRlsSendPdu(address, std::move(pdu)));
 }
 
 void GnbRls::setN1IsReady(bool isReady)
 {
-    isN1Ready = isReady;
+    m_isN1Ready = isReady;
 }
 
 } // namespace nr::gnb

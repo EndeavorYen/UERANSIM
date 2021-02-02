@@ -50,7 +50,7 @@ void NgapTask::receiveSessionResourceSetupRequest(int amfId, ASN_NGAP_PDUSession
                 asn_DEF_ASN_NGAP_PDUSessionResourceSetupRequestTransfer, item->pDUSessionResourceSetupRequestTransfer);
             if (transfer == nullptr)
             {
-                logger->err(
+                m_logger->err(
                     "Unable to decode a PDU session resource setup request transfer. Ignoring the relevant item");
                 asn::Free(asn_DEF_ASN_NGAP_PDUSessionResourceSetupRequestTransfer, transfer);
                 continue;
@@ -191,38 +191,39 @@ void NgapTask::receiveSessionResourceSetupRequest(int amfId, ASN_NGAP_PDUSession
     sendNgapUeAssociated(ue->ctxId, respPdu);
 
     if (failedList.empty())
-        logger->info("PDU session resource is established for UE[%d] count[%d]", ue->ctxId, successList.size());
+        m_logger->info("PDU session resource is established for UE[%d] count[%d]", ue->ctxId, successList.size());
     else if (successList.empty())
-        logger->err("PDU session resource establishment was failed for UE[%d] count[%d]", ue->ctxId, failedList.size());
+        m_logger->err("PDU session resource establishment was failed for UE[%d] count[%d]", ue->ctxId,
+                      failedList.size());
     else
-        logger->err("PDU session establishment is partially successful for UE[%d], success[%d], failed[%d]",
-                    successList.size(), failedList.size());
+        m_logger->err("PDU session establishment is partially successful for UE[%d], success[%d], failed[%d]",
+                      successList.size(), failedList.size());
 }
 
 std::optional<NgapCause> NgapTask::setupPduSessionResource(PduSessionResource *resource)
 {
     if (resource->sessionType != PduSessionType::IPv4)
     {
-        logger->err("PDU session resource could not setup: Only IPv4 is supported");
+        m_logger->err("PDU session resource could not setup: Only IPv4 is supported");
         return NgapCause::RadioNetwork_unspecified;
     }
 
     if (resource->upTunnel.address.length() == 0)
     {
-        logger->err("PDU session resource could not setup: Uplink TNL information is missing");
+        m_logger->err("PDU session resource could not setup: Uplink TNL information is missing");
         return NgapCause::Protocol_transfer_syntax_error;
     }
 
     if (resource->qosFlows == nullptr || resource->qosFlows->list.count == 0)
     {
-        logger->err("PDU session resource could not setup: QoS flow list is null or empty");
+        m_logger->err("PDU session resource could not setup: QoS flow list is null or empty");
         return NgapCause::Protocol_semantic_error;
     }
 
-    resource->downTunnel.address = utils::IpToOctetString(base->config->gtpIp);
-    resource->downTunnel.teid = ++downlinkTeidCounter;
+    resource->downTunnel.address = utils::IpToOctetString(m_base->config->gtpIp);
+    resource->downTunnel.teid = ++m_downlinkTeidCounter;
 
-    base->gtpTask->push(new NwPduSessionResourceCreate(resource));
+    m_base->gtpTask->push(new NwPduSessionResourceCreate(resource));
     return {};
 }
 

@@ -28,7 +28,7 @@ namespace nr::gnb
 
 void NgapTask::handleAssociationSetup(NwSctpAssociationSetup *msg)
 {
-    logger->debug("SCTP association setup received ascId[%d]", msg->associationId);
+    m_logger->debug("SCTP association setup received ascId[%d]", msg->associationId);
 
     auto *amf = findAmfContext(msg->clientId);
     if (amf != nullptr)
@@ -37,14 +37,14 @@ void NgapTask::handleAssociationSetup(NwSctpAssociationSetup *msg)
         amf->association.inStreams = msg->inStreams;
         amf->association.outStreams = msg->outStreams;
 
-        waitingSctpClients--;
-        if (waitingSctpClients == 0)
+        m_waitingSctpClients--;
+        if (m_waitingSctpClients == 0)
         {
             auto *update = new NwGnbStatusUpdate(NwGnbStatusUpdate::INITIAL_SCTP_ESTABLISHED);
             update->isInitialSctpEstablished = true;
-            base->appTask->push(update);
+            m_base->appTask->push(update);
 
-            base->mrTask->push(new NwGnbN1Ready());
+            m_base->mrTask->push(new NwGnbN1Ready());
         }
 
         sendNgSetupRequest(amf->ctxId);
@@ -55,7 +55,7 @@ void NgapTask::handleAssociationSetup(NwSctpAssociationSetup *msg)
 
 void NgapTask::sendNgSetupRequest(int amfId)
 {
-    logger->debug("Sending NG Setup Request");
+    m_logger->debug("Sending NG Setup Request");
 
     auto *amf = findAmfContext(amfId);
     if (amf == nullptr)
@@ -69,8 +69,8 @@ void NgapTask::sendNgSetupRequest(int amfId)
 
     auto *globalGnbId = asn::New<ASN_NGAP_GlobalGNB_ID>();
     globalGnbId->gNB_ID.present = ASN_NGAP_GNB_ID_PR_gNB_ID;
-    asn::SetBitString(globalGnbId->gNB_ID.choice.gNB_ID, octet4{base->config->getGnbId()});
-    asn::SetOctetString3(globalGnbId->pLMNIdentity, ngap_utils::PlmnToOctet3(base->config->plmn));
+    asn::SetBitString(globalGnbId->gNB_ID.choice.gNB_ID, octet4{m_base->config->getGnbId()});
+    asn::SetOctetString3(globalGnbId->pLMNIdentity, ngap_utils::PlmnToOctet3(m_base->config->plmn));
 
     auto *ieGlobalGnbId = asn::New<ASN_NGAP_NGSetupRequestIEs>();
     ieGlobalGnbId->id = ASN_NGAP_ProtocolIE_ID_id_GlobalRANNodeID;
@@ -83,11 +83,11 @@ void NgapTask::sendNgSetupRequest(int amfId)
     ieRanNodeName->id = ASN_NGAP_ProtocolIE_ID_id_RANNodeName;
     ieRanNodeName->criticality = ASN_NGAP_Criticality_ignore;
     ieRanNodeName->value.present = ASN_NGAP_NGSetupRequestIEs__value_PR_RANNodeName;
-    asn::SetPrintableString(ieRanNodeName->value.choice.RANNodeName, base->config->name);
+    asn::SetPrintableString(ieRanNodeName->value.choice.RANNodeName, m_base->config->name);
 
     auto *broadcastPlmn = asn::New<ASN_NGAP_BroadcastPLMNItem>();
-    asn::SetOctetString3(broadcastPlmn->pLMNIdentity, ngap_utils::PlmnToOctet3(base->config->plmn));
-    for (auto &nssai : base->config->nssais)
+    asn::SetOctetString3(broadcastPlmn->pLMNIdentity, ngap_utils::PlmnToOctet3(m_base->config->plmn));
+    for (auto &nssai : m_base->config->nssais)
     {
         auto *item = asn::New<ASN_NGAP_SliceSupportItem>();
         asn::SetOctetString1(item->s_NSSAI.sST, static_cast<uint8_t>(nssai.sst));
@@ -100,7 +100,7 @@ void NgapTask::sendNgSetupRequest(int amfId)
     }
 
     auto *supportedTa = asn::New<ASN_NGAP_SupportedTAItem>();
-    asn::SetOctetString3(supportedTa->tAC, octet3{base->config->tac});
+    asn::SetOctetString3(supportedTa->tAC, octet3{m_base->config->tac});
     asn::SequenceAdd(supportedTa->broadcastPLMNList, broadcastPlmn);
 
     auto *ieSupportedTaList = asn::New<ASN_NGAP_NGSetupRequestIEs>();
@@ -113,7 +113,7 @@ void NgapTask::sendNgSetupRequest(int amfId)
     iePagingDrx->id = ASN_NGAP_ProtocolIE_ID_id_DefaultPagingDRX;
     iePagingDrx->criticality = ASN_NGAP_Criticality_ignore;
     iePagingDrx->value.present = ASN_NGAP_NGSetupRequestIEs__value_PR_PagingDRX;
-    iePagingDrx->value.choice.PagingDRX = ngap_utils::PagingDrxToAsn(base->config->pagingDrx);
+    iePagingDrx->value.choice.PagingDRX = ngap_utils::PagingDrxToAsn(m_base->config->pagingDrx);
 
     auto *pdu = asn::ngap::NewMessagePdu<ASN_NGAP_NGSetupRequest>(
         {ieGlobalGnbId, ieRanNodeName, ieSupportedTaList, iePagingDrx});
@@ -123,7 +123,7 @@ void NgapTask::sendNgSetupRequest(int amfId)
 
 void NgapTask::receiveNgSetupResponse(int amfId, ASN_NGAP_NGSetupResponse *msg)
 {
-    logger->debug("NG Setup Response received");
+    m_logger->debug("NG Setup Response received");
 
     auto *amf = findAmfContext(amfId);
     if (amf == nullptr)
@@ -167,12 +167,12 @@ void NgapTask::receiveNgSetupResponse(int amfId, ASN_NGAP_NGSetupResponse *msg)
     }
 
     amf->state = EAmfState::CONNECTED;
-    logger->info("NG Setup procedure is successful");
+    m_logger->info("NG Setup procedure is successful");
 }
 
 void NgapTask::receiveNgSetupFailure(int amfId, ASN_NGAP_NGSetupFailure *msg)
 {
-    logger->debug("NG Setup Failure received");
+    m_logger->debug("NG Setup Failure received");
 
     auto *amf = findAmfContext(amfId);
     if (amf == nullptr)
@@ -182,9 +182,9 @@ void NgapTask::receiveNgSetupFailure(int amfId, ASN_NGAP_NGSetupFailure *msg)
 
     auto *ie = asn::ngap::GetProtocolIe(msg, ASN_NGAP_ProtocolIE_ID_id_Cause);
     if (ie)
-        logger->err("NG Setup procedure is failed. Cause: %s", ngap_utils::CauseToString(ie->Cause).c_str());
+        m_logger->err("NG Setup procedure is failed. Cause: %s", ngap_utils::CauseToString(ie->Cause).c_str());
     else
-        logger->err("NG Setup procedure is failed.");
+        m_logger->err("NG Setup procedure is failed.");
 }
 
 void NgapTask::receiveErrorIndication(int amfId, ASN_NGAP_ErrorIndication *msg)
@@ -192,15 +192,15 @@ void NgapTask::receiveErrorIndication(int amfId, ASN_NGAP_ErrorIndication *msg)
     auto *amf = findAmfContext(amfId);
     if (amf == nullptr)
     {
-        logger->err("Error indication received with not found AMF context");
+        m_logger->err("Error indication received with not found AMF context");
         return;
     }
 
     auto *ie = asn::ngap::GetProtocolIe(msg, ASN_NGAP_ProtocolIE_ID_id_Cause);
     if (ie)
-        logger->err("Error indication received. Cause: %s", ngap_utils::CauseToString(ie->Cause).c_str());
+        m_logger->err("Error indication received. Cause: %s", ngap_utils::CauseToString(ie->Cause).c_str());
     else
-        logger->err("Error indication received.");
+        m_logger->err("Error indication received.");
 }
 
 void NgapTask::sendErrorIndication(int amfId, NgapCause cause, int ueId)
@@ -211,7 +211,7 @@ void NgapTask::sendErrorIndication(int amfId, NgapCause cause, int ueId)
     ieCause->value.present = ASN_NGAP_ErrorIndicationIEs__value_PR_Cause;
     ngap_utils::ToCauseAsn_Ref(cause, ieCause->value.choice.Cause);
 
-    logger->debug("Sending an error indication with cause: %s",
+    m_logger->debug("Sending an error indication with cause: %s",
                   ngap_utils::CauseToString(ieCause->value.choice.Cause).c_str());
 
     auto *pdu = asn::ngap::NewMessagePdu<ASN_NGAP_ErrorIndication>({ieCause});

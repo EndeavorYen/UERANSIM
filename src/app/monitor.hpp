@@ -33,7 +33,8 @@ enum class StateType
 {
     MM,
     MM_SUB,
-    RM
+    RM,
+    CM,
 };
 
 class INodeListener

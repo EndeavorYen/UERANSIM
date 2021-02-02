@@ -29,7 +29,7 @@ namespace nr::gnb
 
 void NgapTask::receiveInitialContextSetup(int amfId, ASN_NGAP_InitialContextSetupRequest *msg)
 {
-    logger->debug("Initial Context Setup Request received");
+    m_logger->debug("Initial Context Setup Request received");
 
     auto *ue = findUeByNgapIdPair(amfId, ngap_utils::FindNgapIdPair(msg));
     if (ue == nullptr)
@@ -49,12 +49,12 @@ void NgapTask::receiveInitialContextSetup(int amfId, ASN_NGAP_InitialContextSetu
     if (ie)
         deliverDownlinkNas(ue->ctxId, asn::GetOctetString(ie->NAS_PDU));
 
-    base->gtpTask->push(new NwUeContextUpdate(ue->ctxId, true, ue->ueAmbr));
+    m_base->gtpTask->push(new NwUeContextUpdate(ue->ctxId, true, ue->ueAmbr));
 }
 
 void NgapTask::receiveContextRelease(int amfId, ASN_NGAP_UEContextReleaseCommand *msg)
 {
-    logger->debug("UE Context Release Command received");
+    m_logger->debug("UE Context Release Command received");
 
     auto *ue = findUeByNgapIdPair(amfId, ngap_utils::FindNgapIdPairFromUeNgapIds(msg));
     if (ue == nullptr)
@@ -71,7 +71,7 @@ void NgapTask::receiveContextRelease(int amfId, ASN_NGAP_UEContextReleaseCommand
 
 void NgapTask::receiveContextModification(int amfId, ASN_NGAP_UEContextModificationRequest *msg)
 {
-    logger->debug("UE Context Modification Request received");
+    m_logger->debug("UE Context Modification Request received");
 
     auto *ue = findUeByNgapIdPair(amfId, ngap_utils::FindNgapIdPair(msg));
     if (ue == nullptr)
@@ -89,13 +89,13 @@ void NgapTask::receiveContextModification(int amfId, ASN_NGAP_UEContextModificat
     {
         int64_t old = ue->amfUeNgapId;
         ue->amfUeNgapId = asn::GetSigned64(ie->AMF_UE_NGAP_ID_1);
-        logger->debug("AMF-UE-NGAP-ID changed from %ld to %ld", old, ue->amfUeNgapId);
+        m_logger->debug("AMF-UE-NGAP-ID changed from %ld to %ld", old, ue->amfUeNgapId);
     }
 
     auto *response = asn::ngap::NewMessagePdu<ASN_NGAP_UEContextModificationResponse>({});
     sendNgapUeAssociated(ue->ctxId, response);
 
-    base->gtpTask->push(new NwUeContextUpdate(ue->ctxId, false, ue->ueAmbr));
+    m_base->gtpTask->push(new NwUeContextUpdate(ue->ctxId, false, ue->ueAmbr));
 }
 
 } // namespace nr::gnb

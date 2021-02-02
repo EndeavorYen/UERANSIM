@@ -22,10 +22,10 @@ namespace nr::gnb
 class GnbAppTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    std::unique_ptr<Logger> m_logger;
 
-    GnbStatusInfo statusInfo;
+    GnbStatusInfo m_statusInfo;
 
   public:
     explicit GnbAppTask(TaskBase *base);

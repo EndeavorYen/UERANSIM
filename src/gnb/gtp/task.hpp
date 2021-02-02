@@ -26,14 +26,14 @@ struct GnbMrTask;
 class GtpTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    std::unique_ptr<Logger> m_logger;
 
-    udp::UdpServerTask *udpServer;
-    std::unordered_map<int, std::unique_ptr<GtpUeContext>> ueContexts;
-    std::unique_ptr<IRateLimiter> rateLimiter;
-    std::unordered_map<uint64_t, std::unique_ptr<PduSessionResource>> pduSessions;
-    PduSessionTree sessionTree;
+    udp::UdpServerTask *m_udpServer;
+    std::unordered_map<int, std::unique_ptr<GtpUeContext>> m_ueContexts;
+    std::unique_ptr<IRateLimiter> m_rateLimiter;
+    std::unordered_map<uint64_t, std::unique_ptr<PduSessionResource>> m_pduSessions;
+    PduSessionTree m_sessionTree;
 
   public:
     explicit GtpTask(TaskBase *base);

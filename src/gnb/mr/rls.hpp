@@ -18,9 +18,9 @@ namespace nr::gnb
 class GnbRls : public rls::RlsGnbEntity
 {
   private:
-    std::unique_ptr<Logger> logger;
-    NtsTask *targetTask;
-    bool isN1Ready;
+    std::unique_ptr<Logger> m_logger;
+    NtsTask *m_targetTask;
+    bool m_isN1Ready;
 
   public:
     explicit GnbRls(std::string nodeName, std::unique_ptr<Logger> logger, NtsTask *targetTask);

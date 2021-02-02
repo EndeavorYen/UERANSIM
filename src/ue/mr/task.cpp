@@ -18,33 +18,33 @@ static const int PLMN_SEARCH_FAILED_PRINT_THRESHOLD = 10000;
 namespace nr::ue
 {
 
-ue::UeMrTask::UeMrTask(TaskBase *base) : base{base}, udpTask{}, rlsEntity{}, lastPlmnSearchFailurePrinted{}
+ue::UeMrTask::UeMrTask(TaskBase *base) : m_base{base}, m_udpTask{}, m_rlsEntity{}, m_lastPlmnSearchFailurePrinted{}
 {
-    logger = base->logBase->makeUniqueLogger(base->config->getLoggerPrefix() + "mr");
+    m_logger = m_base->logBase->makeUniqueLogger(m_base->config->getLoggerPrefix() + "mr");
 }
 
 void UeMrTask::onStart()
 {
-    udpTask = new udp::UdpServerTask(this);
+    m_udpTask = new udp::UdpServerTask(this);
 
     std::vector<InetAddress> gnbSearchList{};
-    for (auto &ip : base->config->gnbSearchList)
+    for (auto &ip : m_base->config->gnbSearchList)
         gnbSearchList.emplace_back(ip, cons::PortalPort);
 
-    rlsEntity = new UeRls(base->config->getNodeName(), gnbSearchList,
-                          base->logBase->makeUniqueLogger(base->config->getLoggerPrefix() + "rls"), this);
+    m_rlsEntity = new UeRls(m_base->config->getNodeName(), gnbSearchList,
+                            m_base->logBase->makeUniqueLogger(m_base->config->getLoggerPrefix() + "rls"), this);
 
-    udpTask->start();
+    m_udpTask->start();
 
     setTimer(TIMER_ID_RLS_HEARTBEAT, rls::Constants::HB_PERIOD_UE_TO_GNB);
 }
 
 void UeMrTask::onQuit()
 {
-    delete rlsEntity;
+    delete m_rlsEntity;
 
-    udpTask->quit();
-    delete udpTask;
+    m_udpTask->quit();
+    delete m_udpTask;
 }
 
 void UeMrTask::onLoop()
@@ -56,13 +56,13 @@ void UeMrTask::onLoop()
     switch (msg->msgType)
     {
     case NtsMessageType::UE_MR_PLMN_SEARCH_REQUEST: {
-        rlsEntity->startGnbSearch();
+        m_rlsEntity->startGnbSearch();
         delete msg;
         break;
     }
     case NtsMessageType::UE_RLS_SEND_PDU: {
         auto *w = dynamic_cast<NwRlsSendPdu *>(msg);
-        udpTask->send(w->address, w->pdu);
+        m_udpTask->send(w->address, w->pdu);
         delete w;
         break;
     }
@@ -76,12 +76,12 @@ void UeMrTask::onLoop()
         auto *w = dynamic_cast<NwTimerExpired *>(msg);
         if (w->timerId == TIMER_ID_RLS_WAITING_TIMER)
         {
-            rlsEntity->onWaitingTimerExpire();
+            m_rlsEntity->onWaitingTimerExpire();
         }
         else if (w->timerId == TIMER_ID_RLS_HEARTBEAT)
         {
             setTimer(TIMER_ID_RLS_HEARTBEAT, rls::Constants::HB_PERIOD_UE_TO_GNB);
-            rlsEntity->onHeartbeat();
+            m_rlsEntity->onHeartbeat();
         }
         delete w;
         break;
@@ -89,30 +89,30 @@ void UeMrTask::onLoop()
     case NtsMessageType::UE_RLS_SEARCH_FAILURE: {
         auto *w = dynamic_cast<NwRlsSearchFailure *>(msg);
         long current = utils::CurrentTimeMillis();
-        if (current - lastPlmnSearchFailurePrinted > PLMN_SEARCH_FAILED_PRINT_THRESHOLD)
+        if (current - m_lastPlmnSearchFailurePrinted > PLMN_SEARCH_FAILED_PRINT_THRESHOLD)
         {
-            logger->err("PLMN search failed [%s]", rls::CauseToString(w->cause));
-            lastPlmnSearchFailurePrinted = current;
-            base->rrcTask->push(new NwPlmnSearchFailure());
+            m_logger->err("PLMN search failed [%s]", rls::CauseToString(w->cause));
+            m_lastPlmnSearchFailurePrinted = current;
+            m_base->rrcTask->push(new NwPlmnSearchFailure());
         }
         delete w;
         break;
     }
     case NtsMessageType::UE_RLS_RELEASED: {
         auto *w = dynamic_cast<NwRlsReleased *>(msg);
-        logger->warn("UE disconnected from gNB, RLS released [%s]", rls::CauseToString(w->cause));
+        m_logger->warn("UE disconnected from gNB, RLS released [%s]", rls::CauseToString(w->cause));
         delete w;
         break;
     }
     case NtsMessageType::UDP_SERVER_RECEIVE: {
         auto *w = dynamic_cast<udp::NwUdpServerReceive *>(msg);
-        rlsEntity->onReceive(w->fromAddress, w->packet);
+        m_rlsEntity->onReceive(w->fromAddress, w->packet);
         delete w;
         break;
     }
     case NtsMessageType::UE_RLS_CONNECTED: {
         auto *w = dynamic_cast<NwRlsConnected *>(msg);
-        base->rrcTask->push(new NwPlmnSearchResponse(std::move(w->gnbName)));
+        m_base->rrcTask->push(new NwPlmnSearchResponse(std::move(w->gnbName)));
         delete w;
         break;
     }
@@ -124,7 +124,7 @@ void UeMrTask::onLoop()
         stream.appendOctet(static_cast<int>(w->channel));
         stream.append(w->rrcPdu);
 
-        rlsEntity->onUplinkDelivery(rls::EPayloadType::RRC, std::move(stream));
+        m_rlsEntity->onUplinkDelivery(rls::EPayloadType::RRC, std::move(stream));
         delete w;
         break;
     }
@@ -136,7 +136,7 @@ void UeMrTask::onLoop()
         stream.appendOctet4(w->psi);
         stream.append(w->data);
 
-        rlsEntity->onUplinkDelivery(rls::EPayloadType::DATA, std::move(stream));
+        m_rlsEntity->onUplinkDelivery(rls::EPayloadType::DATA, std::move(stream));
         delete w;
         break;
     }
@@ -147,7 +147,7 @@ void UeMrTask::onLoop()
         break;
     }
     default:
-        logger->err("Unhandled NTS message received with type [%d]", (int)msg->msgType);
+        m_logger->err("Unhandled NTS message received with type [%d]", (int)msg->msgType);
         delete msg;
         break;
     }
@@ -159,13 +159,13 @@ void UeMrTask::receiveDownlinkPayload(rls::EPayloadType type, OctetString &&payl
     {
         auto ch = static_cast<rrc::RrcChannel>(payload.getI(0));
         OctetString rrcPayload = payload.subCopy(1);
-        base->rrcTask->push(new NwUeDownlinkRrc(ch, std::move(rrcPayload)));
+        m_base->rrcTask->push(new NwUeDownlinkRrc(ch, std::move(rrcPayload)));
     }
     else if (type == rls::EPayloadType::DATA)
     {
         int psi = payload.get4I(0);
         OctetString dataPayload = payload.subCopy(4);
-        base->appTask->push(new NwUeDownlinkData(psi, std::move(dataPayload)));
+        m_base->appTask->push(new NwUeDownlinkData(psi, std::move(dataPayload)));
     }
 }
 

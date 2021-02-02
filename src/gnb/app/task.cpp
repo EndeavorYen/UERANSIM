@@ -12,9 +12,9 @@
 namespace nr::gnb
 {
 
-GnbAppTask::GnbAppTask(TaskBase *base) : base{base}, statusInfo{}
+GnbAppTask::GnbAppTask(TaskBase *base) : m_base{base}, m_statusInfo{}
 {
-    logger = base->logBase->makeUniqueLogger("app");
+    m_logger = m_base->logBase->makeUniqueLogger("app");
 }
 
 void GnbAppTask::onStart()
@@ -34,13 +34,13 @@ void GnbAppTask::onLoop()
         switch (m->what)
         {
         case NwGnbStatusUpdate::INITIAL_SCTP_ESTABLISHED:
-            statusInfo.isInitialSctpEstablished = m->isInitialSctpEstablished;
+            m_statusInfo.isInitialSctpEstablished = m->isInitialSctpEstablished;
             break;
         }
         break;
     }
     default:
-        logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+        m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
         delete msg;
         break;
     }

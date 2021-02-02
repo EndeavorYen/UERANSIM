@@ -7,20 +7,28 @@
 //
 
 #include "task.hpp"
+#include <asn/rrc/ASN_RRC_RRCSetupRequest-IEs.h>
+#include <asn/rrc/ASN_RRC_RRCSetupRequest.h>
+#include <asn/rrc/ASN_RRC_ULInformationTransfer-IEs.h>
+#include <asn/rrc/ASN_RRC_ULInformationTransfer.h>
 #include <rrc/encode.hpp>
+#include <utils/common.hpp>
 
 namespace nr::ue
 {
 
-UeRrcTask::UeRrcTask(TaskBase *base) : base{base}
+UeRrcTask::UeRrcTask(TaskBase *base) : m_base{base}
 {
-    logger = base->logBase->makeUniqueLogger(base->config->getLoggerPrefix() + "rrc");
+    m_logger = base->logBase->makeUniqueLogger(base->config->getLoggerPrefix() + "rrc");
+
+    m_state = ERrcState::RRC_IDLE;
 }
 
 void UeRrcTask::onStart()
 {
-    logger->debug("RRC layer started");
+    m_logger->debug("RRC layer started");
 }
+
 void UeRrcTask::onQuit()
 {
     // TODO
@@ -43,104 +51,28 @@ void UeRrcTask::onLoop()
         delete msg;
         break;
     }
-    case NtsMessageType::UE_MR_PLMN_SEARCH_REQUEST: {
-        base->mrTask->push(msg);
-        break;
-    }
-    case NtsMessageType::UE_MR_PLMN_SEARCH_RESPONSE: {
-        base->nasTask->push(msg);
-        break;
-    }
-    case NtsMessageType::UE_MR_PLMN_SEARCH_FAILURE: {
-        base->nasTask->push(msg);
-        break;
-    }
-    default:
-        logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+    case NtsMessageType::UE_INITIAL_NAS_DELIVERY: {
+        deliverInitialNas(*dynamic_cast<NwInitialNasDelivery *>(msg));
         delete msg;
         break;
     }
-}
-
-void UeRrcTask::handleDownlinkRrc(NwUeDownlinkRrc *msg)
-{
-    switch (msg->channel)
-    {
-    case rrc::RrcChannel::BCCH_BCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_BCCH_BCH_Message>(asn_DEF_ASN_RRC_BCCH_BCH_Message, msg->rrcPdu);
-        if (pdu == nullptr)
-            logger->err("RRC BCCH-BCH PDU decoding failed.");
-        else
-            receiveRrcMessage(pdu);
-        asn::Free(asn_DEF_ASN_RRC_BCCH_BCH_Message, pdu);
+    case NtsMessageType::UE_MR_PLMN_SEARCH_REQUEST: {
+        m_base->mrTask->push(msg);
         break;
     }
-    case rrc::RrcChannel::BCCH_DL_SCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_BCCH_DL_SCH_Message>(asn_DEF_ASN_RRC_BCCH_DL_SCH_Message, msg->rrcPdu);
-        if (pdu == nullptr)
-            logger->err("RRC BCCH-DL-SCH PDU decoding failed.");
-        else
-            receiveRrcMessage(pdu);
-        asn::Free(asn_DEF_ASN_RRC_BCCH_DL_SCH_Message, pdu);
+    case NtsMessageType::UE_MR_PLMN_SEARCH_RESPONSE: {
+        m_base->nasTask->push(msg);
         break;
-    };
-    case rrc::RrcChannel::DL_CCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_DL_CCCH_Message>(asn_DEF_ASN_RRC_DL_CCCH_Message, msg->rrcPdu);
-        if (pdu == nullptr)
-            logger->err("RRC DL-CCCH PDU decoding failed.");
-        else
-            receiveRrcMessage(pdu);
-        asn::Free(asn_DEF_ASN_RRC_DL_CCCH_Message, pdu);
-        break;
-    };
-    case rrc::RrcChannel::DL_DCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_DL_DCCH_Message>(asn_DEF_ASN_RRC_DL_DCCH_Message, msg->rrcPdu);
-        if (pdu == nullptr)
-            logger->err("RRC DL-DCCH PDU decoding failed.");
-        else
-            receiveRrcMessage(pdu);
-        asn::Free(asn_DEF_ASN_RRC_DL_DCCH_Message, pdu);
-        break;
-    };
-    case rrc::RrcChannel::PCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_PCCH_Message>(asn_DEF_ASN_RRC_PCCH_Message, msg->rrcPdu);
-        if (pdu == nullptr)
-            logger->err("RRC PCCH PDU decoding failed.");
-        else
-            receiveRrcMessage(pdu);
-        asn::Free(asn_DEF_ASN_RRC_PCCH_Message, pdu);
-        break;
-    };
-    case rrc::RrcChannel::UL_CCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_CCCH_Message>(asn_DEF_ASN_RRC_UL_CCCH_Message, msg->rrcPdu);
-        if (pdu == nullptr)
-            logger->err("RRC UL-CCCH PDU decoding failed.");
-        else
-            receiveRrcMessage(pdu);
-        asn::Free(asn_DEF_ASN_RRC_UL_CCCH_Message, pdu);
-        break;
-    };
-    case rrc::RrcChannel::UL_CCCH1: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_CCCH1_Message>(asn_DEF_ASN_RRC_UL_CCCH1_Message, msg->rrcPdu);
-        if (pdu == nullptr)
-            logger->err("RRC UL-CCCH1 PDU decoding failed.");
-        else
-            receiveRrcMessage(pdu);
-        asn::Free(asn_DEF_ASN_RRC_UL_CCCH1_Message, pdu);
-        break;
-    };
-    case rrc::RrcChannel::UL_DCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_DCCH_Message>(asn_DEF_ASN_RRC_UL_DCCH_Message, msg->rrcPdu);
-        if (pdu == nullptr)
-            logger->err("RRC UL-DCCH PDU decoding failed.");
-        else
-            receiveRrcMessage(pdu);
-        asn::Free(asn_DEF_ASN_RRC_UL_DCCH_Message, pdu);
-        break;
-    };
     }
-
-    delete msg;
+    case NtsMessageType::UE_MR_PLMN_SEARCH_FAILURE: {
+        m_base->nasTask->push(msg);
+        break;
+    }
+    default:
+        m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+        delete msg;
+        break;
+    }
 }
 
 } // namespace nr::ue

@@ -61,24 +61,24 @@ static void ReceiverThread(ReceiverArgs *args)
 namespace nr::ue
 {
 
-ue::TunTask::TunTask(TaskBase *base, int psi, int fd) : base{base}, psi{psi}, fd{fd}, receiver{}
+ue::TunTask::TunTask(TaskBase *base, int psi, int fd) : m_base{base}, m_psi{psi}, m_fd{fd}, m_receiver{}
 {
 }
 
 void TunTask::onStart()
 {
     auto *receiverArgs = new ReceiverArgs();
-    receiverArgs->fd = fd;
+    receiverArgs->fd = m_fd;
     receiverArgs->targetTask = this;
-    receiverArgs->psi = psi;
-    receiver =
+    receiverArgs->psi = m_psi;
+    m_receiver =
         new ScopedThread([](void *args) { ReceiverThread(reinterpret_cast<ReceiverArgs *>(args)); }, receiverArgs);
 }
 
 void TunTask::onQuit()
 {
-    delete receiver;
-    ::close(fd);
+    delete m_receiver;
+    ::close(m_fd);
 }
 
 void TunTask::onLoop()
@@ -91,11 +91,11 @@ void TunTask::onLoop()
     {
     case NtsMessageType::UE_TUN_RECEIVE:
     case NtsMessageType::UE_TUN_ERROR:
-        base->appTask->push(msg);
+        m_base->appTask->push(msg);
         break;
     case NtsMessageType::UE_MR_DOWNLINK_DATA: {
         auto *w = dynamic_cast<NwUeDownlinkData *>(msg);
-        int res = ::write(fd, w->data.data(), w->data.length());
+        int res = ::write(m_fd, w->data.data(), w->data.length());
         if (res < 0)
             push(new nr::ue::NwTunError(GetErrorMessage("TUN device could not write")));
         else if (res != w->data.length())

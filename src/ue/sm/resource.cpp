@@ -45,7 +45,6 @@ int NasSm::allocatePduSessionId(const SessionConfig &config)
     arr[id].sessionType = config.type;
     arr[id].sNssai = config.sNssai;
 
-    m_logger->debug("PSI[%d] allocated", id);
     return id;
 }
 
@@ -72,14 +71,12 @@ int NasSm::allocateProcedureTransactionId()
     arr[id] = {};
     arr[id].id = id;
 
-    m_logger->debug("PTI[%d] allocated", id);
     return id;
 }
 
 void NasSm::releaseProcedureTransactionId(int pti)
 {
     m_procedureTransactions[pti].id = 0;
-    m_logger->debug("PTI[%d] released", pti);
 }
 
 void NasSm::releasePduSession(int psi)

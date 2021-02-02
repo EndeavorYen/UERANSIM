@@ -10,6 +10,7 @@
 
 #include <app/monitor.hpp>
 #include <asn/ngap/ASN_NGAP_QosFlowSetupRequestList.h>
+#include <asn/rrc/ASN_RRC_InitialUE-Identity.h>
 #include <asn/utils/utils.hpp>
 #include <string>
 #include <utils/common_types.hpp>
@@ -80,6 +81,18 @@ struct NgapUeContext
     AggregateMaximumBitRate ueAmbr{};
 
     explicit NgapUeContext(int ctxId) : ctxId(ctxId)
+    {
+    }
+};
+
+struct RrcUeContext
+{
+    const int ueId;
+
+    int64_t initialRandomId = -1;
+    long establishmentCause{};
+
+    explicit RrcUeContext(const int ueId) : ueId(ueId)
     {
     }
 };

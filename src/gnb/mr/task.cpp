@@ -17,23 +17,23 @@ static const int TIMER_ID_RLS_HEARTBEAT = 1;
 namespace nr::gnb
 {
 
-GnbMrTask::GnbMrTask(TaskBase *base) : base{base}, udpTask{}, rlsEntity{}, ueMap{}
+GnbMrTask::GnbMrTask(TaskBase *base) : m_base{base}, m_udpTask{}, m_rlsEntity{}, m_ueMap{}
 {
-    logger = base->logBase->makeUniqueLogger("mr");
+    m_logger = m_base->logBase->makeUniqueLogger("mr");
 }
 
 void GnbMrTask::onStart()
 {
-    rlsEntity = new GnbRls(base->config->name, base->logBase->makeUniqueLogger("rls"), this);
+    m_rlsEntity = new GnbRls(m_base->config->name, m_base->logBase->makeUniqueLogger("rls"), this);
 
     try
     {
-        udpTask = new udp::UdpServerTask(base->config->portalIp, cons::PortalPort, this);
-        udpTask->start();
+        m_udpTask = new udp::UdpServerTask(m_base->config->portalIp, cons::PortalPort, this);
+        m_udpTask->start();
     }
     catch (const LibError &e)
     {
-        logger->err("MR failure [%s]", e.what());
+        m_logger->err("MR failure [%s]", e.what());
         quit();
         return;
     }
@@ -57,7 +57,7 @@ void GnbMrTask::onLoop()
         stream.appendOctet(static_cast<int>(w->channel));
         stream.append(w->rrcPdu);
 
-        rlsEntity->downlinkPayloadDelivery(w->ueId, rls::EPayloadType::RRC, std::move(stream));
+        m_rlsEntity->downlinkPayloadDelivery(w->ueId, rls::EPayloadType::RRC, std::move(stream));
         delete w;
         break;
     }
@@ -69,7 +69,7 @@ void GnbMrTask::onLoop()
         stream.appendOctet4(static_cast<int>(w->pduSessionId));
         stream.append(w->data);
 
-        rlsEntity->downlinkPayloadDelivery(w->ueId, rls::EPayloadType::DATA, std::move(stream));
+        m_rlsEntity->downlinkPayloadDelivery(w->ueId, rls::EPayloadType::DATA, std::move(stream));
         delete w;
         break;
     }
@@ -78,14 +78,14 @@ void GnbMrTask::onLoop()
         if (w->timerId == TIMER_ID_RLS_HEARTBEAT)
         {
             setTimer(TIMER_ID_RLS_HEARTBEAT, rls::Constants::HB_PERIOD_GNB_TO_UE);
-            rlsEntity->onHeartbeat();
+            m_rlsEntity->onHeartbeat();
         }
         delete w;
         break;
     }
     case NtsMessageType::UDP_SERVER_RECEIVE: {
         auto *w = dynamic_cast<udp::NwUdpServerReceive *>(msg);
-        rlsEntity->onReceive(w->fromAddress, w->packet);
+        m_rlsEntity->onReceive(w->fromAddress, w->packet);
         delete w;
         break;
     }
@@ -109,17 +109,17 @@ void GnbMrTask::onLoop()
     }
     case NtsMessageType::GNB_RLS_SEND_PDU: {
         auto *w = dynamic_cast<NwRlsSendPdu *>(msg);
-        udpTask->send(w->address, w->pdu);
+        m_udpTask->send(w->address, w->pdu);
         delete w;
         break;
     }
     case NtsMessageType::GNB_MR_N1_IS_READY: {
-        rlsEntity->setN1IsReady(true);
+        m_rlsEntity->setN1IsReady(true);
         delete msg;
         break;
     }
     default:
-        logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+        m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
         delete msg;
         break;
     }
@@ -127,26 +127,26 @@ void GnbMrTask::onLoop()
 
 void GnbMrTask::onQuit()
 {
-    delete rlsEntity;
+    delete m_rlsEntity;
 
-    if (udpTask != nullptr)
-        udpTask->quit();
-    delete udpTask;
+    if (m_udpTask != nullptr)
+        m_udpTask->quit();
+    delete m_udpTask;
 }
 
 void GnbMrTask::onUeConnected(int ue, const std::string &name)
 {
-    ueMap[ue] = {};
-    ueMap[ue].ueId = ue;
-    ueMap[ue].name = name;
+    m_ueMap[ue] = {};
+    m_ueMap[ue].ueId = ue;
+    m_ueMap[ue].name = name;
 
-    logger->info("New UE connected to gNB. Total number of UEs is now: %d", ueMap.size());
+    m_logger->info("New UE connected to gNB. Total number of UEs is now: %d", m_ueMap.size());
 }
 
 void GnbMrTask::onUeReleased(int ue, rls::ECause cause)
 {
-    ueMap.erase(ue);
-    logger->info("A UE disconnected from gNB. Total number of UEs is now: %d", ueMap.size());
+    m_ueMap.erase(ue);
+    m_logger->info("A UE disconnected from gNB. Total number of UEs is now: %d", m_ueMap.size());
 }
 
 void GnbMrTask::receiveUplinkPayload(int ue, rls::EPayloadType type, OctetString &&payload)
@@ -155,13 +155,13 @@ void GnbMrTask::receiveUplinkPayload(int ue, rls::EPayloadType type, OctetString
     {
         auto ch = static_cast<rrc::RrcChannel>(payload.getI(0));
         OctetString rrcPayload = payload.subCopy(1);
-        base->rrcTask->push(new NwGnbUplinkRrc(ue, ch, std::move(rrcPayload)));
+        m_base->rrcTask->push(new NwGnbUplinkRrc(ue, ch, std::move(rrcPayload)));
     }
     else if (type == rls::EPayloadType::DATA)
     {
         int psi = payload.get4I(0);
         OctetString dataPayload = payload.subCopy(4);
-        base->gtpTask->push(new NwUplinkData(ue, psi, std::move(dataPayload)));
+        m_base->gtpTask->push(new NwUplinkData(ue, psi, std::move(dataPayload)));
     }
 }
 

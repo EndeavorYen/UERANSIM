@@ -15,10 +15,10 @@ namespace nr::gnb
 NgapAmfContext *NgapTask::findAmfContext(int ctxId)
 {
     NgapAmfContext *ctx = nullptr;
-    if (amfContexts.count(ctxId))
-        ctx = amfContexts[ctxId];
+    if (m_amfCtx.count(ctxId))
+        ctx = m_amfCtx[ctxId];
     if (ctx == nullptr)
-        logger->err("AMF context not found with id: %d", ctxId);
+        m_logger->err("AMF context not found with id: %d", ctxId);
     return ctx;
 }
 
@@ -29,19 +29,19 @@ void NgapTask::createAmfContext(const GnbAmfConfig &conf)
     ctx->state = EAmfState::NOT_CONNECTED;
     ctx->address = conf.address;
     ctx->port = conf.port;
-    amfContexts[ctx->ctxId] = ctx;
+    m_amfCtx[ctx->ctxId] = ctx;
 }
 
 void NgapTask::createUeContext(int ueId)
 {
     auto *ctx = new NgapUeContext(ueId);
     ctx->amfUeNgapId = -1;
-    ctx->ranUeNgapId = ++ueNgapIdCounter;
+    ctx->ranUeNgapId = ++m_ueNgapIdCounter;
 
-    ueContexts[ctx->ctxId] = ctx;
+    m_ueCtx[ctx->ctxId] = ctx;
 
     // Select an AMF for the UE (if any)
-    for (auto &amf : amfContexts)
+    for (auto &amf : m_amfCtx)
     {
         // todo: an arbitrary AMF is selected for now
         ctx->associatedAmfId = amf.second->ctxId;
@@ -52,10 +52,10 @@ void NgapTask::createUeContext(int ueId)
 NgapUeContext *NgapTask::findUeContext(int ctxId)
 {
     NgapUeContext *ctx = nullptr;
-    if (ueContexts.count(ctxId))
-        ctx = ueContexts[ctxId];
+    if (m_ueCtx.count(ctxId))
+        ctx = m_ueCtx[ctxId];
     if (ctx == nullptr)
-        logger->err("UE context not found with id: %d", ctxId);
+        m_logger->err("UE context not found with id: %d", ctxId);
     return ctx;
 }
 
@@ -64,7 +64,7 @@ NgapUeContext *NgapTask::findUeByRanId(long ranUeNgapId)
     if (ranUeNgapId <= 0)
         return nullptr;
     // TODO: optimize
-    for (auto &ue : ueContexts)
+    for (auto &ue : m_ueCtx)
         if (ue.second->ranUeNgapId == ranUeNgapId)
             return ue.second;
     return nullptr;
@@ -75,7 +75,7 @@ NgapUeContext *NgapTask::findUeByAmfId(long amfUeNgapId)
     if (amfUeNgapId <= 0)
         return nullptr;
     // TODO: optimize
-    for (auto &ue : ueContexts)
+    for (auto &ue : m_ueCtx)
         if (ue.second->amfUeNgapId == amfUeNgapId)
             return ue.second;
     return nullptr;
@@ -142,11 +142,11 @@ NgapAmfContext *NgapTask::selectNewAmfForReAllocation(int initiatedAmfId, int am
 
 void NgapTask::deleteUeContext(int ueId)
 {
-    auto *ue = ueContexts[ueId];
+    auto *ue = m_ueCtx[ueId];
     if (ue)
     {
         delete ue;
-        ueContexts.erase(ueId);
+        m_ueCtx.erase(ueId);
     }
 }
 

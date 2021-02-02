@@ -114,6 +114,11 @@ void NasTask::onLoop()
         delete msg;
         break;
     }
+    case NtsMessageType::UE_RRC_CONNECTION_SETUP: {
+        mm->receiveRrcConnectionSetup();
+        delete msg;
+        break;
+    }
     default:
         logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
         delete msg;

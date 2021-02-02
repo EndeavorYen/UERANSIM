@@ -25,13 +25,13 @@ namespace nr::gnb
 class GnbMrTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    std::unique_ptr<Logger> m_logger;
 
-    udp::UdpServerTask *udpTask;
-    GnbRls *rlsEntity;
+    udp::UdpServerTask *m_udpTask;
+    GnbRls *m_rlsEntity;
 
-    std::unordered_map<int, MrUeContext> ueMap;
+    std::unordered_map<int, MrUeContext> m_ueMap;
 
   public:
     explicit GnbMrTask(TaskBase *base);

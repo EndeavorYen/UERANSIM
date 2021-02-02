@@ -7,6 +7,7 @@
 //
 
 #include "mm.hpp"
+#include <asn/rrc/ASN_RRC_EstablishmentCause.h>
 #include <nas/utils.hpp>
 #include <ue/nas/enc.hpp>
 #include <ue/sm/sm.hpp>
@@ -19,7 +20,6 @@ void NasMm::sendNasMessage(const nas::PlainMmMessage &msg)
     // TODO trigger on send
 
     OctetString pdu{};
-
     if (m_currentNsCtx.has_value() && (m_currentNsCtx->integrity != nas::ETypeOfIntegrityProtectionAlgorithm::IA0 ||
                                        m_currentNsCtx->ciphering != nas::ETypeOfCipheringAlgorithm::EA0))
     {
@@ -31,7 +31,14 @@ void NasMm::sendNasMessage(const nas::PlainMmMessage &msg)
         nas::EncodeNasMessage(msg, pdu);
     }
 
-    m_base->rrcTask->push(new NwUplinkNasDelivery(std::move(pdu)));
+    if (m_cmState == ECmState::CM_IDLE)
+    {
+        m_base->rrcTask->push(new NwInitialNasDelivery(std::move(pdu), ASN_RRC_EstablishmentCause_mo_Data));
+    }
+    else
+    {
+        m_base->rrcTask->push(new NwUplinkNasDelivery(std::move(pdu)));
+    }
 }
 
 void NasMm::receiveNasMessage(const nas::NasMessage &msg)

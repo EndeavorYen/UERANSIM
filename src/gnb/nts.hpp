@@ -151,6 +151,19 @@ struct NwUplinkNasDelivery : NtsMessage
     }
 };
 
+struct NwInitialNasDelivery : NtsMessage
+{
+    int ueId;
+    OctetString nasPdu;
+    long rrcEstablishmentCause;
+
+    NwInitialNasDelivery(int ueId, OctetString &&nasPdu, long rrcEstablishmentCause)
+        : NtsMessage(NtsMessageType::NGAP_INITIAL_NAS_DELIVERY), ueId(ueId), nasPdu(std::move(nasPdu)),
+          rrcEstablishmentCause(rrcEstablishmentCause)
+    {
+    }
+};
+
 struct NwPduSessionResourceCreate : NtsMessage
 {
     PduSessionResource *resource;

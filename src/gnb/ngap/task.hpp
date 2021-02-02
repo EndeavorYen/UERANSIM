@@ -39,15 +39,15 @@ class GnbAppTask;
 class NgapTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    std::unique_ptr<Logger> m_logger;
 
-    std::unordered_map<int, NgapAmfContext *> amfContexts;
-    std::unordered_map<int, NgapUeContext *> ueContexts;
-    long ueNgapIdCounter;
+    std::unordered_map<int, NgapAmfContext *> m_amfCtx;
+    std::unordered_map<int, NgapUeContext *> m_ueCtx;
+    long m_ueNgapIdCounter;
 
-    int waitingSctpClients;
-    uint32_t downlinkTeidCounter;
+    int m_waitingSctpClients;
+    uint32_t m_downlinkTeidCounter;
 
   public:
     explicit NgapTask(TaskBase *base);
@@ -85,11 +85,10 @@ class NgapTask : public NtsTask
     bool handleSctpStreamId(int amfId, int stream, const ASN_NGAP_NGAP_PDU &pdu);
 
     /* NAS transport */
-    void handleInitialNasTransport(int ueId, const OctetString &nasPdu);
+    void handleInitialNasTransport(int ueId, const OctetString &nasPdu, long rrcEstablishmentCause);
     void handleUplinkNasTransport(int ueId, const OctetString &nasPdu);
     void receiveDownlinkNasTransport(int amfId, ASN_NGAP_DownlinkNASTransport *msg);
     void deliverDownlinkNas(int ueId, OctetString &&nasPdu);
-    void deliverUplinkNas(NwUplinkNasDelivery *msg);
     void sendNasNonDeliveryIndication(int ueId, const OctetString &nasPdu, NgapCause cause);
     void receiveRerouteNasRequest(int amfId, ASN_NGAP_RerouteNASRequest *msg);
 

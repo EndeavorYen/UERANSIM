@@ -24,13 +24,13 @@ namespace nr::ue
 class UeMrTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    std::unique_ptr<Logger> m_logger;
 
-    udp::UdpServerTask *udpTask;
-    UeRls *rlsEntity;
+    udp::UdpServerTask *m_udpTask;
+    UeRls *m_rlsEntity;
 
-    long lastPlmnSearchFailurePrinted;
+    long m_lastPlmnSearchFailurePrinted;
 
   public:
     explicit UeMrTask(TaskBase *base);

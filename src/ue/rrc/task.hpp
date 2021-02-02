@@ -8,14 +8,15 @@
 
 #pragma once
 
+#include <asn/rrc/ASN_RRC_InitialUE-Identity.h>
 #include <memory>
 #include <thread>
+#include <ue/nts.hpp>
+#include <ue/types.hpp>
 #include <unordered_map>
 #include <utils/logger.hpp>
 #include <utils/nts.hpp>
 #include <vector>
-#include <ue/nts.hpp>
-#include <ue/types.hpp>
 
 extern "C"
 {
@@ -31,6 +32,8 @@ extern "C"
     struct ASN_RRC_RRCSetupRequest;
     struct ASN_RRC_DLInformationTransfer;
     struct ASN_RRC_ULInformationTransfer;
+    struct ASN_RRC_RRCSetup;
+    struct ASN_RRC_RRCReject;
 }
 
 namespace nr::ue
@@ -39,8 +42,14 @@ namespace nr::ue
 class UeRrcTask : public NtsTask
 {
   private:
-    TaskBase *base;
-    std::unique_ptr<Logger> logger;
+    TaskBase *m_base;
+    std::unique_ptr<Logger> m_logger;
+
+    ERrcState m_state;
+    ERrcLastSetupRequest m_lastSetupReq{};
+
+    ASN_RRC_InitialUE_Identity_t m_initialId{};
+    OctetString m_initialNasPdu{};
 
   public:
     explicit UeRrcTask(TaskBase *base);
@@ -52,14 +61,14 @@ class UeRrcTask : public NtsTask
     void onQuit() override;
 
   private:
-    /* Handle NTS messages */
+    /* Handlers */
     void handleDownlinkRrc(NwUeDownlinkRrc *msg);
-
-    /* NAS transport */
+    void deliverInitialNas(NwInitialNasDelivery &msg);
     void deliverUplinkNas(OctetString &&nasPdu);
 
-    /* Procedure handlers */
-    void receiveDownlinkInformationTransfer(ASN_RRC_DLInformationTransfer *msg);
+    void receiveRrcSetup(const ASN_RRC_RRCSetup &msg);
+    void receiveRrcReject(const ASN_RRC_RRCReject &msg);
+    void receiveDownlinkInformationTransfer(const ASN_RRC_DLInformationTransfer &msg);
 
     /* RRC channel send message */
     void sendRrcMessage(ASN_RRC_BCCH_BCH_Message *msg);

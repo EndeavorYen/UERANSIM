@@ -61,7 +61,6 @@ void UeRrcTask::onLoop()
             break;
         }
         }
-        delete msg;
         break;
     }
     case NtsMessageType::UE_NAS_TO_RRC: {
@@ -79,14 +78,14 @@ void UeRrcTask::onLoop()
             deliverUplinkNas(std::move(w->nasPdu));
             break;
         }
-        delete msg;
         break;
     }
     default:
         m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
-        delete msg;
         break;
     }
+
+    delete msg;
 }
 
 } // namespace nr::ue

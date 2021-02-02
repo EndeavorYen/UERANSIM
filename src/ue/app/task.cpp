@@ -61,8 +61,6 @@ void UeAppTask::onLoop()
             break;
         }
         }
-
-        delete w;
         break;
     }
     case NtsMessageType::UE_TUN_TO_APP: {
@@ -81,19 +79,17 @@ void UeAppTask::onLoop()
             break;
         }
         }
-        delete w;
         break;
     }
     case NtsMessageType::UE_STATUS_UPDATE: {
         receiveStatusUpdate(*dynamic_cast<NwUeStatusUpdate *>(msg));
-        delete msg;
         break;
     }
     default:
         m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
-        delete msg;
         break;
     }
+    delete msg;
 }
 
 void UeAppTask::receiveStatusUpdate(NwUeStatusUpdate &msg)

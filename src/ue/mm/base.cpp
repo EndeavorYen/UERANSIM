@@ -204,11 +204,11 @@ void NasMm::onSwitchCmState(ECmState oldState, ECmState newState)
 {
 }
 
-void NasMm::receivePlmnSearchResponse(const NwUeRrcToNas &msg)
+void NasMm::receivePlmnSearchResponse(const std::string &gnbName)
 {
     if (m_base->nodeListener)
         m_base->nodeListener->onConnected(app::NodeType::UE, m_base->config->getNodeName(), app::NodeType::GNB,
-                                          msg.gnbName);
+                                          gnbName);
 
     m_logger->info("UE connected to gNB");
 

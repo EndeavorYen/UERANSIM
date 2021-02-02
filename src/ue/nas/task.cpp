@@ -64,7 +64,7 @@ void NasTask::onLoop()
             break;
         }
         case NwUeRrcToNas::PLMN_SEARCH_RESPONSE: {
-            mm->receivePlmnSearchResponse(*w);
+            mm->receivePlmnSearchResponse(w->gnbName);
             break;
         }
         case NwUeRrcToNas::PLMN_SEARCH_FAILURE: {

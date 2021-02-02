@@ -92,7 +92,6 @@ void UeMrTask::onLoop()
             break;
         }
         }
-        delete w;
         break;
     }
     case NtsMessageType::UE_RRC_TO_MR: {
@@ -113,7 +112,6 @@ void UeMrTask::onLoop()
             break;
         }
         }
-        delete w;
         break;
     }
     case NtsMessageType::UE_APP_TO_MR: {
@@ -130,8 +128,6 @@ void UeMrTask::onLoop()
             break;
         }
         }
-
-        delete w;
         break;
     }
     case NtsMessageType::TIMER_EXPIRED: {
@@ -145,20 +141,19 @@ void UeMrTask::onLoop()
             setTimer(TIMER_ID_RLS_HEARTBEAT, rls::Constants::HB_PERIOD_UE_TO_GNB);
             m_rlsEntity->onHeartbeat();
         }
-        delete w;
         break;
     }
     case NtsMessageType::UDP_SERVER_RECEIVE: {
         auto *w = dynamic_cast<udp::NwUdpServerReceive *>(msg);
         m_rlsEntity->onReceive(w->fromAddress, w->packet);
-        delete w;
         break;
     }
     default:
         m_logger->err("Unhandled NTS message received with type [%d]", (int)msg->msgType);
-        delete msg;
         break;
     }
+
+    delete msg;
 }
 
 void UeMrTask::receiveDownlinkPayload(rls::EPayloadType type, OctetString &&payload)

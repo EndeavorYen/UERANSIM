@@ -8,8 +8,8 @@
 
 #include "mm.hpp"
 
-#include <utils/common.hpp>
 #include <nas/utils.hpp>
+#include <utils/common.hpp>
 
 namespace nr::ue
 {
@@ -20,9 +20,10 @@ NasMm::NasMm(TaskBase *base, NtsTask *nas, UeTimers *timers) : m_base{base}, m_n
 
     m_rmState = ERmState::RM_DEREGISTERED;
     m_cmState = ECmState::CM_IDLE;
-    m_mmState = EMmState::MM_NULL;
-    m_mmSubState = EMmSubState::MM_NULL_NA;
+    m_mmState = EMmState::MM_DEREGISTERED;
+    m_mmSubState = EMmSubState::MM_DEREGISTERED_NA;
     m_emulationMode = base->config->emulationMode;
+    m_validSim = base->config->supi.has_value();
 }
 
 void NasMm::onStart(NasSm *sm)
@@ -52,9 +53,18 @@ void NasMm::triggerMmCycle()
 void NasMm::performMmCycle()
 {
     if (m_mmState == EMmState::MM_NULL)
-    {
-        switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_PLMN_SEARCH);
         return;
+
+    if (m_mmSubState == EMmSubState::MM_DEREGISTERED_NA)
+    {
+        if (m_validSim)
+        {
+            switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_PLMN_SEARCH);
+        }
+        else
+        {
+            switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NO_SUPI);
+        }
     }
 
     if (m_mmSubState == EMmSubState::MM_DEREGISTERED_PLMN_SEARCH)
@@ -83,6 +93,12 @@ void NasMm::performMmCycle()
     if (m_mmState == EMmState::MM_DEREGISTERED_INITIATED)
         return;
     if (m_mmSubState == EMmSubState::MM_DEREGISTERED_NA)
+        return;
+    if (m_mmSubState == EMmSubState::MM_DEREGISTERED_NO_SUPI)
+        return;
+    if (m_mmSubState == EMmSubState::MM_DEREGISTERED_NO_CELL_AVAILABLE)
+        return;
+    if (m_mmSubState == EMmSubState::MM_REGISTERED_NO_CELL_AVAILABLE)
         return;
 
     if (m_emulationMode)
@@ -170,7 +186,19 @@ void NasMm::receivePlmnSearchResponse(const NwPlmnSearchResponse &msg)
                                           msg.gnbName);
 
     m_logger->info("UE connected to gNB");
-    switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NORMAL_SERVICE);
+
+    if (m_mmSubState == EMmSubState::MM_REGISTERED_PLMN_SEARCH)
+        switchMmState(EMmState::MM_REGISTERED, EMmSubState::MM_REGISTERED_NORMAL_SERVICE);
+    else if (m_mmSubState == EMmSubState::MM_DEREGISTERED_PLMN_SEARCH)
+        switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NORMAL_SERVICE);
+}
+
+void NasMm::receivePlmnSearchFailure()
+{
+    if (m_mmSubState == EMmSubState::MM_REGISTERED_PLMN_SEARCH)
+        switchMmState(EMmState::MM_REGISTERED, EMmSubState::MM_REGISTERED_NO_CELL_AVAILABLE);
+    else if (m_mmSubState == EMmSubState::MM_DEREGISTERED_PLMN_SEARCH)
+        switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NO_CELL_AVAILABLE);
 }
 
 void NasMm::onTimerExpire(nas::NasTimer &timer)

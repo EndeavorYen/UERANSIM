@@ -68,8 +68,8 @@ bool Encode(const RlsMessage &msg, OctetString &stream)
     if (msg.msgCls == EMessageClass::NORMAL_MESSAGE)
     {
         stream.appendOctet3(msg.appVersion);
-		stream.appendOctet(static_cast<int>(msg.msgType));
-		stream.appendOctet8(msg.ueToken);
+        stream.appendOctet(static_cast<int>(msg.msgType));
+        stream.appendOctet8(msg.ueToken);
         if (msg.msgType != EMessageType::RLS_SETUP_REQUEST && msg.msgType != EMessageType::RLS_SETUP_COMPLETE &&
             msg.msgType != EMessageType::RLS_SETUP_FAILURE && msg.msgType != EMessageType::RLS_HEARTBEAT &&
             msg.msgType != EMessageType::RLS_RELEASE_INDICATION && msg.msgType != EMessageType::RLS_PAYLOAD_TRANSPORT &&
@@ -101,17 +101,17 @@ const char *CauseToString(ECause cause)
     switch (cause)
     {
     case ECause::UNSPECIFIED:
-        return "UNSPECIFIED";
+        return "RLS_UNSPECIFIED";
     case ECause::TOKEN_CONFLICT:
-        return "TOKEN_CONFLICT";
+        return "RLS_TOKEN_CONFLICT";
     case ECause::GNB_IS_NOT_READY_FOR_N1:
-        return "GNB_IS_NOT_READY_FOR_N1";
+        return "RLS_GNB_IS_NOT_READY_FOR_N1";
     case ECause::EMPTY_SEARCH_LIST:
-        return "EMPTY_SEARCH_LIST";
+        return "RLS_EMPTY_SEARCH_LIST";
     case ECause::SETUP_TIMEOUT:
-        return "SETUP_TIMEOUT";
+        return "RLS_SETUP_TIMEOUT";
     case ECause::HEARTBEAT_TIMEOUT:
-        return "HEARTBEAT_TIMEOUT";
+        return "RLS_HEARTBEAT_TIMEOUT";
     default:
         return "?";
     }

@@ -66,6 +66,13 @@ struct NwPlmnSearchResponse : NtsMessage
     }
 };
 
+struct NwPlmnSearchFailure : NtsMessage
+{
+    NwPlmnSearchFailure() : NtsMessage(NtsMessageType::UE_MR_PLMN_SEARCH_FAILURE)
+    {
+    }
+};
+
 struct NwPerformMmCycle : NtsMessage
 {
     NwPerformMmCycle() : NtsMessage(NtsMessageType::NAS_PERFORM_MM_CYCLE)

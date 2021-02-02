@@ -93,6 +93,7 @@ void UeMrTask::onLoop()
         {
             logger->err("PLMN search failed [%s]", rls::CauseToString(w->cause));
             lastPlmnSearchFailurePrinted = current;
+            base->rrcTask->push(new NwPlmnSearchFailure());
         }
         delete w;
         break;

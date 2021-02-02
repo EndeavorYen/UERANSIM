@@ -83,6 +83,11 @@ void NasTask::onLoop()
         delete w;
         break;
     }
+    case NtsMessageType::UE_MR_PLMN_SEARCH_FAILURE: {
+        mm->receivePlmnSearchFailure();
+        delete msg;
+        break;
+    }
     case NtsMessageType::TIMER_EXPIRED: {
         auto *w = dynamic_cast<NwTimerExpired *>(msg);
         int timerId = w->timerId;

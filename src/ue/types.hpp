@@ -142,6 +142,13 @@ enum class ECmState
     CM_CONNECTED
 };
 
+enum E5UState
+{
+    U1_UPDATED,
+    U2_NOT_UPDATED,
+    U3_ROAMING_NOT_ALLOWED
+};
+
 enum class EMmState
 {
     MM_NULL,

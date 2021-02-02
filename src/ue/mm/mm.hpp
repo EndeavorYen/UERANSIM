@@ -45,6 +45,7 @@ class NasMm
     std::optional<NasSecurityContext> m_nonCurrentNsCtx;
 
     bool m_emulationMode;
+    bool m_validSim;
     long m_lastPlmnSearchTrigger{};
     OctetString m_sqn{};
 
@@ -59,6 +60,7 @@ class NasMm
     void performMmCycle();
     void onTimerExpire(nas::NasTimer &timer);
     void receivePlmnSearchResponse(const NwPlmnSearchResponse &msg);
+    void receivePlmnSearchFailure();
 
     /* Transport */
     void sendNasMessage(const nas::PlainMmMessage &msg);

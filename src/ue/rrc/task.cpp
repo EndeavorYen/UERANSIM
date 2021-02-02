@@ -51,6 +51,10 @@ void UeRrcTask::onLoop()
         base->nasTask->push(msg);
         break;
     }
+    case NtsMessageType::UE_MR_PLMN_SEARCH_FAILURE: {
+        base->nasTask->push(msg);
+        break;
+    }
     default:
         logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
         delete msg;

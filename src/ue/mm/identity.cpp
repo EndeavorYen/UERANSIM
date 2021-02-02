@@ -43,14 +43,10 @@ void NasMm::receiveIdentityRequest(const nas::IdentityRequest &msg)
 nas::IE5gsMobileIdentity NasMm::getOrGenerateSuci()
 {
     if (m_timers->t3519.isRunning())
-    {
-        m_logger->debug("T3519 is running, returning stored SUCI.");
         return m_storedSuci;
-    }
 
     m_storedSuci = generateSuci();
 
-    m_logger->debug("T3519 is not running, new SUCI generated.");
     m_timers->t3519.start();
 
     if (m_storedSuci.type == nas::EIdentityType::NO_IDENTITY)

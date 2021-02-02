@@ -59,7 +59,10 @@ void NasMm::performMmCycle()
     {
         if (m_validSim)
         {
-            switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_PLMN_SEARCH);
+            if (m_cmState == ECmState::CM_IDLE)
+                switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_PLMN_SEARCH);
+            else
+                switchMmState(EMmState::MM_DEREGISTERED, EMmSubState::MM_DEREGISTERED_NORMAL_SERVICE);
         }
         else
         {

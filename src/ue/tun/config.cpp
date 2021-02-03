@@ -32,6 +32,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include <vector>
 
@@ -64,7 +65,9 @@ static int ExecOutput(const char *cmd, std::string &output)
         return -1;
     }
     output = result;
-    return WEXITSTATUS(pclose(pipe));
+
+    int status = pclose(pipe);
+    return WEXITSTATUS(status);
 }
 
 static std::string ExecStrict(const std::string &cmd)

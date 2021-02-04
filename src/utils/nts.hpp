@@ -58,6 +58,7 @@ enum class NtsMessageType
     /////
 
     GNB_MR_TO_RRC,
+    GNB_NGAP_TO_RRC,
 
     UE_MR_TO_MR,
     UE_MR_TO_RRC,

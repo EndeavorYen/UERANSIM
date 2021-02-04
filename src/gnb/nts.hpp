@@ -38,6 +38,22 @@ struct NwGnbMrToRrc : NtsMessage
     }
 };
 
+struct NwGnbNgapToRrc : NtsMessage
+{
+    enum PR
+    {
+        NAS_DELIVERY
+    } present;
+
+    // NAS_DELIVERY
+    int ueId{};
+    OctetString pdu{};
+
+    explicit NwGnbNgapToRrc(PR present) : NtsMessage(NtsMessageType::GNB_NGAP_TO_RRC), present(present)
+    {
+    }
+};
+
 struct NwSctpConnectionRequest : NtsMessage
 {
     int clientId;

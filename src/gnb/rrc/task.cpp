@@ -37,9 +37,6 @@ void GnbRrcTask::onLoop()
 
     switch (msg->msgType)
     {
-    case NtsMessageType::NGAP_DOWNLINK_NAS_DELIVERY:
-        handleDownlinkNasDelivery(dynamic_cast<NwDownlinkNasDelivery *>(msg));
-        break;
     case NtsMessageType::GNB_MR_TO_RRC: {
         auto *w = dynamic_cast<NwGnbMrToRrc *>(msg);
         switch (w->present)
@@ -49,14 +46,26 @@ void GnbRrcTask::onLoop()
             break;
         }
         }
-        delete w;
+        break;
+    }
+    case NtsMessageType::GNB_NGAP_TO_RRC: {
+        auto *w = dynamic_cast<NwGnbNgapToRrc *>(msg);
+        switch (w->present)
+        {
+        case NwGnbNgapToRrc::NAS_DELIVERY: {
+            handleDownlinkNasDelivery(w->ueId, w->pdu);
+            break;
+        }
+        }
+
         break;
     }
     default:
         m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
-        delete msg;
         break;
     }
+
+    delete msg;
 }
 
 } // namespace nr::gnb

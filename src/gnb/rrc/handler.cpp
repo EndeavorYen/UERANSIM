@@ -30,7 +30,7 @@
 namespace nr::gnb
 {
 
-void GnbRrcTask::handleDownlinkNasDelivery(NwDownlinkNasDelivery *msg)
+void GnbRrcTask::handleDownlinkNasDelivery(int ueId, const OctetString &nasPdu)
 {
     auto *pdu = asn::New<ASN_RRC_DL_DCCH_Message>();
     pdu->message.present = ASN_RRC_DL_DCCH_MessageType_PR_c1;
@@ -43,10 +43,9 @@ void GnbRrcTask::handleDownlinkNasDelivery(NwDownlinkNasDelivery *msg)
     c1.present = ASN_RRC_DLInformationTransfer__criticalExtensions_PR_dlInformationTransfer;
     c1.choice.dlInformationTransfer = asn::New<ASN_RRC_DLInformationTransfer_IEs>();
     c1.choice.dlInformationTransfer->dedicatedNAS_Message = asn::New<ASN_RRC_DedicatedNAS_Message_t>();
-    asn::SetOctetString(*c1.choice.dlInformationTransfer->dedicatedNAS_Message, msg->nasPdu);
+    asn::SetOctetString(*c1.choice.dlInformationTransfer->dedicatedNAS_Message, nasPdu);
 
-    sendRrcMessage(msg->ueId, pdu);
-    delete msg;
+    sendRrcMessage(ueId, pdu);
 }
 
 void GnbRrcTask::deliverUplinkNas(int ueId, OctetString &&nasPdu)

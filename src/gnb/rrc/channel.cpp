@@ -14,85 +14,83 @@
 namespace nr::gnb
 {
 
-void GnbRrcTask::handleUplinkRrc(NwGnbUplinkRrc *msg)
+void GnbRrcTask::handleUplinkRrc(int ueId, rrc::RrcChannel channel, const OctetString &rrcPdu)
 {
-    switch (msg->channel)
+    switch (channel)
     {
     case rrc::RrcChannel::BCCH_BCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_BCCH_BCH_Message>(asn_DEF_ASN_RRC_BCCH_BCH_Message, msg->rrcPdu);
+        auto *pdu = rrc::encode::Decode<ASN_RRC_BCCH_BCH_Message>(asn_DEF_ASN_RRC_BCCH_BCH_Message, rrcPdu);
         if (pdu == nullptr)
             m_logger->err("RRC BCCH-BCH PDU decoding failed.");
         else
-            receiveRrcMessage(msg->ueId, pdu);
+            receiveRrcMessage(ueId, pdu);
         asn::Free(asn_DEF_ASN_RRC_BCCH_BCH_Message, pdu);
         break;
     }
     case rrc::RrcChannel::BCCH_DL_SCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_BCCH_DL_SCH_Message>(asn_DEF_ASN_RRC_BCCH_DL_SCH_Message, msg->rrcPdu);
+        auto *pdu = rrc::encode::Decode<ASN_RRC_BCCH_DL_SCH_Message>(asn_DEF_ASN_RRC_BCCH_DL_SCH_Message, rrcPdu);
         if (pdu == nullptr)
             m_logger->err("RRC BCCH-DL-SCH PDU decoding failed.");
         else
-            receiveRrcMessage(msg->ueId, pdu);
+            receiveRrcMessage(ueId, pdu);
         asn::Free(asn_DEF_ASN_RRC_BCCH_DL_SCH_Message, pdu);
         break;
-    };
+    }
     case rrc::RrcChannel::DL_CCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_DL_CCCH_Message>(asn_DEF_ASN_RRC_DL_CCCH_Message, msg->rrcPdu);
+        auto *pdu = rrc::encode::Decode<ASN_RRC_DL_CCCH_Message>(asn_DEF_ASN_RRC_DL_CCCH_Message, rrcPdu);
         if (pdu == nullptr)
             m_logger->err("RRC DL-CCCH PDU decoding failed.");
         else
-            receiveRrcMessage(msg->ueId, pdu);
+            receiveRrcMessage(ueId, pdu);
         asn::Free(asn_DEF_ASN_RRC_DL_CCCH_Message, pdu);
         break;
-    };
+    }
     case rrc::RrcChannel::DL_DCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_DL_DCCH_Message>(asn_DEF_ASN_RRC_DL_DCCH_Message, msg->rrcPdu);
+        auto *pdu = rrc::encode::Decode<ASN_RRC_DL_DCCH_Message>(asn_DEF_ASN_RRC_DL_DCCH_Message, rrcPdu);
         if (pdu == nullptr)
             m_logger->err("RRC DL-DCCH PDU decoding failed.");
         else
-            receiveRrcMessage(msg->ueId, pdu);
+            receiveRrcMessage(ueId, pdu);
         asn::Free(asn_DEF_ASN_RRC_DL_DCCH_Message, pdu);
         break;
-    };
+    }
     case rrc::RrcChannel::PCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_PCCH_Message>(asn_DEF_ASN_RRC_PCCH_Message, msg->rrcPdu);
+        auto *pdu = rrc::encode::Decode<ASN_RRC_PCCH_Message>(asn_DEF_ASN_RRC_PCCH_Message, rrcPdu);
         if (pdu == nullptr)
             m_logger->err("RRC PCCH PDU decoding failed.");
         else
-            receiveRrcMessage(msg->ueId, pdu);
+            receiveRrcMessage(ueId, pdu);
         asn::Free(asn_DEF_ASN_RRC_PCCH_Message, pdu);
         break;
-    };
+    }
     case rrc::RrcChannel::UL_CCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_CCCH_Message>(asn_DEF_ASN_RRC_UL_CCCH_Message, msg->rrcPdu);
+        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_CCCH_Message>(asn_DEF_ASN_RRC_UL_CCCH_Message, rrcPdu);
         if (pdu == nullptr)
             m_logger->err("RRC UL-CCCH PDU decoding failed.");
         else
-            receiveRrcMessage(msg->ueId, pdu);
+            receiveRrcMessage(ueId, pdu);
         asn::Free(asn_DEF_ASN_RRC_UL_CCCH_Message, pdu);
         break;
-    };
+    }
     case rrc::RrcChannel::UL_CCCH1: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_CCCH1_Message>(asn_DEF_ASN_RRC_UL_CCCH1_Message, msg->rrcPdu);
+        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_CCCH1_Message>(asn_DEF_ASN_RRC_UL_CCCH1_Message, rrcPdu);
         if (pdu == nullptr)
             m_logger->err("RRC UL-CCCH1 PDU decoding failed.");
         else
-            receiveRrcMessage(msg->ueId, pdu);
+            receiveRrcMessage(ueId, pdu);
         asn::Free(asn_DEF_ASN_RRC_UL_CCCH1_Message, pdu);
         break;
-    };
+    }
     case rrc::RrcChannel::UL_DCCH: {
-        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_DCCH_Message>(asn_DEF_ASN_RRC_UL_DCCH_Message, msg->rrcPdu);
+        auto *pdu = rrc::encode::Decode<ASN_RRC_UL_DCCH_Message>(asn_DEF_ASN_RRC_UL_DCCH_Message, rrcPdu);
         if (pdu == nullptr)
             m_logger->err("RRC UL-DCCH PDU decoding failed.");
         else
-            receiveRrcMessage(msg->ueId, pdu);
+            receiveRrcMessage(ueId, pdu);
         asn::Free(asn_DEF_ASN_RRC_UL_DCCH_Message, pdu);
         break;
-    };
     }
-
-    delete msg;
+    }
 }
 
 void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_BCCH_BCH_Message *msg)

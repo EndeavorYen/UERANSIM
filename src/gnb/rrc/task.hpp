@@ -64,7 +64,7 @@ class GnbRrcTask : public NtsTask
     int getNextTid();
 
     /* Handlers */
-    void handleUplinkRrc(NwGnbUplinkRrc *msg);
+    void handleUplinkRrc(int ueId, rrc::RrcChannel channel, const OctetString &rrcPdu);
     void handleDownlinkNasDelivery(NwDownlinkNasDelivery *msg);
     void deliverUplinkNas(int ueId, OctetString &&nasPdu);
 

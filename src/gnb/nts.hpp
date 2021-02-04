@@ -21,7 +21,22 @@
 namespace nr::gnb
 {
 
-// TODO: remove unused ones
+struct NwGnbMrToRrc : NtsMessage
+{
+    enum PR
+    {
+        RRC_PDU_DELIVERY
+    } present;
+
+    // RRC_PDU_DELIVERY
+    int ueId{};
+    rrc::RrcChannel channel{};
+    OctetString pdu{};
+
+    explicit NwGnbMrToRrc(PR present) : NtsMessage(NtsMessageType::GNB_MR_TO_RRC), present(present)
+    {
+    }
+};
 
 struct NwSctpConnectionRequest : NtsMessage
 {
@@ -215,18 +230,6 @@ struct NwGnbDownlinkRrc : NtsMessage
 
     NwGnbDownlinkRrc(int ueId, rrc::RrcChannel channel, OctetString &&rrcPdu)
         : NtsMessage(NtsMessageType::GNB_MR_DOWNLINK_RRC), ueId(ueId), channel(channel), rrcPdu(std::move(rrcPdu))
-    {
-    }
-};
-
-struct NwGnbUplinkRrc : NtsMessage
-{
-    int ueId;
-    rrc::RrcChannel channel;
-    OctetString rrcPdu;
-
-    NwGnbUplinkRrc(int ueId, rrc::RrcChannel channel, OctetString &&rrcPdu)
-        : NtsMessage(NtsMessageType::GNB_MR_UPLINK_RRC), ueId(ueId), channel(channel), rrcPdu(std::move(rrcPdu))
     {
     }
 };

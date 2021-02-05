@@ -54,6 +54,27 @@ struct NwGnbNgapToRrc : NtsMessage
     }
 };
 
+struct NwGnbRrcToNgap : NtsMessage
+{
+    enum PR
+    {
+        INITIAL_NAS_DELIVERY,
+        UPLINK_NAS_DELIVERY
+    } present;
+
+    // INITIAL_NAS_DELIVERY
+    // UPLINK_NAS_DELIVERY
+    int ueId{};
+    OctetString pdu{};
+
+    // INITIAL_NAS_DELIVERY
+    long rrcEstablishmentCause{};
+
+    explicit NwGnbRrcToNgap(PR present) : NtsMessage(NtsMessageType::GNB_RRC_TO_NGAP), present(present)
+    {
+    }
+};
+
 struct NwSctpConnectionRequest : NtsMessage
 {
     int clientId;
@@ -157,41 +178,6 @@ struct NwSctpSendMessage : NtsMessage
     {
         // This buffer was allocated by asn1c library using malloc/calloc
         free(buffer);
-    }
-};
-
-struct NwDownlinkNasDelivery : NtsMessage
-{
-    int ueId;
-    OctetString nasPdu;
-
-    NwDownlinkNasDelivery(int ueId, OctetString &&nasPdu)
-        : NtsMessage(NtsMessageType::NGAP_DOWNLINK_NAS_DELIVERY), ueId(ueId), nasPdu(std::move(nasPdu))
-    {
-    }
-};
-
-struct NwUplinkNasDelivery : NtsMessage
-{
-    int ueId;
-    OctetString nasPdu;
-
-    NwUplinkNasDelivery(int ueId, OctetString &&nasPdu)
-        : NtsMessage(NtsMessageType::NGAP_UPLINK_NAS_DELIVERY), ueId(ueId), nasPdu(std::move(nasPdu))
-    {
-    }
-};
-
-struct NwInitialNasDelivery : NtsMessage
-{
-    int ueId;
-    OctetString nasPdu;
-    long rrcEstablishmentCause;
-
-    NwInitialNasDelivery(int ueId, OctetString &&nasPdu, long rrcEstablishmentCause)
-        : NtsMessage(NtsMessageType::NGAP_INITIAL_NAS_DELIVERY), ueId(ueId), nasPdu(std::move(nasPdu)),
-          rrcEstablishmentCause(rrcEstablishmentCause)
-    {
     }
 };
 

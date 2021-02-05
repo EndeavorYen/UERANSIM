@@ -50,7 +50,10 @@ void GnbRrcTask::handleDownlinkNasDelivery(int ueId, const OctetString &nasPdu)
 
 void GnbRrcTask::deliverUplinkNas(int ueId, OctetString &&nasPdu)
 {
-    m_base->ngapTask->push(new NwUplinkNasDelivery(ueId, std::move(nasPdu)));
+    auto *w = new NwGnbRrcToNgap(NwGnbRrcToNgap::UPLINK_NAS_DELIVERY);
+    w->ueId = ueId;
+    w->pdu = std::move(nasPdu);
+    m_base->ngapTask->push(w);
 }
 
 void GnbRrcTask::receiveUplinkInformationTransfer(int ueId, const ASN_RRC_ULInformationTransfer &msg)
@@ -123,8 +126,11 @@ void GnbRrcTask::receiveRrcSetupComplete(int ueId, const ASN_RRC_RRCSetupComplet
 
     auto setupComplete = msg.criticalExtensions.choice.rrcSetupComplete;
 
-    m_base->ngapTask->push(new NwInitialNasDelivery(ueId, asn::GetOctetString(setupComplete->dedicatedNAS_Message),
-                                                    ue->establishmentCause));
+    auto *w = new NwGnbRrcToNgap(NwGnbRrcToNgap::INITIAL_NAS_DELIVERY);
+    w->ueId = ueId;
+    w->pdu = asn::GetOctetString(setupComplete->dedicatedNAS_Message);
+    w->rrcEstablishmentCause = ue->establishmentCause;
+    m_base->ngapTask->push(w);
 }
 
 } // namespace nr::gnb

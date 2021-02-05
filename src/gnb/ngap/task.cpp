@@ -43,24 +43,28 @@ void NgapTask::onLoop()
 
     switch (msg->msgType)
     {
+    case NtsMessageType::GNB_RRC_TO_NGAP: {
+        auto *w = dynamic_cast<NwGnbRrcToNgap *>(msg);
+        switch (w->present)
+        {
+        case NwGnbRrcToNgap::INITIAL_NAS_DELIVERY: {
+            handleInitialNasTransport(w->ueId, w->pdu, w->rrcEstablishmentCause);
+            break;
+        }
+        case NwGnbRrcToNgap::UPLINK_NAS_DELIVERY: {
+            handleUplinkNasTransport(w->ueId, w->pdu);
+            break;
+        }
+        }
+        delete w;
+        break;
+    }
     case NtsMessageType::SCTP_ASSOCIATION_SETUP: {
         handleAssociationSetup(dynamic_cast<NwSctpAssociationSetup *>(msg));
         break;
     }
     case NtsMessageType::SCTP_CLIENT_RECEIVE: {
         handleSctpMessage(dynamic_cast<NwSctpClientReceive *>(msg));
-        break;
-    }
-    case NtsMessageType::NGAP_INITIAL_NAS_DELIVERY: {
-        auto *w = dynamic_cast<NwInitialNasDelivery *>(msg);
-        handleInitialNasTransport(w->ueId, w->nasPdu, w->rrcEstablishmentCause);
-        delete w;
-        break;
-    }
-    case NtsMessageType::NGAP_UPLINK_NAS_DELIVERY: {
-        auto *w = dynamic_cast<NwUplinkNasDelivery *>(msg);
-        handleUplinkNasTransport(w->ueId, w->nasPdu);
-        delete w;
         break;
     }
     default: {

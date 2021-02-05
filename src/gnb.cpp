@@ -1,6 +1,6 @@
 //
 // This file is a part of UERANSIM open source project.
-// Copyright (c) 2021 ALİ GÜNGÖR, Havelsan.
+// Copyright (c) 2021 ALİ GÜNGÖR.
 //
 // The software and all associated files are licensed under GPL-3.0
 // and subject to the terms and conditions defined in LICENSE file.
@@ -75,7 +75,7 @@ static void ReadOptions(int argc, char **argv, std::string &configFile)
 {
     try
     {
-        cxxopts::Options options("nr-gnb", "5G-SA gNB implementation | Copyright (c) 2021 Havelsan");
+        cxxopts::Options options("nr-gnb", "5G-SA gNB implementation | Copyright (c) 2021 Ali Güngör");
         options.add_options()("c,config", "Use specified configuration file for gNB",
                               cxxopts::value<std::string>())("h,help", "Show this help message and exit");
 

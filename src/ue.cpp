@@ -1,6 +1,6 @@
 //
 // This file is a part of UERANSIM open source project.
-// Copyright (c) 2021 ALİ GÜNGÖR, Havelsan.
+// Copyright (c) 2021 ALİ GÜNGÖR.
 //
 // The software and all associated files are licensed under GPL-3.0
 // and subject to the terms and conditions defined in LICENSE file.
@@ -126,7 +126,7 @@ static void ReadOptions(int argc, char **argv, std::string &configFile, bool &no
 {
     try
     {
-        cxxopts::Options options("nr-ue", "5G-SA UE implementation | Copyright (c) 2021 Havelsan");
+        cxxopts::Options options("nr-ue", "5G-SA UE implementation | Copyright (c) 2021 Ali Güngör");
         options.add_options()("c,config", "Use specified configuration file for UE", cxxopts::value<std::string>())(
             "i,imsi", "Use specified IMSI number instead of provided one", cxxopts::value<std::string>())(
             "n,num-of-UE", "Create specified number of UEs starting from the given IMSI",

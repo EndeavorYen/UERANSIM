@@ -22,7 +22,7 @@ static nr::gnb::GnbConfig *ReadConfigYaml(const std::string &file)
 
     result->plmn.mcc = yaml::GetInt32(config, "mcc", 1, 999);
     yaml::GetString(config, "mcc", 3, 3);
-    result->plmn.mnc = yaml::GetInt32(config, "mnc", 1, 999);
+    result->plmn.mnc = yaml::GetInt32(config, "mnc", 0, 999);
     result->plmn.isLongMnc = yaml::GetString(config, "mnc", 2, 3).size() == 3;
 
     result->nci = yaml::GetInt64(config, "nci", 0, 0xFFFFFFFFFll);

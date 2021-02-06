@@ -174,6 +174,11 @@ inline uint8_t Bmp4Enc4(T1 v1)
 template <typename T1, typename T2, typename T3, typename T4>
 inline void Bmp4Dec1111(int v, T1 v1, T2 v2, T3 v3, T4 v4)
 {
+    (void)v1;
+    (void)v2;
+    (void)v3;
+    (void)v4;
+
     if constexpr (!std::is_same<T1, nullptr_t>::value)
         *v1 = static_cast<typename std::remove_pointer<T1>::type>(BitRange8<3, 3>(v));
     if constexpr (!std::is_same<T2, nullptr_t>::value)
@@ -187,6 +192,10 @@ inline void Bmp4Dec1111(int v, T1 v1, T2 v2, T3 v3, T4 v4)
 template <typename T1, typename T2, typename T3>
 inline void Bmp4Dec112(int v, T1 v1, T2 v2, T3 v3)
 {
+    (void)v1;
+    (void)v2;
+    (void)v3;
+
     if constexpr (!std::is_same<T1, nullptr_t>::value)
         *v1 = static_cast<typename std::remove_pointer<T1>::type>(BitRange8<3, 3>(v));
     if constexpr (!std::is_same<T2, nullptr_t>::value)
@@ -198,6 +207,10 @@ inline void Bmp4Dec112(int v, T1 v1, T2 v2, T3 v3)
 template <typename T1, typename T2, typename T3>
 inline void Bmp4Dec121(int v, T1 v1, T2 v2, T3 v3)
 {
+    (void)v1;
+    (void)v2;
+    (void)v3;
+
     if constexpr (!std::is_same<T1, nullptr_t>::value)
         *v1 = static_cast<typename std::remove_pointer<T1>::type>(BitRange8<3, 3>(v));
     if constexpr (!std::is_same<T2, nullptr_t>::value)
@@ -209,6 +222,10 @@ inline void Bmp4Dec121(int v, T1 v1, T2 v2, T3 v3)
 template <typename T1, typename T2, typename T3>
 inline void Bmp4Dec211(int v, T1 v1, T2 v2, T3 v3)
 {
+    (void)v1;
+    (void)v2;
+    (void)v3;
+
     if constexpr (!std::is_same<T1, nullptr_t>::value)
         *v1 = static_cast<typename std::remove_pointer<T1>::type>(BitRange8<2, 3>(v));
     if constexpr (!std::is_same<T2, nullptr_t>::value)
@@ -220,6 +237,9 @@ inline void Bmp4Dec211(int v, T1 v1, T2 v2, T3 v3)
 template <typename T1, typename T2>
 inline void Bmp4Dec13(int v, T1 v1, T2 v2)
 {
+    (void)v1;
+    (void)v2;
+
     if constexpr (!std::is_same<T1, nullptr_t>::value)
         *v1 = static_cast<typename std::remove_pointer<T1>::type>(BitRange8<3, 3>(v));
     if constexpr (!std::is_same<T2, nullptr_t>::value)
@@ -229,6 +249,9 @@ inline void Bmp4Dec13(int v, T1 v1, T2 v2)
 template <typename T1, typename T2>
 inline void Bmp4Dec22(int v, T1 v1, T2 v2)
 {
+    (void)v1;
+    (void)v2;
+
     if constexpr (!std::is_same<T1, nullptr_t>::value)
         *v1 = static_cast<typename std::remove_pointer<T1>::type>(BitRange8<2, 3>(v));
     if constexpr (!std::is_same<T2, nullptr_t>::value)
@@ -238,6 +261,9 @@ inline void Bmp4Dec22(int v, T1 v1, T2 v2)
 template <typename T1, typename T2>
 inline void Bmp4Dec31(int v, T1 v1, T2 v2)
 {
+    (void)v1;
+    (void)v2;
+
     if constexpr (!std::is_same<T1, nullptr_t>::value)
         *v1 = static_cast<typename std::remove_pointer<T1>::type>(BitRange8<1, 3>(v));
     if constexpr (!std::is_same<T2, nullptr_t>::value)
@@ -247,6 +273,8 @@ inline void Bmp4Dec31(int v, T1 v1, T2 v2)
 template <typename T1>
 inline void Bmp4Dec4(int v, T1 v1)
 {
+    (void)v1;
+
     if constexpr (!std::is_same<T1, nullptr_t>::value)
         *v1 = static_cast<typename std::remove_pointer<T1>::type>(BitRange8<0, 3>(v));
 }

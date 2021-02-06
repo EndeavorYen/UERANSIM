@@ -80,7 +80,7 @@ memb_ASN_NGAP_usageCountUL_constraint_1(const asn_TYPE_descriptor_t *td, const v
 		return -1;
 	}
 	
-	if((value >= 0 && value <= 18446744073709551615)) {
+	if((value >= 0 && value <= 18446744073709551615ULL)) {
 		/* Constraint check succeeded */
 		return 0;
 	} else {
@@ -111,7 +111,7 @@ memb_ASN_NGAP_usageCountDL_constraint_1(const asn_TYPE_descriptor_t *td, const v
 		return -1;
 	}
 	
-	if((value >= 0 && value <= 18446744073709551615)) {
+	if((value >= 0 && value <= 18446744073709551615ULL)) {
 		/* Constraint check succeeded */
 		return 0;
 	} else {
@@ -133,12 +133,12 @@ static asn_per_constraints_t asn_PER_memb_ASN_NGAP_endTimeStamp_constr_3 CC_NOTU
 	0, 0	/* No PER value map */
 };
 static asn_per_constraints_t asn_PER_memb_ASN_NGAP_usageCountUL_constr_4 CC_NOTUSED = {
-	{ APC_CONSTRAINED,	 64, -1,  0,  18446744073709551615 }	/* (0..18446744073709551615) */,
+	{ APC_CONSTRAINED,	 64, -1,  0,  18446744073709551615ULL }	/* (0..18446744073709551615) */,
 	{ APC_UNCONSTRAINED,	-1, -1,  0,  0 },
 	0, 0	/* No PER value map */
 };
 static asn_per_constraints_t asn_PER_memb_ASN_NGAP_usageCountDL_constr_5 CC_NOTUSED = {
-	{ APC_CONSTRAINED,	 64, -1,  0,  18446744073709551615 }	/* (0..18446744073709551615) */,
+	{ APC_CONSTRAINED,	 64, -1,  0,  18446744073709551615ULL }	/* (0..18446744073709551615) */,
 	{ APC_UNCONSTRAINED,	-1, -1,  0,  0 },
 	0, 0	/* No PER value map */
 };

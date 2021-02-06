@@ -248,9 +248,14 @@ struct GnbConfig
     std::string name;
     EPagingDrx pagingDrx;
 
-    [[nodiscard]] inline int getGnbId() const
+    [[nodiscard]] inline uint32_t getGnbId() const
     {
-        return static_cast<int>((nci >> (36LL - static_cast<int64_t>(gnbIdLength))) & ((1 << (gnbIdLength + 1)) - 1));
+        return static_cast<uint32_t>((nci & 0xFFFFFFFFFLL) >> (36LL - static_cast<int64_t>(gnbIdLength)));
+    }
+
+    [[nodiscard]] inline int getCellId() const
+    {
+        return static_cast<int>(nci & static_cast<uint64_t>((1 << (36 - gnbIdLength)) - 1));
     }
 };
 

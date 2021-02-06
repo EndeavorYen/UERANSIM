@@ -113,7 +113,7 @@ void NasTask::onLoop()
         break;
     }
     default:
-        logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+        logger->unhandledNts(msg);
         break;
     }
 

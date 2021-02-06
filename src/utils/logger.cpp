@@ -55,6 +55,11 @@ void Logger::flush()
     logger->flush();
 }
 
+void Logger::unhandledNts(NtsMessage* msg)
+{
+    err("Unhandled NTS message received with type %d", (int)msg->msgType);
+}
+
 LogBase::LogBase(const std::string &filename)
 {
     // fileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(filename);

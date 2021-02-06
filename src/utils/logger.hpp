@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "nts.hpp"
 #include <memory>
 #include <spdlog/fwd.h>
 #include <vector>
@@ -100,6 +101,9 @@ class Logger
     }
 
     void flush();
+
+    /* Specific logs */
+    void unhandledNts(NtsMessage *msg);
 };
 
 class LogBase

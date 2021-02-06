@@ -65,7 +65,7 @@ void GtpTask::onLoop()
         handleUplinkData(dynamic_cast<NwUplinkData *>(msg));
         break;
     default:
-        m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+        m_logger->unhandledNts(msg);
         delete msg;
         break;
     }

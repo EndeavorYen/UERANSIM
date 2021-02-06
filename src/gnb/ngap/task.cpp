@@ -79,13 +79,13 @@ void NgapTask::onLoop()
             handleAssociationShutdown(w->clientId);
             break;
         default:
-            m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+            m_logger->unhandledNts(msg);
             break;
         }
         break;
     }
     default: {
-        m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+        m_logger->unhandledNts(msg);
         break;
     }
     }

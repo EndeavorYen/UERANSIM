@@ -86,7 +86,7 @@ void UeAppTask::onLoop()
         break;
     }
     default:
-        m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+        m_logger->unhandledNts(msg);
         break;
     }
     delete msg;

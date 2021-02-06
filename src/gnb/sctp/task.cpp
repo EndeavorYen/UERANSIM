@@ -286,17 +286,11 @@ void SctpTask::receiveClientReceive(int clientId, uint16_t stream, UniqueBuffer 
 
 void SctpTask::receiveUnhandledNotification(int clientId)
 {
-    ClientEntry *entry = m_clients[clientId];
-    if (entry == nullptr)
-    {
-        m_logger->warn("Client entry not found for id: %d", clientId);
-        return;
-    }
+    // NOTE: For unhandled notifications, "clientId" may be invalid for some notifications.
+    // Because some notification may be received after shutdown.
 
-    // Notify the relevant task
-    auto *msg = new NwGnbSctp(NwGnbSctp::UNHANDLED_NOTIFICATION);
-    msg->clientId = clientId;
-    entry->associatedTask->push(msg);
+    // Print warning
+    m_logger->warn("Unhandled SCTP notification received");
 }
 
 void SctpTask::receiveConnectionClose(int clientId)

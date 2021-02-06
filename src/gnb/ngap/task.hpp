@@ -77,6 +77,7 @@ class NgapTask : public NtsTask
     void receiveNgSetupFailure(int amfId, ASN_NGAP_NGSetupFailure *msg);
     void receiveErrorIndication(int amfId, ASN_NGAP_ErrorIndication *msg);
     void handleAssociationSetup(int amfId, int ascId, int inCount, int outCount);
+    void handleAssociationShutdown(int amfId);
 
     /* Message transport */
     void sendNgapNonUe(int amfId, ASN_NGAP_NGAP_PDU *pdu);

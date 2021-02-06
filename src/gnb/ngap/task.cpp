@@ -75,6 +75,9 @@ void NgapTask::onLoop()
         case NwGnbSctp::RECEIVE_MESSAGE:
             handleSctpMessage(w->clientId, w->stream, w->buffer);
             break;
+        case NwGnbSctp::ASSOCIATION_SHUTDOWN:
+            handleAssociationShutdown(w->clientId);
+            break;
         default:
             m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
             break;

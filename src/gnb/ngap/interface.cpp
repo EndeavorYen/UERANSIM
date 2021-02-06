@@ -28,8 +28,6 @@ namespace nr::gnb
 
 void NgapTask::handleAssociationSetup(int amfId, int ascId, int inCount, int outCount)
 {
-    m_logger->debug("SCTP association setup received ascId[%d]", ascId);
-
     auto *amf = findAmfContext(amfId);
     if (amf != nullptr)
     {
@@ -49,6 +47,11 @@ void NgapTask::handleAssociationSetup(int amfId, int ascId, int inCount, int out
 
         sendNgSetupRequest(amf->ctxId);
     }
+}
+
+void NgapTask::handleAssociationShutdown(int amfId)
+{
+    // TODO
 }
 
 void NgapTask::sendNgSetupRequest(int amfId)

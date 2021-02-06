@@ -136,7 +136,7 @@ void SctpTask::onLoop()
             break;
         }
         case NwGnbSctp::ASSOCIATION_SHUTDOWN: {
-            receiveAssociationShutdown(w->associationId);
+            receiveAssociationShutdown(w->clientId);
             break;
         }
         case NwGnbSctp::RECEIVE_MESSAGE: {

@@ -70,14 +70,14 @@ class SctpHandler : public sctp::ISctpHandler
         sctpTask->push(w);
     }
 
-    void onMessage(uint8_t *buffer, size_t length, uint16_t stream) override
+    void onMessage(const uint8_t *buffer, size_t length, uint16_t stream) override
     {
         auto *data = new uint8_t[length];
         std::memcpy(data, buffer, length);
 
         auto *w = new NwGnbSctp(NwGnbSctp::RECEIVE_MESSAGE);
         w->clientId = clientId;
-        w->buffer = UniqueBuffer{buffer, length};
+        w->buffer = UniqueBuffer{data, length};
         w->stream = stream;
         sctpTask->push(w);
     }

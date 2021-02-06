@@ -163,7 +163,7 @@ void NgapTask::sendNgapUeAssociated(int ueId, ASN_NGAP_NGAP_PDU *pdu)
     asn::Free(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
 }
 
-void NgapTask::handleSctpMessage(int amfId, uint16_t stream, const UniqueBuffer &buffer)
+void NgapTask::handleSctpMessage(int amfId, uint16_t stream, const UniqueBuffer& buffer)
 {
     auto *amf = findAmfContext(amfId);
     if (amf == nullptr)

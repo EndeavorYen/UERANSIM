@@ -28,6 +28,8 @@ class UniqueBuffer
     inline ~UniqueBuffer() noexcept
     {
         delete[] m_data;
+        m_data = nullptr;
+        m_size = 0;
     }
 
     UniqueBuffer(const UniqueBuffer &m) = delete;
@@ -44,6 +46,10 @@ class UniqueBuffer
     {
         m_data = m.m_data;
         m_size = m.m_size;
+
+        m.m_data = nullptr;
+        m.m_size = 0;
+
         return *this;
     }
 

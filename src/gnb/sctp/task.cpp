@@ -184,8 +184,8 @@ void SctpTask::DeleteClientEntry(ClientEntry *entry)
     delete entry;
 }
 
-void SctpTask::receiveSctpConnectionSetupRequest(int clientId, std::string localAddress, uint16_t localPort,
-                                                 std::string remoteAddress, uint16_t remotePort,
+void SctpTask::receiveSctpConnectionSetupRequest(int clientId, const std::string &localAddress, uint16_t localPort,
+                                                 const std::string &remoteAddress, uint16_t remotePort,
                                                  sctp::PayloadProtocolId ppid, NtsTask *associatedTask)
 {
     m_logger->info("Trying to establish SCTP connection... (%s:%d)", remoteAddress.c_str(), remotePort);

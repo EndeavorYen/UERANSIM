@@ -76,12 +76,12 @@ class NgapTask : public NtsTask
     void receiveNgSetupResponse(int amfId, ASN_NGAP_NGSetupResponse *msg);
     void receiveNgSetupFailure(int amfId, ASN_NGAP_NGSetupFailure *msg);
     void receiveErrorIndication(int amfId, ASN_NGAP_ErrorIndication *msg);
-    void handleAssociationSetup(NwSctpAssociationSetup *msg);
+    void handleAssociationSetup(int amfId, int ascId, int inCount, int outCount);
 
     /* Message transport */
     void sendNgapNonUe(int amfId, ASN_NGAP_NGAP_PDU *pdu);
     void sendNgapUeAssociated(int ueId, ASN_NGAP_NGAP_PDU *pdu);
-    void handleSctpMessage(NwSctpClientReceive *msg);
+    void handleSctpMessage(int amfId, uint16_t stream, const uint8_t *buffer, size_t length);
     bool handleSctpStreamId(int amfId, int stream, const ASN_NGAP_NGAP_PDU &pdu);
 
     /* NAS transport */

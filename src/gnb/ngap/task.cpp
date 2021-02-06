@@ -28,9 +28,16 @@ void NgapTask::onStart()
 
     for (auto &amfCtx : m_amfCtx)
     {
-        m_base->sctpTask->push(new NwSctpConnectionRequest(amfCtx.second->ctxId, m_base->config->ngapIp, 0,
-                                                           amfCtx.second->address, amfCtx.second->port,
-                                                           sctp::PayloadProtocolId::NGAP, this));
+        auto *msg = new NwGnbSctp(NwGnbSctp::CONNECTION_REQUEST);
+        msg->clientId = amfCtx.second->ctxId;
+        msg->localAddress = m_base->config->ngapIp;
+        msg->localPort = 0;
+        msg->remoteAddress = amfCtx.second->address;
+        msg->remotePort = amfCtx.second->port;
+        msg->ppid = sctp::PayloadProtocolId::NGAP;
+        msg->associatedTask = this;
+        m_base->sctpTask->push(msg);
+
         m_waitingSctpClients++;
     }
 }
@@ -56,23 +63,31 @@ void NgapTask::onLoop()
             break;
         }
         }
-        delete w;
         break;
     }
-    case NtsMessageType::SCTP_ASSOCIATION_SETUP: {
-        handleAssociationSetup(dynamic_cast<NwSctpAssociationSetup *>(msg));
-        break;
-    }
-    case NtsMessageType::SCTP_CLIENT_RECEIVE: {
-        handleSctpMessage(dynamic_cast<NwSctpClientReceive *>(msg));
+    case NtsMessageType::GNB_SCTP: {
+        auto *w = dynamic_cast<NwGnbSctp *>(msg);
+        switch (w->present)
+        {
+        case NwGnbSctp::ASSOCIATION_SETUP:
+            handleAssociationSetup(w->clientId, w->associationId, w->inStreams, w->outStreams);
+            break;
+        case NwGnbSctp::RECEIVE_MESSAGE:
+            handleSctpMessage(w->clientId, w->stream, w->buffer, w->length);
+            break;
+        default:
+            m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
+            break;
+        }
         break;
     }
     default: {
         m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);
-        delete msg;
         break;
     }
     }
+
+    delete msg;
 }
 
 void NgapTask::onQuit()

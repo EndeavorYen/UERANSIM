@@ -52,13 +52,15 @@ class SctpTask : public NtsTask
     static void DeleteClientEntry(ClientEntry *entry);
 
   private:
-    void receiveSctpConnectionSetupRequest(NwSctpConnectionRequest *msg);
-    void receiveAssociationSetup(NwSctpAssociationSetup *msg);
-    void receiveAssociationShutdown(NwSctpAssociationShutdown *msg);
-    void receiveClientReceive(NwSctpClientReceive *msg);
-    void receiveUnhandledNotification(NwSctpUnhandledNotificationReceive *msg);
-    void receiveConnectionClose(NwSctpConnectionClose *msg);
-    void receiveSendMessage(NwSctpSendMessage *msg);
+    void receiveSctpConnectionSetupRequest(int clientId, std::string localAddress, uint16_t localPort,
+                                           std::string remoteAddress, uint16_t remotePort, sctp::PayloadProtocolId ppid,
+                                           NtsTask *associatedTask);
+    void receiveAssociationSetup(int clientId, int associationId, int inStreams, int outStreams);
+    void receiveAssociationShutdown(int clientId);
+    void receiveClientReceive(int clientId, uint16_t stream, const uint8_t *buffer, size_t length);
+    void receiveUnhandledNotification(int clientId);
+    void receiveConnectionClose(int clientId);
+    void receiveSendMessage(int clientId, uint16_t stream, const uint8_t *buffer, size_t length);
 };
 
 } // namespace nr::gnb

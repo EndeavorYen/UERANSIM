@@ -58,7 +58,7 @@ inline OctetString EncodeS(const asn_TYPE_descriptor_t &desc, T *pdu)
 }
 
 template <typename T>
-inline T *Decode(asn_TYPE_descriptor_t &desc, uint8_t *buffer, size_t size)
+inline T *Decode(asn_TYPE_descriptor_t &desc, const uint8_t *buffer, size_t size)
 {
     auto *pdu = asn::New<T>();
     auto res = aper_decode(nullptr, &desc, reinterpret_cast<void **>(&pdu), buffer, size, 0, 0);

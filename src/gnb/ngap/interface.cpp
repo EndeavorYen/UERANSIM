@@ -26,16 +26,16 @@
 namespace nr::gnb
 {
 
-void NgapTask::handleAssociationSetup(NwSctpAssociationSetup *msg)
+void NgapTask::handleAssociationSetup(int amfId, int ascId, int inCount, int outCount)
 {
-    m_logger->debug("SCTP association setup received ascId[%d]", msg->associationId);
+    m_logger->debug("SCTP association setup received ascId[%d]", ascId);
 
-    auto *amf = findAmfContext(msg->clientId);
+    auto *amf = findAmfContext(amfId);
     if (amf != nullptr)
     {
-        amf->association.associationId = msg->associationId;
-        amf->association.inStreams = msg->inStreams;
-        amf->association.outStreams = msg->outStreams;
+        amf->association.associationId = amfId;
+        amf->association.inStreams = inCount;
+        amf->association.outStreams = outCount;
 
         m_waitingSctpClients--;
         if (m_waitingSctpClients == 0)
@@ -48,8 +48,6 @@ void NgapTask::handleAssociationSetup(NwSctpAssociationSetup *msg)
         }
 
         sendNgSetupRequest(amf->ctxId);
-
-        delete msg;
     }
 }
 
@@ -212,7 +210,7 @@ void NgapTask::sendErrorIndication(int amfId, NgapCause cause, int ueId)
     ngap_utils::ToCauseAsn_Ref(cause, ieCause->value.choice.Cause);
 
     m_logger->debug("Sending an error indication with cause: %s",
-                  ngap_utils::CauseToString(ieCause->value.choice.Cause).c_str());
+                    ngap_utils::CauseToString(ieCause->value.choice.Cause).c_str());
 
     auto *pdu = asn::ngap::NewMessagePdu<ASN_NGAP_ErrorIndication>({ieCause});
 

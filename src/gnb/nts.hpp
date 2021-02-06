@@ -75,109 +75,57 @@ struct NwGnbRrcToNgap : NtsMessage
     }
 };
 
-struct NwSctpConnectionRequest : NtsMessage
+struct NwGnbSctp : NtsMessage
 {
-    int clientId;
-
-    std::string localAddress;
-    uint16_t localPort;
-
-    std::string remoteAddress;
-    uint16_t remotePort;
-
-    sctp::PayloadProtocolId ppid;
-
-    NtsTask *associatedTask;
-
-    NwSctpConnectionRequest(int clientId, std::string localAddress, uint16_t localPort, std::string remoteAddress,
-                            uint16_t remotePort, sctp::PayloadProtocolId ppid, NtsTask *associatedTask)
-        : NtsMessage(NtsMessageType::SCTP_CONNECTION_REQUEST), clientId(clientId),
-          localAddress(std::move(localAddress)), localPort(localPort), remoteAddress(std::move(remoteAddress)),
-          remotePort(remotePort), ppid(ppid), associatedTask(associatedTask)
+    enum PR
     {
-    }
-};
+        CONNECTION_REQUEST,
+        CONNECTION_CLOSE,
+        ASSOCIATION_SETUP,
+        ASSOCIATION_SHUTDOWN,
+        RECEIVE_MESSAGE,
+        SEND_MESSAGE,
+        UNHANDLED_NOTIFICATION,
+    } present;
 
-struct NwSctpAssociationSetup : NtsMessage
-{
-    int clientId;
-    int associationId;
-    int inStreams;
-    int outStreams;
+    // CONNECTION_REQUEST
+    // CONNECTION_CLOSE
+    // ASSOCIATION_SETUP
+    // ASSOCIATION_SHUTDOWN
+    // RECEIVE_MESSAGE
+    // SEND_MESSAGE
+    // UNHANDLED_NOTIFICATION
+    int clientId{};
 
-    NwSctpAssociationSetup(int clientId, int associationId, int inStreams, int outStreams)
-        : NtsMessage(NtsMessageType::SCTP_ASSOCIATION_SETUP), clientId(clientId), associationId(associationId),
-          inStreams(inStreams), outStreams(outStreams)
-    {
-    }
-};
+    // CONNECTION_REQUEST
+    std::string localAddress{};
+    uint16_t localPort{};
+    std::string remoteAddress{};
+    uint16_t remotePort{};
+    sctp::PayloadProtocolId ppid{};
+    NtsTask *associatedTask{};
 
-struct NwSctpAssociationShutdown : NtsMessage
-{
-    int clientId;
+    // ASSOCIATION_SETUP
+    int associationId{};
+    int inStreams{};
+    int outStreams{};
 
-    explicit NwSctpAssociationShutdown(int clientId)
-        : NtsMessage(NtsMessageType::SCTP_ASSOCIATION_SHUTDOWN), clientId(clientId)
-    {
-    }
-};
+    // RECEIVE_MESSAGE
+    // SEND_MESSAGE
+    const uint8_t *buffer{};
+    size_t length{};
+    uint16_t stream{};
 
-struct NwSctpClientReceive : NtsMessage
-{
-    int clientId;
-    uint8_t *buffer;
-    size_t length;
-    uint16_t stream;
-
-    NwSctpClientReceive(int clientId, uint8_t *buffer, size_t length, uint16_t stream)
-        : NtsMessage(NtsMessageType::SCTP_CLIENT_RECEIVE), clientId(clientId), buffer(buffer), length(length),
-          stream(stream)
+    explicit NwGnbSctp(PR present) : NtsMessage(NtsMessageType::GNB_SCTP), present(present)
     {
     }
 
-    ~NwSctpClientReceive() override
+    ~NwGnbSctp() override
     {
-        delete[] buffer;
-    }
-};
-
-struct NwSctpUnhandledNotificationReceive : NtsMessage
-{
-    int clientId;
-
-    explicit NwSctpUnhandledNotificationReceive(int clientId)
-        : NtsMessage(NtsMessageType::SCTP_UNHANDLED_NOTIFICATION_RECEIVE), clientId(clientId)
-    {
-    }
-};
-
-struct NwSctpConnectionClose : NtsMessage
-{
-    int clientId;
-
-    explicit NwSctpConnectionClose(int clientId) : NtsMessage(NtsMessageType::SCTP_CONNECTION_CLOSE), clientId(clientId)
-    {
-    }
-};
-
-struct NwSctpSendMessage : NtsMessage
-{
-    const int clientId;
-    const uint16_t stream;
-    uint8_t *const buffer;
-    const size_t offset;
-    const size_t length;
-
-    NwSctpSendMessage(int clientId, uint16_t stream, uint8_t *buffer, size_t offset, size_t length)
-        : NtsMessage(NtsMessageType::SCTP_SEND_MESSAGE), clientId(clientId), stream(stream), buffer(buffer),
-          offset(offset), length(length)
-    {
-    }
-
-    ~NwSctpSendMessage() override
-    {
-        // This buffer was allocated by asn1c library using malloc/calloc
-        free(buffer);
+        if (present == RECEIVE_MESSAGE)
+            delete[] buffer; // This buffer was allocated using new()
+        else if (present == SEND_MESSAGE)
+            free((void *)buffer); // This buffer was allocated by asn1c library using malloc/calloc
     }
 };
 

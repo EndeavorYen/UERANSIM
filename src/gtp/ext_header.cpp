@@ -11,7 +11,7 @@
 namespace gtp
 {
 
-std::unique_ptr<PduSessionInformation> gtp::PduSessionInformation::Decode(const OctetBuffer &stream)
+std::unique_ptr<PduSessionInformation> gtp::PduSessionInformation::Decode(const OctetView &stream)
 {
     int startIndex = stream.currentIndex();
 

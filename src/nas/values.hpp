@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include <utils/octet_buffer.hpp>
-#include <utils/octet_string.hpp>
 #include <optional>
 #include <utility>
+#include <utils/octet_string.hpp>
+#include <utils/octet_view.hpp>
 
 #include "enums.hpp"
 
@@ -25,7 +25,7 @@ struct VAmfSetId
     explicit VAmfSetId(int value);
 
     static void Encode(const VAmfSetId &value, OctetString &stream);
-    static VAmfSetId Decode(const OctetBuffer &stream);
+    static VAmfSetId Decode(const OctetView &stream);
 };
 
 struct VPlmn
@@ -37,7 +37,7 @@ struct VPlmn
     VPlmn(int mcc, int mnc, bool isLongMnc);
 
     static void Encode(const VPlmn &value, OctetString &stream);
-    static VPlmn Decode(const OctetBuffer &stream);
+    static VPlmn Decode(const OctetView &stream);
 };
 
 struct VQoSFlowParameter
@@ -48,7 +48,7 @@ struct VQoSFlowParameter
     VQoSFlowParameter(uint8_t identifier, OctetString content);
 
     static void Encode(const VQoSFlowParameter &value, OctetString &stream);
-    static VQoSFlowParameter Decode(const OctetBuffer &stream);
+    static VQoSFlowParameter Decode(const OctetView &stream);
 };
 
 struct VQoSFlowDescription
@@ -63,7 +63,7 @@ struct VQoSFlowDescription
                         std::vector<std::unique_ptr<VQoSFlowParameter>> parameterList);
 
     static void Encode(const VQoSFlowDescription &value, OctetString &stream);
-    static VQoSFlowDescription Decode(const OctetBuffer &stream);
+    static VQoSFlowDescription Decode(const OctetView &stream);
 };
 
 struct VTrackingAreaIdentity
@@ -74,7 +74,7 @@ struct VTrackingAreaIdentity
     VTrackingAreaIdentity(const VPlmn &plmn, const octet3 &tac);
 
     static void Encode(const VTrackingAreaIdentity &value, OctetString &stream);
-    static VTrackingAreaIdentity Decode(const OctetBuffer &stream);
+    static VTrackingAreaIdentity Decode(const OctetView &stream);
 };
 
 struct VTime
@@ -92,7 +92,7 @@ struct VTime
           const octet &second);
 
     static void Encode(const VTime &value, OctetString &stream);
-    static VTime Decode(const OctetBuffer &stream);
+    static VTime Decode(const OctetView &stream);
 };
 
 struct VRejectedSNssai
@@ -106,7 +106,7 @@ struct VRejectedSNssai
     VRejectedSNssai(ERejectedSNssaiCause cause, const std::optional<octet> &sst, const std::optional<octet3> &sd);
 
     static void Encode(const VRejectedSNssai &value, OctetString &stream);
-    static VRejectedSNssai Decode(const OctetBuffer &stream);
+    static VRejectedSNssai Decode(const OctetView &stream);
 };
 
 struct VPartialServiceAreaList00
@@ -118,7 +118,7 @@ struct VPartialServiceAreaList00
     VPartialServiceAreaList00(EAllowedType allowedType, const VPlmn &plmn, std::vector<octet3> &&tacs);
 
     static void Encode(const VPartialServiceAreaList00 &value, OctetString &stream);
-    static VPartialServiceAreaList00 Decode(const OctetBuffer &stream);
+    static VPartialServiceAreaList00 Decode(const OctetView &stream);
 };
 
 struct VPartialServiceAreaList01
@@ -130,7 +130,7 @@ struct VPartialServiceAreaList01
     VPartialServiceAreaList01(EAllowedType allowedType, const VPlmn &plmn, const octet3 &tac);
 
     static void Encode(const VPartialServiceAreaList01 &value, OctetString &stream);
-    static VPartialServiceAreaList01 Decode(const OctetBuffer &stream);
+    static VPartialServiceAreaList01 Decode(const OctetView &stream);
 };
 
 struct VPartialServiceAreaList10
@@ -141,7 +141,7 @@ struct VPartialServiceAreaList10
     VPartialServiceAreaList10(EAllowedType allowedType, std::vector<VTrackingAreaIdentity> &&tais);
 
     static void Encode(const VPartialServiceAreaList10 &value, OctetString &stream);
-    static VPartialServiceAreaList10 Decode(const OctetBuffer &stream);
+    static VPartialServiceAreaList10 Decode(const OctetView &stream);
 };
 
 struct VPartialServiceAreaList11
@@ -152,7 +152,7 @@ struct VPartialServiceAreaList11
     VPartialServiceAreaList11(EAllowedType allowedType, const VPlmn &plmn);
 
     static void Encode(const VPartialServiceAreaList11 &value, OctetString &stream);
-    static VPartialServiceAreaList11 Decode(const OctetBuffer &stream);
+    static VPartialServiceAreaList11 Decode(const OctetView &stream);
 };
 
 struct VPartialServiceAreaList
@@ -166,7 +166,7 @@ struct VPartialServiceAreaList
     VPartialServiceAreaList();
 
     static void Encode(const VPartialServiceAreaList &value, OctetString &stream);
-    static VPartialServiceAreaList Decode(const OctetBuffer &stream);
+    static VPartialServiceAreaList Decode(const OctetView &stream);
 };
 
 struct VPartialTrackingAreaIdentityList00
@@ -177,7 +177,7 @@ struct VPartialTrackingAreaIdentityList00
     VPartialTrackingAreaIdentityList00(const VPlmn &plmn, std::vector<octet3> &&tacs);
 
     static void Encode(const VPartialTrackingAreaIdentityList00 &value, OctetString &stream);
-    static VPartialTrackingAreaIdentityList00 Decode(const OctetBuffer &stream);
+    static VPartialTrackingAreaIdentityList00 Decode(const OctetView &stream);
 };
 
 struct VPartialTrackingAreaIdentityList01
@@ -188,7 +188,7 @@ struct VPartialTrackingAreaIdentityList01
     VPartialTrackingAreaIdentityList01(const VPlmn &plmn, octet3 tac);
 
     static void Encode(const VPartialTrackingAreaIdentityList01 &value, OctetString &stream);
-    static VPartialTrackingAreaIdentityList01 Decode(const OctetBuffer &stream);
+    static VPartialTrackingAreaIdentityList01 Decode(const OctetView &stream);
 };
 
 struct VPartialTrackingAreaIdentityList10
@@ -198,7 +198,7 @@ struct VPartialTrackingAreaIdentityList10
     explicit VPartialTrackingAreaIdentityList10(std::vector<VTrackingAreaIdentity> &&tais);
 
     static void Encode(const VPartialTrackingAreaIdentityList10 &value, OctetString &stream);
-    static VPartialTrackingAreaIdentityList10 Decode(const OctetBuffer &stream);
+    static VPartialTrackingAreaIdentityList10 Decode(const OctetView &stream);
 };
 
 struct VPartialTrackingAreaIdentityList
@@ -211,7 +211,7 @@ struct VPartialTrackingAreaIdentityList
     VPartialTrackingAreaIdentityList();
 
     static void Encode(const VPartialTrackingAreaIdentityList &value, OctetString &stream);
-    static VPartialTrackingAreaIdentityList Decode(const OctetBuffer &stream);
+    static VPartialTrackingAreaIdentityList Decode(const OctetView &stream);
 };
 
 struct VPduSessionReactivationResultErrorCause
@@ -222,7 +222,7 @@ struct VPduSessionReactivationResultErrorCause
     VPduSessionReactivationResultErrorCause(int pduSessionId, EMmCause causeValue);
 
     static void Encode(const VPduSessionReactivationResultErrorCause &value, OctetString &stream);
-    static VPduSessionReactivationResultErrorCause Decode(const OctetBuffer &stream);
+    static VPduSessionReactivationResultErrorCause Decode(const OctetView &stream);
 };
 
 struct VOperatorDefinedAccessCategoryDefinition
@@ -238,7 +238,7 @@ struct VOperatorDefinedAccessCategoryDefinition
                                              uint8_t standardizedAccessCategory);
 
     static void Encode(const VOperatorDefinedAccessCategoryDefinition &value, OctetString &stream);
-    static VOperatorDefinedAccessCategoryDefinition Decode(const OctetBuffer &stream);
+    static VOperatorDefinedAccessCategoryDefinition Decode(const OctetView &stream);
 };
 
 struct VPlmnIdAccessTech
@@ -249,7 +249,7 @@ struct VPlmnIdAccessTech
     VPlmnIdAccessTech(const VPlmn &plmnId, const octet2 &accessTechnologyIdentifier);
 
     static void Encode(const VPlmnIdAccessTech &value, OctetString &stream);
-    static VPlmnIdAccessTech Decode(const OctetBuffer &stream);
+    static VPlmnIdAccessTech Decode(const OctetView &stream);
 };
 
 } // namespace nas

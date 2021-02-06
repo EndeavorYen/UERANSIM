@@ -11,8 +11,8 @@
 #include <cstdint>
 #include <memory>
 #include <optional>
-#include <utils/octet_buffer.hpp>
 #include <utils/octet_string.hpp>
+#include <utils/octet_view.hpp>
 
 namespace gtp
 {
@@ -31,7 +31,7 @@ struct PduSessionInformation
 
     virtual ~PduSessionInformation() = default;
 
-    static std::unique_ptr<PduSessionInformation> Decode(const OctetBuffer &stream);
+    static std::unique_ptr<PduSessionInformation> Decode(const OctetView &stream);
     static bool Encode(const PduSessionInformation &pdu, OctetString &stream);
 };
 

@@ -148,7 +148,7 @@ void eap::EncodeEapPdu(OctetString &stream, const eap::Eap &pdu)
     }
 }
 
-std::unique_ptr<eap::Eap> eap::DecodeEapPdu(const OctetBuffer &stream)
+std::unique_ptr<eap::Eap> eap::DecodeEapPdu(const OctetView &stream)
 {
     auto code = static_cast<ECode>(stream.readI());
     int id = stream.readI();

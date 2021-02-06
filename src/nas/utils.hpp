@@ -51,13 +51,13 @@ inline T DeepCopyIe(const T &a)
     if constexpr (std::is_base_of<InformationElement1, T>::value)
     {
         EncodeIe1(0, a, s);
-        OctetBuffer buf{s};
+        OctetView buf{s};
         return DecodeIe1<T>(buf);
     }
     else
     {
         Encode2346(a, s);
-        OctetBuffer buf{s};
+        OctetView buf{s};
         return DecodeIe2346<T>(buf);
     }
 }

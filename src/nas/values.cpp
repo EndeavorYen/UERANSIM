@@ -18,7 +18,7 @@ void VAmfSetId::Encode(const VAmfSetId &value, OctetString &stream)
     stream.appendOctet((value.value & 0b11) << 6);
 }
 
-VAmfSetId VAmfSetId::Decode(const OctetBuffer &stream)
+VAmfSetId VAmfSetId::Decode(const OctetView &stream)
 {
     int octet0 = stream.readI();
     int octet1 = stream.peekI();
@@ -52,7 +52,7 @@ void VPlmn::Encode(const VPlmn &value, OctetString &stream)
     stream.appendOctet(octet3);
 }
 
-VPlmn VPlmn::Decode(const OctetBuffer &stream)
+VPlmn VPlmn::Decode(const OctetView &stream)
 {
     bool longMnc = false;
 
@@ -90,7 +90,7 @@ void VQoSFlowParameter::Encode(const VQoSFlowParameter &value, OctetString &stre
     stream.append(value.content);
 }
 
-VQoSFlowParameter VQoSFlowParameter::Decode(const OctetBuffer &stream)
+VQoSFlowParameter VQoSFlowParameter::Decode(const OctetView &stream)
 {
     uint8_t identifier = stream.read();
     uint8_t contentLength = stream.read();
@@ -112,7 +112,7 @@ void VQoSFlowDescription::Encode(const VQoSFlowDescription &value, OctetString &
         VQoSFlowParameter::Encode(*item, stream);
 }
 
-VQoSFlowDescription VQoSFlowDescription::Decode(const OctetBuffer &stream)
+VQoSFlowDescription VQoSFlowDescription::Decode(const OctetView &stream)
 {
     int qfi = stream.readI() & 0b111111;
     int opCode = (stream.readI() >> 5) & 0b111;
@@ -137,7 +137,7 @@ void VTrackingAreaIdentity::Encode(const VTrackingAreaIdentity &value, OctetStri
     stream.appendOctet3(value.tac);
 }
 
-VTrackingAreaIdentity VTrackingAreaIdentity::Decode(const OctetBuffer &stream)
+VTrackingAreaIdentity VTrackingAreaIdentity::Decode(const OctetView &stream)
 {
     VPlmn plmn = VPlmn::Decode(stream);
     octet3 tac = stream.read3();
@@ -158,7 +158,7 @@ void VTime::Encode(const VTime &value, OctetString &stream)
     stream.appendOctet(value.second);
 }
 
-VTime VTime::Decode(const OctetBuffer &stream)
+VTime VTime::Decode(const OctetView &stream)
 {
     VTime time;
     time.year = stream.read();
@@ -197,7 +197,7 @@ void VRejectedSNssai::Encode(const VRejectedSNssai &value, OctetString &stream)
         stream.appendOctet3(value.sd.value());
 }
 
-VRejectedSNssai VRejectedSNssai::Decode(const OctetBuffer &stream)
+VRejectedSNssai VRejectedSNssai::Decode(const OctetView &stream)
 {
     VRejectedSNssai res;
 
@@ -239,7 +239,7 @@ void VPartialServiceAreaList::Encode(const VPartialServiceAreaList &value, Octet
     }
 }
 
-VPartialServiceAreaList VPartialServiceAreaList::Decode(const OctetBuffer &stream)
+VPartialServiceAreaList VPartialServiceAreaList::Decode(const OctetView &stream)
 {
     auto octet = stream.peek();
 
@@ -279,7 +279,7 @@ void VPartialServiceAreaList00::Encode(const VPartialServiceAreaList00 &value, O
         stream.appendOctet3(tac);
 }
 
-VPartialServiceAreaList00 VPartialServiceAreaList00::Decode(const OctetBuffer &stream)
+VPartialServiceAreaList00 VPartialServiceAreaList00::Decode(const OctetView &stream)
 {
     auto octet = stream.read();
     auto allowed = static_cast<EAllowedType>(octet.bit(7));
@@ -305,7 +305,7 @@ void VPartialServiceAreaList01::Encode(const VPartialServiceAreaList01 &value, O
     stream.appendOctet3(value.tac);
 }
 
-VPartialServiceAreaList01 VPartialServiceAreaList01::Decode(const OctetBuffer &stream)
+VPartialServiceAreaList01 VPartialServiceAreaList01::Decode(const OctetView &stream)
 {
     auto octet = stream.read();
     auto allowed = static_cast<EAllowedType>(octet.bit(7));
@@ -325,7 +325,7 @@ void VPartialServiceAreaList10::Encode(const VPartialServiceAreaList10 &value, O
         VTrackingAreaIdentity::Encode(tai, stream);
 }
 
-VPartialServiceAreaList10 VPartialServiceAreaList10::Decode(const OctetBuffer &stream)
+VPartialServiceAreaList10 VPartialServiceAreaList10::Decode(const OctetView &stream)
 {
     auto octet = stream.read();
     auto allowed = static_cast<EAllowedType>(octet.bit(7));
@@ -349,7 +349,7 @@ void VPartialServiceAreaList11::Encode(const VPartialServiceAreaList11 &value, O
     VPlmn::Encode(value.plmn, stream);
 }
 
-VPartialServiceAreaList11 VPartialServiceAreaList11::Decode(const OctetBuffer &stream)
+VPartialServiceAreaList11 VPartialServiceAreaList11::Decode(const OctetView &stream)
 {
     auto octet = stream.read();
     auto allowed = static_cast<EAllowedType>(octet.bit(7));
@@ -369,7 +369,7 @@ void VPartialTrackingAreaIdentityList00::Encode(const VPartialTrackingAreaIdenti
         stream.appendOctet3(x);
 }
 
-VPartialTrackingAreaIdentityList00 VPartialTrackingAreaIdentityList00::Decode(const OctetBuffer &stream)
+VPartialTrackingAreaIdentityList00 VPartialTrackingAreaIdentityList00::Decode(const OctetView &stream)
 {
     auto octet = stream.read();
     int count = bits::BitRange8<0, 4>(octet) + 1;
@@ -393,7 +393,7 @@ void VPartialTrackingAreaIdentityList01::Encode(const VPartialTrackingAreaIdenti
     stream.appendOctet3(value.tac);
 }
 
-VPartialTrackingAreaIdentityList01 VPartialTrackingAreaIdentityList01::Decode(const OctetBuffer &stream)
+VPartialTrackingAreaIdentityList01 VPartialTrackingAreaIdentityList01::Decode(const OctetView &stream)
 {
     stream.read();
     return VPartialTrackingAreaIdentityList01{VPlmn::Decode(stream), stream.read3()};
@@ -411,7 +411,7 @@ void VPartialTrackingAreaIdentityList10::Encode(const VPartialTrackingAreaIdenti
         VTrackingAreaIdentity::Encode(x, stream);
 }
 
-VPartialTrackingAreaIdentityList10 VPartialTrackingAreaIdentityList10::Decode(const OctetBuffer &stream)
+VPartialTrackingAreaIdentityList10 VPartialTrackingAreaIdentityList10::Decode(const OctetView &stream)
 {
     auto octet = stream.read();
     int count = bits::BitRange8<0, 4>(octet) + 1;
@@ -445,7 +445,7 @@ void VPartialTrackingAreaIdentityList::Encode(const VPartialTrackingAreaIdentity
     }
 }
 
-VPartialTrackingAreaIdentityList VPartialTrackingAreaIdentityList::Decode(const OctetBuffer &stream)
+VPartialTrackingAreaIdentityList VPartialTrackingAreaIdentityList::Decode(const OctetView &stream)
 {
     auto octet = stream.peek();
 
@@ -479,7 +479,7 @@ void VPduSessionReactivationResultErrorCause::Encode(const VPduSessionReactivati
     stream.appendOctet(static_cast<int>(value.causeValue));
 }
 
-VPduSessionReactivationResultErrorCause VPduSessionReactivationResultErrorCause::Decode(const OctetBuffer &stream)
+VPduSessionReactivationResultErrorCause VPduSessionReactivationResultErrorCause::Decode(const OctetView &stream)
 {
     return VPduSessionReactivationResultErrorCause{stream.readI(), static_cast<EMmCause>(stream.readI())};
 }
@@ -507,7 +507,7 @@ void VOperatorDefinedAccessCategoryDefinition::Encode(const VOperatorDefinedAcce
     stream.appendOctet(value.standardizedAccessCategory & 0b11111);
 }
 
-VOperatorDefinedAccessCategoryDefinition VOperatorDefinedAccessCategoryDefinition::Decode(const OctetBuffer &stream)
+VOperatorDefinedAccessCategoryDefinition VOperatorDefinedAccessCategoryDefinition::Decode(const OctetView &stream)
 {
     stream.readI();
     auto precedence = stream.read();
@@ -540,7 +540,7 @@ void VPlmnIdAccessTech::Encode(const VPlmnIdAccessTech &value, OctetString &stre
     stream.appendOctet2(value.accessTechnologyIdentifier);
 }
 
-VPlmnIdAccessTech VPlmnIdAccessTech::Decode(const OctetBuffer &stream)
+VPlmnIdAccessTech VPlmnIdAccessTech::Decode(const OctetView &stream)
 {
     auto plmn = VPlmn::Decode(stream);
     return VPlmnIdAccessTech{plmn, stream.read2()};

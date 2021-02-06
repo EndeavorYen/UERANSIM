@@ -9,9 +9,9 @@
 #pragma once
 
 #include <memory>
-#include <utils/octet_buffer.hpp>
-#include <utils/octet_string.hpp>
 #include <utility>
+#include <utils/octet_string.hpp>
+#include <utils/octet_view.hpp>
 
 namespace rls
 {
@@ -91,7 +91,7 @@ enum class DecodeRes
     FAILURE,
 };
 
-DecodeRes Decode(const OctetBuffer &stream, RlsMessage &output, octet3 appVersion);
+DecodeRes Decode(const OctetView &stream, RlsMessage &output, octet3 appVersion);
 bool Encode(const RlsMessage &msg, OctetString &stream);
 
 const char *CauseToString(ECause cause);

@@ -8,7 +8,7 @@
 
 #include "proto_conf.hpp"
 
-#include <utils/octet_buffer.hpp>
+#include <utils/octet_view.hpp>
 
 bool nas::ProtocolConfigurationOptions::IsProtocolId(int id)
 {
@@ -49,7 +49,7 @@ std::unique_ptr<nas::ProtocolConfigurationOptions> nas::ProtocolConfigurationOpt
 {
     auto res = std::make_unique<ProtocolConfigurationOptions>();
 
-    OctetBuffer buff{data, len};
+    OctetView buff{data, len};
 
     while (buff.hasNext())
     {

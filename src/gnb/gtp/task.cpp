@@ -155,7 +155,7 @@ void GtpTask::handleUplinkData(NwUplinkData *msg)
 
 void GtpTask::handleUdpReceive(udp::NwUdpServerReceive *msg)
 {
-    OctetBuffer buffer{msg->packet};
+    OctetView buffer{msg->packet};
     auto *gtp = gtp::DecodeGtpMessage(buffer);
 
     auto sessionInd = m_sessionTree.findByDownTeid(gtp->teid);

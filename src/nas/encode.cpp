@@ -203,7 +203,7 @@ void EncodeNasMessage(const NasMessage &msg, OctetString &stream)
         EncodeSm((SmMessage &)msg, stream);
 }
 
-static SecuredMmMessage *DecodeSecuredMmMessage(const OctetBuffer &stream, ESecurityHeaderType sht)
+static SecuredMmMessage *DecodeSecuredMmMessage(const OctetView &stream, ESecurityHeaderType sht)
 {
     auto *p = new SecuredMmMessage();
     p->messageAuthenticationCode = stream.read4();
@@ -213,7 +213,7 @@ static SecuredMmMessage *DecodeSecuredMmMessage(const OctetBuffer &stream, ESecu
 }
 
 template <typename T>
-static T *DecodeViaBuilder(const OctetBuffer &stream)
+static T *DecodeViaBuilder(const OctetView &stream)
 {
     T *p = new T();
 
@@ -237,7 +237,7 @@ static T *DecodeViaBuilder(const OctetBuffer &stream)
     return p;
 }
 
-static PlainMmMessage *DecodePlainMmMessage(const OctetBuffer &stream, EMessageType messageType)
+static PlainMmMessage *DecodePlainMmMessage(const OctetView &stream, EMessageType messageType)
 {
     switch (messageType)
     {
@@ -302,7 +302,7 @@ static PlainMmMessage *DecodePlainMmMessage(const OctetBuffer &stream, EMessageT
     }
 }
 
-static SmMessage *DecodeSmMessage(const OctetBuffer &stream, EMessageType messageType)
+static SmMessage *DecodeSmMessage(const OctetView &stream, EMessageType messageType)
 {
     switch (messageType)
     {
@@ -343,7 +343,7 @@ static SmMessage *DecodeSmMessage(const OctetBuffer &stream, EMessageType messag
     }
 }
 
-std::unique_ptr<NasMessage> DecodeNasMessage(const OctetBuffer &stream)
+std::unique_ptr<NasMessage> DecodeNasMessage(const OctetView &stream)
 {
     auto epd = static_cast<EExtendedProtocolDiscriminator>(stream.readI());
     if (epd == EExtendedProtocolDiscriminator::MOBILITY_MANAGEMENT_MESSAGES)

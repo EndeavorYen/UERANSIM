@@ -77,7 +77,7 @@ void NasMm::receiveNasMessage(const nas::NasMessage &msg)
 
     if (mmMsg.sht == nas::ESecurityHeaderType::INTEGRITY_PROTECTED_WITH_NEW_SECURITY_CONTEXT)
     {
-        auto smcMsg = nas::DecodeNasMessage(OctetBuffer{securedMm.plainNasMessage});
+        auto smcMsg = nas::DecodeNasMessage(OctetView{securedMm.plainNasMessage});
 
         if (smcMsg->epd != nas::EExtendedProtocolDiscriminator::MOBILITY_MANAGEMENT_MESSAGES ||
             (((const nas::MmMessage &)(*smcMsg)).sht != nas::ESecurityHeaderType::NOT_PROTECTED) ||
@@ -202,7 +202,7 @@ void NasMm::receiveDlNasTransport(const nas::DlNasTransport &msg)
         return;
     }
 
-    OctetBuffer buff{msg.payloadContainer.data.data(), static_cast<size_t>(msg.payloadContainer.data.length())};
+    OctetView buff{msg.payloadContainer.data.data(), static_cast<size_t>(msg.payloadContainer.data.length())};
     auto sm = nas::DecodeNasMessage(buff);
     if (sm->epd != nas::EExtendedProtocolDiscriminator::SESSION_MANAGEMENT_MESSAGES)
     {

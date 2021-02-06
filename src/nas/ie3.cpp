@@ -15,7 +15,7 @@ IE5gMmCause::IE5gMmCause(EMmCause value) : value(value)
 {
 }
 
-IE5gMmCause IE5gMmCause::Decode(const OctetBuffer &stream)
+IE5gMmCause IE5gMmCause::Decode(const OctetView &stream)
 {
     IE5gMmCause r;
     r.value = static_cast<EMmCause>(stream.readI());
@@ -32,7 +32,7 @@ IE5gsTrackingAreaIdentity::IE5gsTrackingAreaIdentity(int mcc, int mnc, bool isLo
 {
 }
 
-IE5gsTrackingAreaIdentity IE5gsTrackingAreaIdentity::Decode(const OctetBuffer &stream)
+IE5gsTrackingAreaIdentity IE5gsTrackingAreaIdentity::Decode(const OctetView &stream)
 {
     auto plmn = VPlmn::Decode(stream);
 
@@ -55,7 +55,7 @@ IEAuthenticationParameterRand::IEAuthenticationParameterRand(OctetString &&value
 {
 }
 
-IEAuthenticationParameterRand IEAuthenticationParameterRand::Decode(const OctetBuffer &stream)
+IEAuthenticationParameterRand IEAuthenticationParameterRand::Decode(const OctetView &stream)
 {
     return IEAuthenticationParameterRand{stream.readOctetString(16)};
 }
@@ -71,7 +71,7 @@ IEEpsNasSecurityAlgorithms::IEEpsNasSecurityAlgorithms(EEpsTypeOfIntegrityProtec
 {
 }
 
-IEEpsNasSecurityAlgorithms IEEpsNasSecurityAlgorithms::Decode(const OctetBuffer &stream)
+IEEpsNasSecurityAlgorithms IEEpsNasSecurityAlgorithms::Decode(const OctetView &stream)
 {
     IEEpsNasSecurityAlgorithms r;
     r.integrity = static_cast<EEpsTypeOfIntegrityProtectionAlgorithm>(stream.peekI() & 0b111);
@@ -89,7 +89,7 @@ IEGprsTimer::IEGprsTimer(int timerValue, EGprsTimerValueUnit timerValueUnit)
 {
 }
 
-IEGprsTimer IEGprsTimer::Decode(const OctetBuffer &stream)
+IEGprsTimer IEGprsTimer::Decode(const OctetView &stream)
 {
     int octet = stream.readI();
     IEGprsTimer r;
@@ -117,7 +117,7 @@ IEIntegrityProtectionMaximumDataRate::IEIntegrityProtectionMaximumDataRate(
 {
 }
 
-IEIntegrityProtectionMaximumDataRate IEIntegrityProtectionMaximumDataRate::Decode(const OctetBuffer &stream)
+IEIntegrityProtectionMaximumDataRate IEIntegrityProtectionMaximumDataRate::Decode(const OctetView &stream)
 {
     IEIntegrityProtectionMaximumDataRate r;
     r.maxRateUplink = static_cast<EMaximumDataRatePerUeForUserPlaneIntegrityProtectionForUplink>(stream.readI());
@@ -139,7 +139,7 @@ IEMaximumNumberOfSupportedPacketFilters::IEMaximumNumberOfSupportedPacketFilters
 {
 }
 
-IEMaximumNumberOfSupportedPacketFilters IEMaximumNumberOfSupportedPacketFilters::Decode(const OctetBuffer &stream)
+IEMaximumNumberOfSupportedPacketFilters IEMaximumNumberOfSupportedPacketFilters::Decode(const OctetView &stream)
 {
     int v = stream.read2I();
     v >>= 5;
@@ -160,7 +160,7 @@ IEN1ModeToS1ModeNasTransparentContainer::IEN1ModeToS1ModeNasTransparentContainer
 {
 }
 
-IEN1ModeToS1ModeNasTransparentContainer IEN1ModeToS1ModeNasTransparentContainer::Decode(const OctetBuffer &stream)
+IEN1ModeToS1ModeNasTransparentContainer IEN1ModeToS1ModeNasTransparentContainer::Decode(const OctetView &stream)
 {
     IEN1ModeToS1ModeNasTransparentContainer r;
     r.sequenceNumber = stream.read();
@@ -179,7 +179,7 @@ IENasSecurityAlgorithms::IENasSecurityAlgorithms(ETypeOfIntegrityProtectionAlgor
 {
 }
 
-IENasSecurityAlgorithms IENasSecurityAlgorithms::Decode(const OctetBuffer &stream)
+IENasSecurityAlgorithms IENasSecurityAlgorithms::Decode(const OctetView &stream)
 {
     IENasSecurityAlgorithms r;
     r.integrity = static_cast<ETypeOfIntegrityProtectionAlgorithm>(stream.peekI() & 0xF);
@@ -196,7 +196,7 @@ IEPduSessionIdentity2::IEPduSessionIdentity2(uint8_t value) : value(value)
 {
 }
 
-IEPduSessionIdentity2 IEPduSessionIdentity2::Decode(const OctetBuffer &stream)
+IEPduSessionIdentity2 IEPduSessionIdentity2::Decode(const OctetView &stream)
 {
     IEPduSessionIdentity2 r;
     r.value = stream.read();
@@ -212,7 +212,7 @@ IETimeZone::IETimeZone(uint8_t value) : value(value)
 {
 }
 
-IETimeZone IETimeZone::Decode(const OctetBuffer &stream)
+IETimeZone IETimeZone::Decode(const OctetView &stream)
 {
     IETimeZone r;
     r.value = stream.read();
@@ -228,7 +228,7 @@ IETimeZoneAndTime::IETimeZoneAndTime(VTime time, octet timezone) : time(time), t
 {
 }
 
-IETimeZoneAndTime IETimeZoneAndTime::Decode(const OctetBuffer &stream)
+IETimeZoneAndTime IETimeZoneAndTime::Decode(const OctetView &stream)
 {
     IETimeZoneAndTime r;
     r.time = VTime::Decode(stream);
@@ -246,7 +246,7 @@ IE5gSmCause::IE5gSmCause(ESmCause value) : value(value)
 {
 }
 
-IE5gSmCause IE5gSmCause::Decode(const OctetBuffer &stream)
+IE5gSmCause IE5gSmCause::Decode(const OctetView &stream)
 {
     return IE5gSmCause{static_cast<ESmCause>(stream.readI())};
 }

@@ -10,8 +10,8 @@
 
 #include <functional>
 #include <map>
-#include <utils/octet_buffer.hpp>
 #include <utils/octet_string.hpp>
+#include <utils/octet_view.hpp>
 
 namespace eap
 {
@@ -194,6 +194,6 @@ class EapNotification : public Eap
 };
 
 void EncodeEapPdu(OctetString &stream, const Eap &eap);
-std::unique_ptr<Eap> DecodeEapPdu(const OctetBuffer &stream);
+std::unique_ptr<Eap> DecodeEapPdu(const OctetView &stream);
 
 } // namespace eap

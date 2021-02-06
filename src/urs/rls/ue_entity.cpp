@@ -115,7 +115,7 @@ void RlsUeEntity::onReceive(const InetAddress &address, const OctetString &pdu)
 {
     RlsMessage msg{};
 
-    auto res = Decode(OctetBuffer{pdu}, msg, AppVersion);
+    auto res = Decode(OctetView{pdu}, msg, AppVersion);
     if (res == DecodeRes::FAILURE)
     {
         logError("PDU decoding failed");

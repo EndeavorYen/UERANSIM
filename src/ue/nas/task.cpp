@@ -72,7 +72,7 @@ void NasTask::onLoop()
             break;
         }
         case NwUeRrcToNas::NAS_DELIVERY: {
-            OctetBuffer buffer{w->nasPdu};
+            OctetView buffer{w->nasPdu};
             auto nasMessage = nas::DecodeNasMessage(buffer);
             if (nasMessage != nullptr)
                 mm->receiveNasMessage(*nasMessage);

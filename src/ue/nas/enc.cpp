@@ -159,7 +159,7 @@ std::unique_ptr<nas::NasMessage> Decrypt(NasSecurityContext &ctx, const nas::Sec
 
     ctx.updateDownlinkCount(estimatedCount);
     OctetString decryptedData = DecryptData(encAlg, estimatedCount, is3gppAccess, encKey, msg.sht, msg.plainNasMessage);
-    OctetBuffer buff{decryptedData};
+    OctetView buff{decryptedData};
     return nas::DecodeNasMessage(buff);
 }
 

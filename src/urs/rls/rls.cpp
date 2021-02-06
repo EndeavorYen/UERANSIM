@@ -11,7 +11,7 @@
 namespace rls
 {
 
-DecodeRes Decode(const OctetBuffer &stream, RlsMessage &output, octet3 appVersion)
+DecodeRes Decode(const OctetView &stream, RlsMessage &output, octet3 appVersion)
 {
     output.msgCls = static_cast<EMessageClass>(stream.readI());
     if (output.msgCls == EMessageClass::ERROR_INDICATION)

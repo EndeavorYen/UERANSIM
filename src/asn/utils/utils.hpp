@@ -23,7 +23,7 @@
 #include <type_traits>
 #include <utils/bit_buffer.hpp>
 #include <utils/octet.hpp>
-#include <utils/octet_buffer.hpp>
+#include <utils/octet_view.hpp>
 
 namespace asn
 {

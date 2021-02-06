@@ -18,15 +18,15 @@
 class OctetString;
 
 // TODO: add bound check
-class OctetBuffer
+class OctetView
 {
     const uint8_t *data;
     mutable size_t index;
     size_t size;
 
   public:
-    OctetBuffer(const uint8_t *data, size_t size);
-    explicit OctetBuffer(const OctetString &data);
+    OctetView(const uint8_t *data, size_t size);
+    explicit OctetView(const OctetString &data);
 
     inline octet peek() const
     {

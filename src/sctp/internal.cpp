@@ -205,6 +205,11 @@ void ReceiveMessage(int sd, uint32_t ppid, ISctpHandler *handler)
                     if (handler)
                         handler->onAssociationSetup(status.sstat_assoc_id, status.sstat_instrms, status.sstat_outstrms);
                 }
+                else if (sac->sac_state == sctp_sac_state::SCTP_COMM_LOST)
+                {
+                    if (handler)
+                        handler->onAssociationShutdown();
+                }
                 else
                 {
                     if (handler)

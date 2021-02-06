@@ -55,8 +55,7 @@ void NgapTask::sendNgapNonUe(int associatedAmf, ASN_NGAP_NGAP_PDU *pdu)
         auto *msg = new NwGnbSctp(NwGnbSctp::SEND_MESSAGE);
         msg->clientId = amf->ctxId;
         msg->stream = 0;
-        msg->buffer = buffer;
-        msg->length = static_cast<size_t>(encoded);
+        msg->buffer = UniqueBuffer{buffer, static_cast<size_t>(encoded)};
         m_base->sctpTask->push(msg);
 
         if (m_base->nodeListener)
@@ -147,8 +146,7 @@ void NgapTask::sendNgapUeAssociated(int ueId, ASN_NGAP_NGAP_PDU *pdu)
         auto *msg = new NwGnbSctp(NwGnbSctp::SEND_MESSAGE);
         msg->clientId = amf->ctxId;
         msg->stream = ue->uplinkStream;
-        msg->buffer = buffer;
-        msg->length = static_cast<size_t>(encoded);
+        msg->buffer = UniqueBuffer{buffer, static_cast<size_t>(encoded)};
         m_base->sctpTask->push(msg);
 
         if (m_base->nodeListener)
@@ -165,13 +163,13 @@ void NgapTask::sendNgapUeAssociated(int ueId, ASN_NGAP_NGAP_PDU *pdu)
     asn::Free(asn_DEF_ASN_NGAP_NGAP_PDU, pdu);
 }
 
-void NgapTask::handleSctpMessage(int amfId, uint16_t stream, const uint8_t *buffer, size_t length)
+void NgapTask::handleSctpMessage(int amfId, uint16_t stream, const UniqueBuffer &buffer)
 {
     auto *amf = findAmfContext(amfId);
     if (amf == nullptr)
         return;
 
-    auto *pdu = ngap_encode::Decode<ASN_NGAP_NGAP_PDU>(asn_DEF_ASN_NGAP_NGAP_PDU, buffer, length);
+    auto *pdu = ngap_encode::Decode<ASN_NGAP_NGAP_PDU>(asn_DEF_ASN_NGAP_NGAP_PDU, buffer.data(), buffer.size());
     if (pdu == nullptr)
     {
         m_logger->err("APER decoding failed for SCTP message");

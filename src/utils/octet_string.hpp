@@ -69,10 +69,10 @@ class OctetString
     [[nodiscard]] uint64_t get8UL(int index) const;
 
   public:
-    std::string toHexString() const;
-    OctetString copy() const;
-    OctetString subCopy(int index) const;
-    OctetString subCopy(int index, int length) const;
+    [[nodiscard]] std::string toHexString() const;
+    [[nodiscard]] OctetString copy() const;
+    [[nodiscard]] OctetString subCopy(int index) const;
+    [[nodiscard]] OctetString subCopy(int index, int length) const;
 
   public:
     inline OctetString &operator=(OctetString &&other) noexcept

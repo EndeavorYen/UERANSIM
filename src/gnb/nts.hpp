@@ -15,6 +15,7 @@
 #include <utils/network.hpp>
 #include <utils/nts.hpp>
 #include <utils/octet_string.hpp>
+#include <utils/unique_buffer.hpp>
 
 #include "types.hpp"
 
@@ -112,20 +113,11 @@ struct NwGnbSctp : NtsMessage
 
     // RECEIVE_MESSAGE
     // SEND_MESSAGE
-    const uint8_t *buffer{};
-    size_t length{};
+    UniqueBuffer buffer{};
     uint16_t stream{};
 
     explicit NwGnbSctp(PR present) : NtsMessage(NtsMessageType::GNB_SCTP), present(present)
     {
-    }
-
-    ~NwGnbSctp() override
-    {
-        if (present == RECEIVE_MESSAGE)
-            delete[] buffer; // This buffer was allocated using new()
-        else if (present == SEND_MESSAGE)
-            free((void *)buffer); // This buffer was allocated by asn1c library using malloc/calloc
     }
 };
 

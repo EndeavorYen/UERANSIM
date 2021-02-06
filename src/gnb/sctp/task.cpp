@@ -77,8 +77,7 @@ class SctpHandler : public sctp::ISctpHandler
 
         auto *w = new NwGnbSctp(NwGnbSctp::RECEIVE_MESSAGE);
         w->clientId = clientId;
-        w->buffer = data;
-        w->length = length;
+        w->buffer = UniqueBuffer{buffer, length};
         w->stream = stream;
         sctpTask->push(w);
     }
@@ -141,11 +140,11 @@ void SctpTask::onLoop()
             break;
         }
         case NwGnbSctp::RECEIVE_MESSAGE: {
-            receiveClientReceive(w->clientId, w->stream, w->buffer, w->length);
+            receiveClientReceive(w->clientId, w->stream, std::move(w->buffer));
             break;
         }
         case NwGnbSctp::SEND_MESSAGE: {
-            receiveSendMessage(w->clientId, w->stream, w->buffer, w->length);
+            receiveSendMessage(w->clientId, w->stream, std::move(w->buffer));
             break;
         }
         case NwGnbSctp::UNHANDLED_NOTIFICATION: {
@@ -268,7 +267,7 @@ void SctpTask::receiveAssociationShutdown(int clientId)
     entry->associatedTask->push(msg);
 }
 
-void SctpTask::receiveClientReceive(int clientId, uint16_t stream, const uint8_t *buffer, size_t length)
+void SctpTask::receiveClientReceive(int clientId, uint16_t stream, UniqueBuffer &&buffer)
 {
     ClientEntry *entry = m_clients[clientId];
     if (entry == nullptr)
@@ -281,8 +280,7 @@ void SctpTask::receiveClientReceive(int clientId, uint16_t stream, const uint8_t
     auto *msg = new NwGnbSctp(NwGnbSctp::RECEIVE_MESSAGE);
     msg->clientId = clientId;
     msg->stream = stream;
-    msg->buffer = buffer;
-    msg->length = length;
+    msg->buffer = std::move(buffer);
     entry->associatedTask->push(msg);
 }
 
@@ -313,7 +311,7 @@ void SctpTask::receiveConnectionClose(int clientId)
     DeleteClientEntry(entry);
 }
 
-void SctpTask::receiveSendMessage(int clientId, uint16_t stream, const uint8_t *buffer, size_t length)
+void SctpTask::receiveSendMessage(int clientId, uint16_t stream, UniqueBuffer &&buffer)
 {
     ClientEntry *entry = m_clients[clientId];
     if (entry == nullptr)
@@ -331,7 +329,7 @@ void SctpTask::receiveSendMessage(int clientId, uint16_t stream, const uint8_t *
         receiveClientReceive(clientId, 0, copy, data.length());
     }
 #else
-    entry->client->send(stream, buffer, 0, length);
+    entry->client->send(stream, buffer.data(), 0, buffer.size());
 #endif
 }
 

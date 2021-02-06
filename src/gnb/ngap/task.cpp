@@ -73,7 +73,7 @@ void NgapTask::onLoop()
             handleAssociationSetup(w->clientId, w->associationId, w->inStreams, w->outStreams);
             break;
         case NwGnbSctp::RECEIVE_MESSAGE:
-            handleSctpMessage(w->clientId, w->stream, w->buffer, w->length);
+            handleSctpMessage(w->clientId, w->stream, w->buffer);
             break;
         default:
             m_logger->err("Unhandled NTS message received with type %d", (int)msg->msgType);

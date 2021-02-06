@@ -57,10 +57,10 @@ class SctpTask : public NtsTask
                                            NtsTask *associatedTask);
     void receiveAssociationSetup(int clientId, int associationId, int inStreams, int outStreams);
     void receiveAssociationShutdown(int clientId);
-    void receiveClientReceive(int clientId, uint16_t stream, const uint8_t *buffer, size_t length);
+    void receiveClientReceive(int clientId, uint16_t stream, UniqueBuffer &&buffer);
     void receiveUnhandledNotification(int clientId);
     void receiveConnectionClose(int clientId);
-    void receiveSendMessage(int clientId, uint16_t stream, const uint8_t *buffer, size_t length);
+    void receiveSendMessage(int clientId, uint16_t stream, UniqueBuffer &&buffer);
 };
 
 } // namespace nr::gnb

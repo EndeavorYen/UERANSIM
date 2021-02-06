@@ -12,6 +12,8 @@
 #include <cstdint>
 #include <stdexcept>
 
+#include <utils/unique_buffer.hpp>
+
 namespace sctp
 {
 

@@ -37,7 +37,9 @@ inline bool Encode(const asn_TYPE_descriptor_t &desc, T *pdu, ssize_t &encoded, 
         return false;
 
     encoded = res.result.encoded;
-    buffer = reinterpret_cast<uint8_t *>(res.buffer);
+    buffer = new uint8_t[encoded];
+    std::memcpy(buffer, res.buffer, encoded);
+    free(res.buffer);
 
     return true;
 }

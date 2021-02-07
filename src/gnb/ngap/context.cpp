@@ -49,7 +49,12 @@ void NgapTask::receiveInitialContextSetup(int amfId, ASN_NGAP_InitialContextSetu
     if (ie)
         deliverDownlinkNas(ue->ctxId, asn::GetOctetString(ie->NAS_PDU));
 
-    m_base->gtpTask->push(new NwUeContextUpdate(ue->ctxId, true, ue->ueAmbr));
+    auto *w = new NwNgapToGtp(NwNgapToGtp::UE_CONTEXT_UPDATE);
+    w->update = std::make_unique<GtpUeContextUpdate>();
+    w->update->ueId = ue->ctxId;
+    w->update->ueAmbr = ue->ueAmbr;
+    w->update->isCreate = true;
+    m_base->gtpTask->push(w);
 }
 
 void NgapTask::receiveContextRelease(int amfId, ASN_NGAP_UEContextReleaseCommand *msg)
@@ -95,7 +100,12 @@ void NgapTask::receiveContextModification(int amfId, ASN_NGAP_UEContextModificat
     auto *response = asn::ngap::NewMessagePdu<ASN_NGAP_UEContextModificationResponse>({});
     sendNgapUeAssociated(ue->ctxId, response);
 
-    m_base->gtpTask->push(new NwUeContextUpdate(ue->ctxId, false, ue->ueAmbr));
+    auto *w = new NwNgapToGtp(NwNgapToGtp::UE_CONTEXT_UPDATE);
+    w->update = std::make_unique<GtpUeContextUpdate>();
+    w->update->ueId = ue->ctxId;
+    w->update->ueAmbr = ue->ueAmbr;
+    w->update->isCreate = false;
+    m_base->gtpTask->push(w);
 }
 
 } // namespace nr::gnb

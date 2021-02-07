@@ -35,9 +35,6 @@ enum class NtsMessageType
     GNB_RLS_UPLINK_PAYLOAD,
     GNB_RLS_SEND_PDU,
 
-    NGAP_PDU_SESSION_RESOURCE_CREATE,
-
-    GTP_UE_CONTEXT_UPDATE,
     UDP_SERVER_RECEIVE,
 
     UE_STATUS_UPDATE,
@@ -47,6 +44,7 @@ enum class NtsMessageType
     GNB_MR_TO_RRC,
     GNB_NGAP_TO_RRC,
     GNB_RRC_TO_NGAP,
+    GNB_NGAP_TO_GTP,
     GNB_SCTP,
 
     UE_MR_TO_MR,

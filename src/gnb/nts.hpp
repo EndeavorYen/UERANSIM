@@ -76,6 +76,25 @@ struct NwGnbRrcToNgap : NtsMessage
     }
 };
 
+struct NwNgapToGtp : NtsMessage
+{
+    enum PR
+    {
+        UE_CONTEXT_UPDATE,
+        SESSION_CREATE
+    } present;
+
+    // UE_CONTEXT_UPDATE
+    std::unique_ptr<GtpUeContextUpdate> update{};
+
+    // SESSION_CREATE
+    PduSessionResource *resource{};
+
+    explicit NwNgapToGtp(PR present) : NtsMessage(NtsMessageType::GNB_NGAP_TO_GTP), present(present)
+    {
+    }
+};
+
 struct NwGnbSctp : NtsMessage
 {
     enum PR
@@ -121,16 +140,6 @@ struct NwGnbSctp : NtsMessage
     }
 };
 
-struct NwPduSessionResourceCreate : NtsMessage
-{
-    PduSessionResource *resource;
-
-    explicit NwPduSessionResourceCreate(PduSessionResource *resource)
-        : NtsMessage(NtsMessageType::NGAP_PDU_SESSION_RESOURCE_CREATE), resource(resource)
-    {
-    }
-};
-
 struct NwGnbStatusUpdate : NtsMessage
 {
     static constexpr const int INITIAL_SCTP_ESTABLISHED = 1;
@@ -148,18 +157,6 @@ struct NwGnbStatusUpdate : NtsMessage
 struct NwGnbN1Ready : NtsMessage
 {
     NwGnbN1Ready() : NtsMessage(NtsMessageType::GNB_MR_N1_IS_READY)
-    {
-    }
-};
-
-struct NwUeContextUpdate : NtsMessage
-{
-    int ueId;
-    bool isCreate;
-    AggregateMaximumBitRate ueAmbr;
-
-    NwUeContextUpdate(int ueId, bool isCreate, const AggregateMaximumBitRate &ueAmbr)
-        : NtsMessage(NtsMessageType::GTP_UE_CONTEXT_UPDATE), ueId(ueId), isCreate(isCreate), ueAmbr(ueAmbr)
     {
     }
 };

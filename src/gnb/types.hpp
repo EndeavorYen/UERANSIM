@@ -224,6 +224,13 @@ struct GtpUeContext
     }
 };
 
+struct GtpUeContextUpdate
+{
+    bool isCreate{};
+    int ueId{};
+    AggregateMaximumBitRate ueAmbr{};
+};
+
 struct GnbAmfConfig
 {
     std::string address;

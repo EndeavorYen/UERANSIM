@@ -18,7 +18,8 @@ namespace nr::gnb
 {
 
 GtpTask::GtpTask(TaskBase *base)
-    : m_base{base}, m_udpServer{}, m_ueContexts{}, m_rateLimiter(std::make_unique<RateLimiter>()), m_pduSessions{}, m_sessionTree{}
+    : m_base{base}, m_udpServer{}, m_ueContexts{},
+      m_rateLimiter(std::make_unique<RateLimiter>()), m_pduSessions{}, m_sessionTree{}
 {
     m_logger = m_base->logBase->makeUniqueLogger("gtp");
 }
@@ -52,14 +53,24 @@ void GtpTask::onLoop()
 
     switch (msg->msgType)
     {
+    case NtsMessageType::GNB_NGAP_TO_GTP: {
+        auto *w = dynamic_cast<NwNgapToGtp *>(msg);
+        switch (w->present)
+        {
+        case NwNgapToGtp::UE_CONTEXT_UPDATE: {
+            handleUeContextUpdate(*w->update);
+            break;
+        }
+        case NwNgapToGtp::SESSION_CREATE: {
+            handleSessionCreate(w->resource);
+            break;
+        }
+        }
+        delete w;
+        break;
+    }
     case NtsMessageType::UDP_SERVER_RECEIVE:
         handleUdpReceive(dynamic_cast<udp::NwUdpServerReceive *>(msg));
-        break;
-    case NtsMessageType::GTP_UE_CONTEXT_UPDATE:
-        handleUeContextUpdate(dynamic_cast<NwUeContextUpdate *>(msg));
-        break;
-    case NtsMessageType::NGAP_PDU_SESSION_RESOURCE_CREATE:
-        handleSessionCreate(dynamic_cast<NwPduSessionResourceCreate *>(msg));
         break;
     case NtsMessageType::GNB_MR_UPLINK_DATA:
         handleUplinkData(dynamic_cast<NwUplinkData *>(msg));
@@ -71,22 +82,19 @@ void GtpTask::onLoop()
     }
 }
 
-void GtpTask::handleUeContextUpdate(NwUeContextUpdate *msg)
+void GtpTask::handleUeContextUpdate(const GtpUeContextUpdate &msg)
 {
-    if (!m_ueContexts.count(msg->ueId))
-        m_ueContexts[msg->ueId] = std::make_unique<GtpUeContext>(msg->ueId);
+    if (!m_ueContexts.count(msg.ueId))
+        m_ueContexts[msg.ueId] = std::make_unique<GtpUeContext>(msg.ueId);
 
-    auto &ue = m_ueContexts[msg->ueId];
-    ue->ueAmbr = msg->ueAmbr;
+    auto &ue = m_ueContexts[msg.ueId];
+    ue->ueAmbr = msg.ueAmbr;
 
     updateAmbrForUe(ue->ueId);
-
-    delete msg;
 }
 
-void GtpTask::handleSessionCreate(NwPduSessionResourceCreate *msg)
+void GtpTask::handleSessionCreate(PduSessionResource *session)
 {
-    PduSessionResource *session = msg->resource;
     if (!m_ueContexts.count(session->ueId))
     {
         m_logger->err("PDU session resource could not be created, UE context with ID[%d] not found", session->ueId);
@@ -100,8 +108,6 @@ void GtpTask::handleSessionCreate(NwPduSessionResourceCreate *msg)
 
     updateAmbrForUe(session->ueId);
     updateAmbrForSession(sessionInd);
-
-    delete msg;
 }
 
 void GtpTask::handleUplinkData(NwUplinkData *msg)

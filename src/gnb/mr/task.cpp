@@ -62,7 +62,6 @@ void GnbMrTask::onLoop()
             break;
         }
         }
-        delete w;
         break;
     }
     case NtsMessageType::GNB_RRC_TO_MR: {
@@ -78,7 +77,6 @@ void GnbMrTask::onLoop()
             break;
         }
         }
-        delete w;
         break;
     }
     case NtsMessageType::TIMER_EXPIRED: {
@@ -88,49 +86,43 @@ void GnbMrTask::onLoop()
             setTimer(TIMER_ID_RLS_HEARTBEAT, rls::Constants::HB_PERIOD_GNB_TO_UE);
             m_rlsEntity->onHeartbeat();
         }
-        delete w;
         break;
     }
     case NtsMessageType::UDP_SERVER_RECEIVE: {
         auto *w = dynamic_cast<udp::NwUdpServerReceive *>(msg);
         m_rlsEntity->onReceive(w->fromAddress, w->packet);
-        delete w;
         break;
     }
     case NtsMessageType::GNB_RLS_UE_CONNECTED: {
         auto *w = dynamic_cast<NwUeConnected *>(msg);
         onUeConnected(w->ue, w->name);
-        delete w;
         break;
     }
     case NtsMessageType::GNB_RLS_UE_RELEASED: {
         auto *w = dynamic_cast<NwUeReleased *>(msg);
         onUeReleased(w->ue, w->cause);
-        delete w;
         break;
     }
     case NtsMessageType::GNB_RLS_UPLINK_PAYLOAD: {
         auto *w = dynamic_cast<NwUplinkPayload *>(msg);
         receiveUplinkPayload(w->ue, w->type, std::move(w->payload));
-        delete w;
         break;
     }
     case NtsMessageType::GNB_RLS_SEND_PDU: {
         auto *w = dynamic_cast<NwRlsSendPdu *>(msg);
         m_udpTask->send(w->address, w->pdu);
-        delete w;
         break;
     }
     case NtsMessageType::GNB_MR_N1_IS_READY: {
         m_rlsEntity->setN1IsReady(true);
-        delete msg;
         break;
     }
     default:
         m_logger->unhandledNts(msg);
-        delete msg;
         break;
     }
+
+    delete msg;
 }
 
 void GnbMrTask::onQuit()

@@ -34,12 +34,18 @@ bool GnbRls::isInReadyState()
 
 void GnbRls::onUeConnected(int ue, std::string name)
 {
-    m_targetTask->push(new NwUeConnected(ue, std::move(name)));
+    auto *w = new NwGnbMrToMr(NwGnbMrToMr::UE_CONNECTED);
+    w->ue = ue;
+    w->name = std::move(name);
+    m_targetTask->push(w);
 }
 
 void GnbRls::onUeReleased(int ue, rls::ECause cause)
 {
-    m_targetTask->push(new NwUeReleased(ue, cause));
+    auto *w = new NwGnbMrToMr(NwGnbMrToMr::UE_CONNECTED);
+    w->ue = ue;
+    w->cause = cause;
+    m_targetTask->push(w);
 }
 
 void GnbRls::deliverUplinkPayload(int ue, rls::EPayloadType type, OctetString &&payload)

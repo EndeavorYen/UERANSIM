@@ -49,7 +49,7 @@ void NgapTask::receiveInitialContextSetup(int amfId, ASN_NGAP_InitialContextSetu
     if (ie)
         deliverDownlinkNas(ue->ctxId, asn::GetOctetString(ie->NAS_PDU));
 
-    auto *w = new NwNgapToGtp(NwNgapToGtp::UE_CONTEXT_UPDATE);
+    auto *w = new NwGnbNgapToGtp(NwGnbNgapToGtp::UE_CONTEXT_UPDATE);
     w->update = std::make_unique<GtpUeContextUpdate>(true, ue->ctxId, ue->ueAmbr);
     m_base->gtpTask->push(w);
 }
@@ -97,7 +97,7 @@ void NgapTask::receiveContextModification(int amfId, ASN_NGAP_UEContextModificat
     auto *response = asn::ngap::NewMessagePdu<ASN_NGAP_UEContextModificationResponse>({});
     sendNgapUeAssociated(ue->ctxId, response);
 
-    auto *w = new NwNgapToGtp(NwNgapToGtp::UE_CONTEXT_UPDATE);
+    auto *w = new NwGnbNgapToGtp(NwGnbNgapToGtp::UE_CONTEXT_UPDATE);
     w->update = std::make_unique<GtpUeContextUpdate>(false, ue->ctxId, ue->ueAmbr);
     m_base->gtpTask->push(w);
 }

@@ -42,7 +42,7 @@ void NgapTask::handleAssociationSetup(int amfId, int ascId, int inCount, int out
             update->isInitialSctpEstablished = true;
             m_base->appTask->push(update);
 
-            m_base->mrTask->push(new NwGnbN1Ready());
+            m_base->rrcTask->push(new NwGnbNgapToRrc(NwGnbNgapToRrc::N1_N2_READY));
         }
 
         sendNgSetupRequest(amf->ctxId);

@@ -25,11 +25,7 @@ enum class NtsMessageType
     RESERVED_END = 1000,
 
     // Start of implementation specific types
-    GNB_MR_DOWNLINK_RRC,
-    GNB_MR_N1_IS_READY,
     GNB_STATUS_UPDATE,
-    GNB_RLS_UE_CONNECTED,
-    GNB_RLS_UE_RELEASED,
     GNB_RLS_UPLINK_PAYLOAD,
     GNB_RLS_SEND_PDU,
 
@@ -39,6 +35,7 @@ enum class NtsMessageType
 
     /////
 
+    GNB_MR_TO_MR,
     GNB_MR_TO_RRC,
     GNB_RRC_TO_MR,
     GNB_NGAP_TO_RRC,

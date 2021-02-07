@@ -223,7 +223,7 @@ std::optional<NgapCause> NgapTask::setupPduSessionResource(PduSessionResource *r
     resource->downTunnel.address = utils::IpToOctetString(m_base->config->gtpIp);
     resource->downTunnel.teid = ++m_downlinkTeidCounter;
 
-    auto *w = new NwNgapToGtp(NwNgapToGtp::SESSION_CREATE);
+    auto *w = new NwGnbNgapToGtp(NwGnbNgapToGtp::SESSION_CREATE);
     w->resource = resource;
     m_base->gtpTask->push(w);
 

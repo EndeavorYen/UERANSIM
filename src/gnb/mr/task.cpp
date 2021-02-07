@@ -49,11 +49,26 @@ void GnbMrTask::onLoop()
 
     switch (msg->msgType)
     {
-    case NtsMessageType::GNB_GTP_TO_MR: {
-        auto *w = dynamic_cast<NwGtpToMr *>(msg);
+    case NtsMessageType::GNB_MR_TO_MR: {
+        auto *w = dynamic_cast<NwGnbMrToMr *>(msg);
         switch (w->present)
         {
-        case NwGtpToMr::DATA_PDU_DELIVERY: {
+        case NwGnbMrToMr::UE_CONNECTED: {
+            onUeConnected(w->ue, w->name);
+            break;
+        }
+        case NwGnbMrToMr::UE_RELEASED: {
+            onUeReleased(w->ue, w->cause);
+            break;
+        }
+        }
+        break;
+    }
+    case NtsMessageType::GNB_GTP_TO_MR: {
+        auto *w = dynamic_cast<NwGnbGtpToMr *>(msg);
+        switch (w->present)
+        {
+        case NwGnbGtpToMr::DATA_PDU_DELIVERY: {
             OctetString stream{};
             stream.appendOctet4(static_cast<int>(w->pduSessionId));
             stream.append(w->data);
@@ -68,6 +83,10 @@ void GnbMrTask::onLoop()
         auto *w = dynamic_cast<NwGnbRrcToMr *>(msg);
         switch (w->present)
         {
+        case NwGnbRrcToMr::N1_N2_READY: {
+            m_rlsEntity->setN1IsReady(true);
+            break;
+        }
         case NwGnbRrcToMr::RRC_PDU_DELIVERY: {
             OctetString stream{};
             stream.appendOctet(static_cast<int>(w->channel));
@@ -93,16 +112,6 @@ void GnbMrTask::onLoop()
         m_rlsEntity->onReceive(w->fromAddress, w->packet);
         break;
     }
-    case NtsMessageType::GNB_RLS_UE_CONNECTED: {
-        auto *w = dynamic_cast<NwUeConnected *>(msg);
-        onUeConnected(w->ue, w->name);
-        break;
-    }
-    case NtsMessageType::GNB_RLS_UE_RELEASED: {
-        auto *w = dynamic_cast<NwUeReleased *>(msg);
-        onUeReleased(w->ue, w->cause);
-        break;
-    }
     case NtsMessageType::GNB_RLS_UPLINK_PAYLOAD: {
         auto *w = dynamic_cast<NwUplinkPayload *>(msg);
         receiveUplinkPayload(w->ue, w->type, std::move(w->payload));
@@ -111,10 +120,6 @@ void GnbMrTask::onLoop()
     case NtsMessageType::GNB_RLS_SEND_PDU: {
         auto *w = dynamic_cast<NwRlsSendPdu *>(msg);
         m_udpTask->send(w->address, w->pdu);
-        break;
-    }
-    case NtsMessageType::GNB_MR_N1_IS_READY: {
-        m_rlsEntity->setN1IsReady(true);
         break;
     }
     default:
@@ -164,7 +169,7 @@ void GnbMrTask::receiveUplinkPayload(int ue, rls::EPayloadType type, OctetString
         int psi = payload.get4I(0);
         OctetString dataPayload = payload.subCopy(4);
 
-        auto *w = new NwMrToGtp(NwMrToGtp::UPLINK_DELIVERY);
+        auto *w = new NwGnbMrToGtp(NwGnbMrToGtp::UPLINK_DELIVERY);
         w->ueId = ue;
         w->pduSessionId = psi;
         w->data = std::move(dataPayload);

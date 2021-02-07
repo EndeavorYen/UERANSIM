@@ -52,12 +52,15 @@ void GnbRrcTask::onLoop()
         auto *w = dynamic_cast<NwGnbNgapToRrc *>(msg);
         switch (w->present)
         {
+        case NwGnbNgapToRrc::N1_N2_READY: {
+            m_base->mrTask->push(new NwGnbRrcToMr(NwGnbRrcToMr::N1_N2_READY));
+            break;
+        }
         case NwGnbNgapToRrc::NAS_DELIVERY: {
             handleDownlinkNasDelivery(w->ueId, w->pdu);
             break;
         }
         }
-
         break;
     }
     default:

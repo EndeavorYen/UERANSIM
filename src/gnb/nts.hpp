@@ -43,6 +43,7 @@ struct NwGnbRrcToMr : NtsMessage
 {
     enum PR
     {
+        N1_N2_READY,
         RRC_PDU_DELIVERY
     } present;
 
@@ -60,7 +61,8 @@ struct NwGnbNgapToRrc : NtsMessage
 {
     enum PR
     {
-        NAS_DELIVERY
+        N1_N2_READY,
+        NAS_DELIVERY,
     } present;
 
     // NAS_DELIVERY
@@ -93,7 +95,7 @@ struct NwGnbRrcToNgap : NtsMessage
     }
 };
 
-struct NwNgapToGtp : NtsMessage
+struct NwGnbNgapToGtp : NtsMessage
 {
     enum PR
     {
@@ -107,12 +109,12 @@ struct NwNgapToGtp : NtsMessage
     // SESSION_CREATE
     PduSessionResource *resource{};
 
-    explicit NwNgapToGtp(PR present) : NtsMessage(NtsMessageType::GNB_NGAP_TO_GTP), present(present)
+    explicit NwGnbNgapToGtp(PR present) : NtsMessage(NtsMessageType::GNB_NGAP_TO_GTP), present(present)
     {
     }
 };
 
-struct NwMrToGtp : NtsMessage
+struct NwGnbMrToGtp : NtsMessage
 {
     enum PR
     {
@@ -124,12 +126,12 @@ struct NwMrToGtp : NtsMessage
     int pduSessionId{};
     OctetString data{};
 
-    explicit NwMrToGtp(PR present) : NtsMessage(NtsMessageType::GNB_MR_TO_GTP), present(present)
+    explicit NwGnbMrToGtp(PR present) : NtsMessage(NtsMessageType::GNB_MR_TO_GTP), present(present)
     {
     }
 };
 
-struct NwGtpToMr : NtsMessage
+struct NwGnbGtpToMr : NtsMessage
 {
     enum PR
     {
@@ -141,7 +143,30 @@ struct NwGtpToMr : NtsMessage
     int pduSessionId{};
     OctetString data{};
 
-    explicit NwGtpToMr(PR present) : NtsMessage(NtsMessageType::GNB_GTP_TO_MR), present(present)
+    explicit NwGnbGtpToMr(PR present) : NtsMessage(NtsMessageType::GNB_GTP_TO_MR), present(present)
+    {
+    }
+};
+
+struct NwGnbMrToMr : NtsMessage
+{
+    enum PR
+    {
+        UE_CONNECTED,
+        UE_RELEASED
+    } present;
+
+    // UE_CONNECTED
+    // UE_RELEASED
+    int ue{};
+
+    // UE_CONNECTED
+    std::string name{};
+
+    // UE_RELEASED
+    rls::ECause cause{};
+
+    explicit NwGnbMrToMr(PR present) : NtsMessage(NtsMessageType::GNB_MR_TO_MR), present(present)
     {
     }
 };
@@ -201,34 +226,6 @@ struct NwGnbStatusUpdate : NtsMessage
     bool isInitialSctpEstablished{};
 
     explicit NwGnbStatusUpdate(const int what) : NtsMessage(NtsMessageType::GNB_STATUS_UPDATE), what(what)
-    {
-    }
-};
-
-struct NwGnbN1Ready : NtsMessage
-{
-    NwGnbN1Ready() : NtsMessage(NtsMessageType::GNB_MR_N1_IS_READY)
-    {
-    }
-};
-
-struct NwUeConnected : NtsMessage
-{
-    int ue;
-    std::string name;
-
-    NwUeConnected(int ue, std::string name)
-        : NtsMessage(NtsMessageType::GNB_RLS_UE_CONNECTED), ue(ue), name(std::move(name))
-    {
-    }
-};
-
-struct NwUeReleased : NtsMessage
-{
-    int ue;
-    rls::ECause cause;
-
-    NwUeReleased(int ue, rls::ECause cause) : NtsMessage(NtsMessageType::GNB_RLS_UE_RELEASED), ue(ue), cause(cause)
     {
     }
 };

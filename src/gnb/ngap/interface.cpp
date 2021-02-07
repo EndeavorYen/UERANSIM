@@ -43,7 +43,17 @@ void NgapTask::handleAssociationSetup(int amfId, int ascId, int inCount, int out
 
 void NgapTask::handleAssociationShutdown(int amfId)
 {
-    // TODO
+    auto *amf = findAmfContext(amfId);
+    if (amf == nullptr)
+        return;
+
+    m_logger->err("Association terminated for AMF[%d]", amfId);
+    m_logger->debug("Removing AMF context[%d]", amfId);
+
+    amf->state = EAmfState::NOT_CONNECTED;
+    // todo notify sctp layer
+
+    deleteAmfContext(amfId);
 }
 
 void NgapTask::sendNgSetupRequest(int amfId)

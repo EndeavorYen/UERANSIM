@@ -68,6 +68,7 @@ class NgapTask : public NtsTask
     NgapUeContext *findUeByNgapIdPair(int amfCtxId, const NgapIdPair &idPair);
     NgapAmfContext *selectNewAmfForReAllocation(int initiatedAmfId, int amfSetId);
     void deleteUeContext(int ueId);
+    void deleteAmfContext(int amfId);
 
     /* Interface management */
     void sendNgSetupRequest(int amfId);

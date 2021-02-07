@@ -132,7 +132,8 @@ void NasMm::switchMmState(EMmState state, EMmSubState subState)
     statusUpdate->mmSubState = MmSubStateName(subState);
     m_base->appTask->push(statusUpdate);
 
-    m_logger->info("UE switches to state: %s", MmSubStateName(subState));
+    if (state != oldState || subState != oldSubState)
+        m_logger->info("UE switches to state: %s", MmSubStateName(subState));
 
     triggerMmCycle();
 }
@@ -177,7 +178,8 @@ void NasMm::switchCmState(ECmState state)
     statusUpdate->rmState = CmStateName(state);
     m_base->appTask->push(statusUpdate);
 
-    m_logger->info("UE switches to state: %s", CmStateName(state));
+    if (state != oldState)
+        m_logger->info("UE switches to state: %s", CmStateName(state));
 
     triggerMmCycle();
 }

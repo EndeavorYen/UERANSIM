@@ -150,4 +150,14 @@ void NgapTask::deleteUeContext(int ueId)
     }
 }
 
+void NgapTask::deleteAmfContext(int amfId)
+{
+    auto *amf = m_amfCtx[amfId];
+    if (amf)
+    {
+        delete amf;
+        m_amfCtx.erase(amfId);
+    }
+}
+
 } // namespace nr::gnb

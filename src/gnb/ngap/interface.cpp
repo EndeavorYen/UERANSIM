@@ -173,8 +173,6 @@ void NgapTask::receiveNgSetupResponse(int amfId, ASN_NGAP_NGSetupResponse *msg)
 
 void NgapTask::receiveNgSetupFailure(int amfId, ASN_NGAP_NGSetupFailure *msg)
 {
-    m_logger->debug("NG Setup Failure received");
-
     auto *amf = findAmfContext(amfId);
     if (amf == nullptr)
         return;

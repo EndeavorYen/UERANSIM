@@ -180,7 +180,13 @@ void GtpTask::handleUdpReceive(const udp::NwUdpServerReceive &msg)
     }
 
     if (m_rateLimiter->allowDownlinkPacket(sessionInd, gtp->payload.length()))
-        m_base->mrTask->push(new NwDownlinkData(GetUeId(sessionInd), GetPsi(sessionInd), std::move(gtp->payload)));
+    {
+        auto *w = new NwGtpToMr(NwGtpToMr::DOWNLINK_DELIVERY);
+        w->ueId = GetUeId(sessionInd);
+        w->pduSessionId = GetPsi(sessionInd);
+        w->data = std::move(gtp->payload);
+        m_base->mrTask->push(w);
+    }
 
     delete gtp;
 }

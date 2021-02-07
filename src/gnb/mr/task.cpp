@@ -49,6 +49,23 @@ void GnbMrTask::onLoop()
 
     switch (msg->msgType)
     {
+    case NtsMessageType::GNB_GTP_TO_MR: {
+        auto *w = dynamic_cast<NwGtpToMr *>(msg);
+        switch (w->present)
+        {
+        case NwGtpToMr::DOWNLINK_DELIVERY: {
+            OctetString stream{};
+            stream.appendOctet4(static_cast<int>(w->pduSessionId));
+            stream.append(w->data);
+
+            m_rlsEntity->downlinkPayloadDelivery(w->ueId, rls::EPayloadType::DATA, std::move(stream));
+            break;
+        }
+        }
+        delete w;
+        break;
+    }
+
     case NtsMessageType::GNB_MR_DOWNLINK_RRC: {
         auto *w = dynamic_cast<NwGnbDownlinkRrc *>(msg);
 
@@ -58,18 +75,6 @@ void GnbMrTask::onLoop()
         stream.append(w->rrcPdu);
 
         m_rlsEntity->downlinkPayloadDelivery(w->ueId, rls::EPayloadType::RRC, std::move(stream));
-        delete w;
-        break;
-    }
-    case NtsMessageType::GNB_MR_DOWNLINK_DATA: {
-        auto *w = dynamic_cast<NwDownlinkData *>(msg);
-
-        // Append PDU session information
-        OctetString stream{};
-        stream.appendOctet4(static_cast<int>(w->pduSessionId));
-        stream.append(w->data);
-
-        m_rlsEntity->downlinkPayloadDelivery(w->ueId, rls::EPayloadType::DATA, std::move(stream));
         delete w;
         break;
     }

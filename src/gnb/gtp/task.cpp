@@ -181,7 +181,7 @@ void GtpTask::handleUdpReceive(const udp::NwUdpServerReceive &msg)
 
     if (m_rateLimiter->allowDownlinkPacket(sessionInd, gtp->payload.length()))
     {
-        auto *w = new NwGtpToMr(NwGtpToMr::DOWNLINK_DELIVERY);
+        auto *w = new NwGtpToMr(NwGtpToMr::DATA_PDU_DELIVERY);
         w->ueId = GetUeId(sessionInd);
         w->pduSessionId = GetPsi(sessionInd);
         w->data = std::move(gtp->payload);

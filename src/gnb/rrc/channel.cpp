@@ -101,7 +101,12 @@ void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_BCCH_BCH_Message *msg)
         m_logger->err("RRC BCCH-BCH encoding failed.");
         return;
     }
-    m_base->mrTask->push(new NwGnbDownlinkRrc(ueId, rrc::RrcChannel::BCCH_BCH, std::move(pdu)));
+
+    auto *w = new NwGnbRrcToMr(NwGnbRrcToMr::RRC_PDU_DELIVERY);
+    w->ueId = ueId;
+    w->channel = rrc::RrcChannel::BCCH_BCH;
+    w->pdu = std::move(pdu);
+    m_base->mrTask->push(w);
 }
 
 void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_BCCH_DL_SCH_Message *msg)
@@ -112,7 +117,12 @@ void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_BCCH_DL_SCH_Message *msg)
         m_logger->err("RRC BCCH-DL-SCH encoding failed.");
         return;
     }
-    m_base->mrTask->push(new NwGnbDownlinkRrc(ueId, rrc::RrcChannel::BCCH_DL_SCH, std::move(pdu)));
+
+    auto *w = new NwGnbRrcToMr(NwGnbRrcToMr::RRC_PDU_DELIVERY);
+    w->ueId = ueId;
+    w->channel = rrc::RrcChannel::BCCH_DL_SCH;
+    w->pdu = std::move(pdu);
+    m_base->mrTask->push(w);
 }
 
 void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_DL_CCCH_Message *msg)
@@ -123,7 +133,12 @@ void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_DL_CCCH_Message *msg)
         m_logger->err("RRC DL-CCCH encoding failed.");
         return;
     }
-    m_base->mrTask->push(new NwGnbDownlinkRrc(ueId, rrc::RrcChannel::DL_CCCH, std::move(pdu)));
+
+    auto *w = new NwGnbRrcToMr(NwGnbRrcToMr::RRC_PDU_DELIVERY);
+    w->ueId = ueId;
+    w->channel = rrc::RrcChannel::DL_CCCH;
+    w->pdu = std::move(pdu);
+    m_base->mrTask->push(w);
 }
 
 void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_DL_DCCH_Message *msg)
@@ -134,7 +149,12 @@ void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_DL_DCCH_Message *msg)
         m_logger->err("RRC DL-DCCH encoding failed.");
         return;
     }
-    m_base->mrTask->push(new NwGnbDownlinkRrc(ueId, rrc::RrcChannel::DL_DCCH, std::move(pdu)));
+
+    auto *w = new NwGnbRrcToMr(NwGnbRrcToMr::RRC_PDU_DELIVERY);
+    w->ueId = ueId;
+    w->channel = rrc::RrcChannel::DL_DCCH;
+    w->pdu = std::move(pdu);
+    m_base->mrTask->push(w);
 }
 
 void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_PCCH_Message *msg)
@@ -145,7 +165,12 @@ void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_PCCH_Message *msg)
         m_logger->err("RRC PCCH encoding failed.");
         return;
     }
-    m_base->mrTask->push(new NwGnbDownlinkRrc(ueId, rrc::RrcChannel::PCCH, std::move(pdu)));
+
+    auto *w = new NwGnbRrcToMr(NwGnbRrcToMr::RRC_PDU_DELIVERY);
+    w->ueId = ueId;
+    w->channel = rrc::RrcChannel::PCCH;
+    w->pdu = std::move(pdu);
+    m_base->mrTask->push(w);
 }
 
 void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_UL_CCCH_Message *msg)
@@ -156,7 +181,12 @@ void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_UL_CCCH_Message *msg)
         m_logger->err("RRC UL-CCCH encoding failed.");
         return;
     }
-    m_base->mrTask->push(new NwGnbDownlinkRrc(ueId, rrc::RrcChannel::UL_CCCH, std::move(pdu)));
+
+    auto *w = new NwGnbRrcToMr(NwGnbRrcToMr::RRC_PDU_DELIVERY);
+    w->ueId = ueId;
+    w->channel = rrc::RrcChannel::UL_CCCH;
+    w->pdu = std::move(pdu);
+    m_base->mrTask->push(w);
 }
 
 void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_UL_CCCH1_Message *msg)
@@ -167,7 +197,12 @@ void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_UL_CCCH1_Message *msg)
         m_logger->err("RRC UL-CCCH1 encoding failed.");
         return;
     }
-    m_base->mrTask->push(new NwGnbDownlinkRrc(ueId, rrc::RrcChannel::UL_CCCH1, std::move(pdu)));
+
+    auto *w = new NwGnbRrcToMr(NwGnbRrcToMr::RRC_PDU_DELIVERY);
+    w->ueId = ueId;
+    w->channel = rrc::RrcChannel::UL_CCCH1;
+    w->pdu = std::move(pdu);
+    m_base->mrTask->push(w);
 }
 
 void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_UL_DCCH_Message *msg)
@@ -178,7 +213,12 @@ void GnbRrcTask::sendRrcMessage(int ueId, ASN_RRC_UL_DCCH_Message *msg)
         m_logger->err("RRC UL-DCCH encoding failed.");
         return;
     }
-    m_base->mrTask->push(new NwGnbDownlinkRrc(ueId, rrc::RrcChannel::UL_DCCH, std::move(pdu)));
+
+    auto *w = new NwGnbRrcToMr(NwGnbRrcToMr::RRC_PDU_DELIVERY);
+    w->ueId = ueId;
+    w->channel = rrc::RrcChannel::UL_DCCH;
+    w->pdu = std::move(pdu);
+    m_base->mrTask->push(w);
 }
 
 void GnbRrcTask::receiveRrcMessage(int ueId, ASN_RRC_BCCH_BCH_Message *msg)

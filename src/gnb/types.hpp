@@ -226,9 +226,14 @@ struct GtpUeContext
 
 struct GtpUeContextUpdate
 {
-    bool isCreate{};
-    int ueId{};
-    AggregateMaximumBitRate ueAmbr{};
+    bool isCreate;
+    int ueId;
+    AggregateMaximumBitRate ueAmbr;
+
+    GtpUeContextUpdate(bool isCreate, int ueId, const AggregateMaximumBitRate &ueAmbr)
+        : isCreate(isCreate), ueId(ueId), ueAmbr(ueAmbr)
+    {
+    }
 };
 
 struct GnbAmfConfig

@@ -51,7 +51,10 @@ void NgapTask::handleAssociationShutdown(int amfId)
     m_logger->debug("Removing AMF context[%d]", amfId);
 
     amf->state = EAmfState::NOT_CONNECTED;
-    // todo notify sctp layer
+
+    auto *w = new NwGnbSctp(NwGnbSctp::CONNECTION_CLOSE);
+    w->clientId = amfId;
+    m_base->sctpTask->push(w);
 
     deleteAmfContext(amfId);
 }

@@ -8,6 +8,8 @@
 
 #include "task.hpp"
 #include "utils.hpp"
+
+#include <algorithm>
 #include <gnb/app/task.hpp>
 
 #include <asn/ngap/ASN_NGAP_AMFName.h>
@@ -34,16 +36,6 @@ void NgapTask::handleAssociationSetup(int amfId, int ascId, int inCount, int out
         amf->association.associationId = amfId;
         amf->association.inStreams = inCount;
         amf->association.outStreams = outCount;
-
-        m_waitingSctpClients--;
-        if (m_waitingSctpClients == 0)
-        {
-            auto *update = new NwGnbStatusUpdate(NwGnbStatusUpdate::INITIAL_SCTP_ESTABLISHED);
-            update->isInitialSctpEstablished = true;
-            m_base->appTask->push(update);
-
-            m_base->rrcTask->push(new NwGnbNgapToRrc(NwGnbNgapToRrc::N1_N2_READY));
-        }
 
         sendNgSetupRequest(amf->ctxId);
     }
@@ -169,6 +161,16 @@ void NgapTask::receiveNgSetupResponse(int amfId, ASN_NGAP_NGSetupResponse *msg)
 
     amf->state = EAmfState::CONNECTED;
     m_logger->info("NG Setup procedure is successful");
+
+    if (std::all_of(m_amfCtx.begin(), m_amfCtx.end(),
+                    [](auto &amfCtx) { return amfCtx.second->state == EAmfState::CONNECTED; }))
+    {
+        auto *update = new NwGnbStatusUpdate(NwGnbStatusUpdate::NGAP_IS_UP);
+        update->isNgapUp = true;
+        m_base->appTask->push(update);
+
+        m_base->rrcTask->push(new NwGnbNgapToRrc(NwGnbNgapToRrc::NGAP_LAYER_INITIALIZED));
+    }
 }
 
 void NgapTask::receiveNgSetupFailure(int amfId, ASN_NGAP_NGSetupFailure *msg)

@@ -61,7 +61,7 @@ struct NwGnbNgapToRrc : NtsMessage
 {
     enum PR
     {
-        N1_N2_READY,
+        NGAP_LAYER_INITIALIZED,
         NAS_DELIVERY,
     } present;
 
@@ -228,12 +228,12 @@ struct NwGnbSctp : NtsMessage
 
 struct NwGnbStatusUpdate : NtsMessage
 {
-    static constexpr const int INITIAL_SCTP_ESTABLISHED = 1;
+    static constexpr const int NGAP_IS_UP = 1;
 
     const int what;
 
-    // INITIAL_SCTP_ESTABLISHED
-    bool isInitialSctpEstablished{};
+    // NGAP_IS_UP
+    bool isNgapUp{};
 
     explicit NwGnbStatusUpdate(const int what) : NtsMessage(NtsMessageType::GNB_STATUS_UPDATE), what(what)
     {

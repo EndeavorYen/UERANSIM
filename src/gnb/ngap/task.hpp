@@ -46,7 +46,6 @@ class NgapTask : public NtsTask
     std::unordered_map<int, NgapUeContext *> m_ueCtx;
     long m_ueNgapIdCounter;
 
-    int m_waitingSctpClients;
     uint32_t m_downlinkTeidCounter;
 
   public:

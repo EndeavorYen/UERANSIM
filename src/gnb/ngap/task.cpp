@@ -14,7 +14,7 @@
 namespace nr::gnb
 {
 
-NgapTask::NgapTask(TaskBase *base) : m_base{base}, m_ueNgapIdCounter{}, m_waitingSctpClients{}, m_downlinkTeidCounter{}
+NgapTask::NgapTask(TaskBase *base) : m_base{base}, m_ueNgapIdCounter{}, m_downlinkTeidCounter{}
 {
     m_logger = base->logBase->makeUniqueLogger("ngap");
 }
@@ -37,8 +37,6 @@ void NgapTask::onStart()
         msg->ppid = sctp::PayloadProtocolId::NGAP;
         msg->associatedTask = this;
         m_base->sctpTask->push(msg);
-
-        m_waitingSctpClients++;
     }
 }
 

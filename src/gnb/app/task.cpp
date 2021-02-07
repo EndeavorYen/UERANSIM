@@ -33,8 +33,8 @@ void GnbAppTask::onLoop()
         auto *m = dynamic_cast<NwGnbStatusUpdate *>(msg);
         switch (m->what)
         {
-        case NwGnbStatusUpdate::INITIAL_SCTP_ESTABLISHED:
-            m_statusInfo.isInitialSctpEstablished = m->isInitialSctpEstablished;
+        case NwGnbStatusUpdate::NGAP_IS_UP:
+            m_statusInfo.isNgapUp = m->isNgapUp;
             break;
         }
         break;

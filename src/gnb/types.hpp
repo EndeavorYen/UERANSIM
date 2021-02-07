@@ -211,7 +211,7 @@ struct PduSessionResource
 
 struct GnbStatusInfo
 {
-    bool isInitialSctpEstablished;
+    bool isNgapUp;
 };
 
 struct GtpUeContext

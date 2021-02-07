@@ -61,6 +61,14 @@ void GnbMrTask::onLoop()
             onUeReleased(w->ue, w->cause);
             break;
         }
+        case NwGnbMrToMr::SEND_OVER_UDP: {
+            m_udpTask->send(w->address, w->pdu);
+            break;
+        }
+        case NwGnbMrToMr::RECEIVE_OVER_UDP: {
+            receiveUplinkPayload(w->ue, w->type, std::move(w->pdu));
+            break;
+        }
         }
         break;
     }
@@ -110,16 +118,6 @@ void GnbMrTask::onLoop()
     case NtsMessageType::UDP_SERVER_RECEIVE: {
         auto *w = dynamic_cast<udp::NwUdpServerReceive *>(msg);
         m_rlsEntity->onReceive(w->fromAddress, w->packet);
-        break;
-    }
-    case NtsMessageType::GNB_RLS_UPLINK_PAYLOAD: {
-        auto *w = dynamic_cast<NwUplinkPayload *>(msg);
-        receiveUplinkPayload(w->ue, w->type, std::move(w->payload));
-        break;
-    }
-    case NtsMessageType::GNB_RLS_SEND_PDU: {
-        auto *w = dynamic_cast<NwRlsSendPdu *>(msg);
-        m_udpTask->send(w->address, w->pdu);
         break;
     }
     default:

@@ -153,11 +153,14 @@ struct NwGnbMrToMr : NtsMessage
     enum PR
     {
         UE_CONNECTED,
-        UE_RELEASED
+        UE_RELEASED,
+        SEND_OVER_UDP,
+        RECEIVE_OVER_UDP,
     } present;
 
     // UE_CONNECTED
     // UE_RELEASED
+    // RECEIVE_OVER_UDP
     int ue{};
 
     // UE_CONNECTED
@@ -165,6 +168,13 @@ struct NwGnbMrToMr : NtsMessage
 
     // UE_RELEASED
     rls::ECause cause{};
+
+    // SEND_OVER_RLS
+    InetAddress address{};
+    OctetString pdu{};
+
+    // RECEIVE_OVER_UDP
+    rls::EPayloadType type{};
 
     explicit NwGnbMrToMr(PR present) : NtsMessage(NtsMessageType::GNB_MR_TO_MR), present(present)
     {
@@ -226,29 +236,6 @@ struct NwGnbStatusUpdate : NtsMessage
     bool isInitialSctpEstablished{};
 
     explicit NwGnbStatusUpdate(const int what) : NtsMessage(NtsMessageType::GNB_STATUS_UPDATE), what(what)
-    {
-    }
-};
-
-struct NwUplinkPayload : NtsMessage
-{
-    int ue;
-    rls::EPayloadType type;
-    OctetString payload;
-
-    NwUplinkPayload(int ue, rls::EPayloadType type, OctetString &&payload)
-        : NtsMessage(NtsMessageType::GNB_RLS_UPLINK_PAYLOAD), ue(ue), type(type), payload(std::move(payload))
-    {
-    }
-};
-
-struct NwRlsSendPdu : NtsMessage
-{
-    InetAddress address;
-    OctetString pdu;
-
-    NwRlsSendPdu(const InetAddress &address, OctetString &&pdu)
-        : NtsMessage(NtsMessageType::GNB_RLS_SEND_PDU), address(address), pdu(std::move(pdu))
     {
     }
 };

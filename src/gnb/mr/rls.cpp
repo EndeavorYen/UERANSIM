@@ -50,12 +50,19 @@ void GnbRls::onUeReleased(int ue, rls::ECause cause)
 
 void GnbRls::deliverUplinkPayload(int ue, rls::EPayloadType type, OctetString &&payload)
 {
-    m_targetTask->push(new NwUplinkPayload(ue, type, std::move(payload)));
+    auto *w = new NwGnbMrToMr(NwGnbMrToMr::RECEIVE_OVER_UDP);
+    w->ue = ue;
+    w->type = type;
+    w->pdu = std::move(payload);
+    m_targetTask->push(w);
 }
 
 void GnbRls::sendRlsPdu(const InetAddress &address, OctetString &&pdu)
 {
-    m_targetTask->push(new NwRlsSendPdu(address, std::move(pdu)));
+    auto *w = new NwGnbMrToMr(NwGnbMrToMr::SEND_OVER_UDP);
+    w->address = address;
+    w->pdu = std::move(pdu);
+    m_targetTask->push(w);
 }
 
 void GnbRls::setN1IsReady(bool isReady)

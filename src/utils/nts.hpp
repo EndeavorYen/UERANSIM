@@ -27,7 +27,6 @@ enum class NtsMessageType
     // Start of implementation specific types
     GNB_STATUS_UPDATE,
     GNB_RLS_UPLINK_PAYLOAD,
-    GNB_RLS_SEND_PDU,
 
     UDP_SERVER_RECEIVE,
 

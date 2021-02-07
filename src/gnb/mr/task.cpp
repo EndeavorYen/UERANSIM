@@ -157,14 +157,18 @@ void GnbMrTask::receiveUplinkPayload(int ue, rls::EPayloadType type, OctetString
         nw->ueId = ue;
         nw->channel = static_cast<rrc::RrcChannel>(payload.getI(0));
         nw->pdu = payload.subCopy(1);
-
         m_base->rrcTask->push(nw);
     }
     else if (type == rls::EPayloadType::DATA)
     {
         int psi = payload.get4I(0);
         OctetString dataPayload = payload.subCopy(4);
-        m_base->gtpTask->push(new NwUplinkData(ue, psi, std::move(dataPayload)));
+
+        auto *w = new NwMrToGtp(NwMrToGtp::UPLINK_DELIVERY);
+        w->ueId = ue;
+        w->pduSessionId = psi;
+        w->data = std::move(dataPayload);
+        m_base->gtpTask->push(w);
     }
 }
 

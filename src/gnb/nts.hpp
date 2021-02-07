@@ -95,6 +95,23 @@ struct NwNgapToGtp : NtsMessage
     }
 };
 
+struct NwMrToGtp : NtsMessage
+{
+    enum PR
+    {
+        UPLINK_DELIVERY,
+    } present;
+
+    // UPLINK_DELIVERY
+    int ueId{};
+    int pduSessionId{};
+    OctetString data{};
+
+    explicit NwMrToGtp(PR present) : NtsMessage(NtsMessageType::GNB_MR_TO_GTP), present(present)
+    {
+    }
+};
+
 struct NwGnbSctp : NtsMessage
 {
     enum PR
@@ -169,18 +186,6 @@ struct NwGnbDownlinkRrc : NtsMessage
 
     NwGnbDownlinkRrc(int ueId, rrc::RrcChannel channel, OctetString &&rrcPdu)
         : NtsMessage(NtsMessageType::GNB_MR_DOWNLINK_RRC), ueId(ueId), channel(channel), rrcPdu(std::move(rrcPdu))
-    {
-    }
-};
-
-struct NwUplinkData : NtsMessage
-{
-    int ueId;
-    int pduSessionId;
-    OctetString data;
-
-    NwUplinkData(int ueId, int pduSessionId, OctetString &&data)
-        : NtsMessage(NtsMessageType::GNB_MR_UPLINK_DATA), ueId(ueId), pduSessionId(pduSessionId), data(std::move(data))
     {
     }
 };

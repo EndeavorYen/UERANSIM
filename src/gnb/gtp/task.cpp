@@ -66,20 +66,28 @@ void GtpTask::onLoop()
             break;
         }
         }
-        delete w;
+        break;
+    }
+    case NtsMessageType::GNB_MR_TO_GTP: {
+        auto *w = dynamic_cast<NwMrToGtp *>(msg);
+        switch (w->present)
+        {
+        case NwMrToGtp::UPLINK_DELIVERY: {
+            handleUplinkData(w->ueId, w->pduSessionId, std::move(w->data));
+            break;
+        }
+        }
         break;
     }
     case NtsMessageType::UDP_SERVER_RECEIVE:
-        handleUdpReceive(dynamic_cast<udp::NwUdpServerReceive *>(msg));
-        break;
-    case NtsMessageType::GNB_MR_UPLINK_DATA:
-        handleUplinkData(dynamic_cast<NwUplinkData *>(msg));
+        handleUdpReceive(*dynamic_cast<udp::NwUdpServerReceive *>(msg));
         break;
     default:
         m_logger->unhandledNts(msg);
-        delete msg;
         break;
     }
+
+    delete msg;
 }
 
 void GtpTask::handleUeContextUpdate(const GtpUeContextUpdate &msg)
@@ -110,32 +118,28 @@ void GtpTask::handleSessionCreate(PduSessionResource *session)
     updateAmbrForSession(sessionInd);
 }
 
-void GtpTask::handleUplinkData(NwUplinkData *msg)
+void GtpTask::handleUplinkData(int ueId, int psi, OctetString &&pdu)
 {
-    const uint8_t *data = msg->data.data();
+    const uint8_t *data = pdu.data();
 
     // ignore non IPv4 packets
     if ((data[0] >> 4 & 0xF) != 4)
-    {
-        delete msg;
         return;
-    }
 
-    uint64_t sessionInd = MakeSessionResInd(msg->ueId, msg->pduSessionId);
+    uint64_t sessionInd = MakeSessionResInd(ueId, psi);
 
     if (!m_pduSessions.count(sessionInd))
     {
-        m_logger->err("Uplink data failure, PDU session not found. UE: %d PSI: %d", msg->ueId, msg->pduSessionId);
-        delete msg;
+        m_logger->err("Uplink data failure, PDU session not found. UE: %d PSI: %d", ueId, psi);
         return;
     }
 
     auto &pduSession = m_pduSessions[sessionInd];
 
-    if (m_rateLimiter->allowUplinkPacket(sessionInd, static_cast<int64_t>(msg->data.length())))
+    if (m_rateLimiter->allowUplinkPacket(sessionInd, static_cast<int64_t>(pdu.length())))
     {
         gtp::GtpMessage gtp{};
-        gtp.payload = std::move(msg->data);
+        gtp.payload = std::move(pdu);
         gtp.msgType = gtp::GtpMessage::MT_G_PDU;
         gtp.teid = pduSession->upTunnel.teid;
 
@@ -151,17 +155,13 @@ void GtpTask::handleUplinkData(NwUplinkData *msg)
         if (!gtp::EncodeGtpMessage(gtp, gtpPdu))
             m_logger->err("Uplink data failure, GTP encoding failed");
         else
-        {
             m_udpServer->send(InetAddress(pduSession->upTunnel.address, cons::GtpPort), gtpPdu);
-        }
     }
-
-    delete msg;
 }
 
-void GtpTask::handleUdpReceive(udp::NwUdpServerReceive *msg)
+void GtpTask::handleUdpReceive(const udp::NwUdpServerReceive &msg)
 {
-    OctetView buffer{msg->packet};
+    OctetView buffer{msg.packet};
     auto *gtp = gtp::DecodeGtpMessage(buffer);
 
     auto sessionInd = m_sessionTree.findByDownTeid(gtp->teid);
@@ -169,7 +169,6 @@ void GtpTask::handleUdpReceive(udp::NwUdpServerReceive *msg)
     {
         m_logger->err("TEID %d not found on GTP-U Downlink", gtp->teid);
         delete gtp;
-        delete msg;
         return;
     }
 
@@ -177,7 +176,6 @@ void GtpTask::handleUdpReceive(udp::NwUdpServerReceive *msg)
     {
         m_logger->err("Unhandled GTP-U message type: %d", gtp->msgType);
         delete gtp;
-        delete msg;
         return;
     }
 
@@ -185,7 +183,6 @@ void GtpTask::handleUdpReceive(udp::NwUdpServerReceive *msg)
         m_base->mrTask->push(new NwDownlinkData(GetUeId(sessionInd), GetPsi(sessionInd), std::move(gtp->payload)));
 
     delete gtp;
-    delete msg;
 }
 
 void GtpTask::updateAmbrForUe(int ueId)

@@ -26,7 +26,6 @@ enum class NtsMessageType
 
     // Start of implementation specific types
     GNB_MR_DOWNLINK_RRC,
-    GNB_MR_UPLINK_DATA,
     GNB_MR_DOWNLINK_DATA,
     GNB_MR_N1_IS_READY,
     GNB_STATUS_UPDATE,
@@ -45,6 +44,7 @@ enum class NtsMessageType
     GNB_NGAP_TO_RRC,
     GNB_RRC_TO_NGAP,
     GNB_NGAP_TO_GTP,
+    GNB_MR_TO_GTP,
     GNB_SCTP,
 
     UE_MR_TO_MR,

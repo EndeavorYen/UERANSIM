@@ -45,10 +45,10 @@ class GtpTask : public NtsTask
     void onQuit() override;
 
   private:
-    void handleUdpReceive(udp::NwUdpServerReceive *msg);
+    void handleUdpReceive(const udp::NwUdpServerReceive &msg);
     void handleUeContextUpdate(const GtpUeContextUpdate &msg);
     void handleSessionCreate(PduSessionResource *session);
-    void handleUplinkData(NwUplinkData *msg);
+    void handleUplinkData(int ueId, int psi, OctetString &&data);
 
     void updateAmbrForUe(int ueId);
     void updateAmbrForSession(uint64_t pduSession);

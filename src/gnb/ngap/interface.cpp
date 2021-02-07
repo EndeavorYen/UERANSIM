@@ -162,9 +162,11 @@ void NgapTask::receiveNgSetupResponse(int amfId, ASN_NGAP_NGSetupResponse *msg)
     amf->state = EAmfState::CONNECTED;
     m_logger->info("NG Setup procedure is successful");
 
-    if (std::all_of(m_amfCtx.begin(), m_amfCtx.end(),
-                    [](auto &amfCtx) { return amfCtx.second->state == EAmfState::CONNECTED; }))
+    if (!m_isInitialized && std::all_of(m_amfCtx.begin(), m_amfCtx.end(),
+                                        [](auto &amfCtx) { return amfCtx.second->state == EAmfState::CONNECTED; }))
     {
+        m_isInitialized = true;
+
         auto *update = new NwGnbStatusUpdate(NwGnbStatusUpdate::NGAP_IS_UP);
         update->isNgapUp = true;
         m_base->appTask->push(update);

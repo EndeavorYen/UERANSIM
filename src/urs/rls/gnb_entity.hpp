@@ -28,6 +28,7 @@ class RlsGnbEntity
     std::unordered_map<int, InetAddress> ueAddressMap; // UE token to address
     std::unordered_map<int, uint64_t> heartbeatMap;    // UE token to last heartbeat time
     std::set<int> setupCompleteWaiting;
+    bool acceptConnections;
 
   public:
     explicit RlsGnbEntity(std::string nodeName);
@@ -36,8 +37,6 @@ class RlsGnbEntity
   protected:
     virtual void logWarn(const std::string &msg) = 0;
     virtual void logError(const std::string &msg) = 0;
-
-    virtual bool isInReadyState() = 0;
 
     virtual void onUeConnected(int ue, std::string name) = 0;
     virtual void onUeReleased(int ue, ECause cause) = 0;
@@ -49,6 +48,7 @@ class RlsGnbEntity
     void onHeartbeat();
     void onReceive(const InetAddress &address, const OctetString &pdu);
     void downlinkPayloadDelivery(int ue, EPayloadType type, OctetString &&payload);
+    void setAcceptConnections(bool accept);
     void releaseConnection(int ue, ECause cause);
 
   private:

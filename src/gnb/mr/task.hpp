@@ -30,7 +30,6 @@ class GnbMrTask : public NtsTask
 
     udp::UdpServerTask *m_udpTask;
     GnbRls *m_rlsEntity;
-
     std::unordered_map<int, MrUeContext> m_ueMap;
 
   public:

@@ -18,7 +18,7 @@ namespace rls
 
 RlsGnbEntity::RlsGnbEntity(std::string nodeName)
     : nodeName(std::move(nodeName)), token(utils::Random64()), ueIdMap(), idUeMap(), ueAddressMap(), heartbeatMap(),
-      setupCompleteWaiting()
+      setupCompleteWaiting(), acceptConnections()
 {
 }
 
@@ -57,6 +57,11 @@ void RlsGnbEntity::downlinkPayloadDelivery(int ue, EPayloadType type, OctetStrin
     m.payloadType = type;
     m.payload = std::move(payload);
     sendRlsMessage(ue, m);
+}
+
+void RlsGnbEntity::setAcceptConnections(bool accept)
+{
+    acceptConnections = accept;
 }
 
 void RlsGnbEntity::releaseConnection(int ue, ECause cause)
@@ -142,15 +147,15 @@ void RlsGnbEntity::onReceive(const InetAddress &address, const OctetString &pdu)
 
     if (msg.msgType == EMessageType::RLS_SETUP_REQUEST)
     {
-        if (ueIdMap.count(msg.ueToken))
+        if (!acceptConnections)
         {
-            sendSetupFailure(address, msg.ueToken, ECause::TOKEN_CONFLICT);
+            // ignore setup request
             return;
         }
 
-        if (!isInReadyState())
+        if (ueIdMap.count(msg.ueToken))
         {
-            sendSetupFailure(address, msg.ueToken, ECause::GNB_IS_NOT_READY_FOR_N1);
+            sendSetupFailure(address, msg.ueToken, ECause::TOKEN_CONFLICT);
             return;
         }
 

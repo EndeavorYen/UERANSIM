@@ -43,7 +43,7 @@ struct NwGnbRrcToMr : NtsMessage
 {
     enum PR
     {
-        N1_N2_READY,
+        NGAP_LAYER_INITIALIZED,
         RRC_PDU_DELIVERY
     } present;
 

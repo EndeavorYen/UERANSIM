@@ -104,8 +104,6 @@ const char *CauseToString(ECause cause)
         return "RLS_UNSPECIFIED";
     case ECause::TOKEN_CONFLICT:
         return "RLS_TOKEN_CONFLICT";
-    case ECause::GNB_IS_NOT_READY_FOR_N1:
-        return "RLS_GNB_IS_NOT_READY_FOR_N1";
     case ECause::EMPTY_SEARCH_LIST:
         return "RLS_EMPTY_SEARCH_LIST";
     case ECause::SETUP_TIMEOUT:

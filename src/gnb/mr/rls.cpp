@@ -13,7 +13,7 @@ namespace nr::gnb
 {
 
 GnbRls::GnbRls(std::string nodeName, std::unique_ptr<Logger> logger, NtsTask *targetTask)
-    : RlsGnbEntity(std::move(nodeName)), m_logger(std::move(logger)), m_targetTask(targetTask), m_isN1Ready{}
+    : RlsGnbEntity(std::move(nodeName)), m_logger(std::move(logger)), m_targetTask(targetTask)
 {
 }
 
@@ -25,11 +25,6 @@ void GnbRls::logWarn(const std::string &msg)
 void GnbRls::logError(const std::string &msg)
 {
     m_logger->err(msg);
-}
-
-bool GnbRls::isInReadyState()
-{
-    return m_isN1Ready;
 }
 
 void GnbRls::onUeConnected(int ue, std::string name)
@@ -63,11 +58,6 @@ void GnbRls::sendRlsPdu(const InetAddress &address, OctetString &&pdu)
     w->address = address;
     w->pdu = std::move(pdu);
     m_targetTask->push(w);
-}
-
-void GnbRls::setN1IsReady(bool isReady)
-{
-    m_isN1Ready = isReady;
 }
 
 } // namespace nr::gnb

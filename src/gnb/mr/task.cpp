@@ -91,16 +91,16 @@ void GnbMrTask::onLoop()
         auto *w = dynamic_cast<NwGnbRrcToMr *>(msg);
         switch (w->present)
         {
-        case NwGnbRrcToMr::N1_N2_READY: {
-            m_rlsEntity->setN1IsReady(true);
-            break;
-        }
         case NwGnbRrcToMr::RRC_PDU_DELIVERY: {
             OctetString stream{};
             stream.appendOctet(static_cast<int>(w->channel));
             stream.append(w->pdu);
 
             m_rlsEntity->downlinkPayloadDelivery(w->ueId, rls::EPayloadType::RRC, std::move(stream));
+            break;
+        }
+        case NwGnbRrcToMr::NGAP_LAYER_INITIALIZED: {
+            m_rlsEntity->setAcceptConnections(true);
             break;
         }
         }

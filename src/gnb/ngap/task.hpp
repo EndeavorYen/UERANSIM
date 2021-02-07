@@ -45,8 +45,8 @@ class NgapTask : public NtsTask
     std::unordered_map<int, NgapAmfContext *> m_amfCtx;
     std::unordered_map<int, NgapUeContext *> m_ueCtx;
     long m_ueNgapIdCounter;
-
     uint32_t m_downlinkTeidCounter;
+    bool m_isInitialized;
 
   public:
     explicit NgapTask(TaskBase *base);

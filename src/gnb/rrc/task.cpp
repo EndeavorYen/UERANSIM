@@ -53,7 +53,7 @@ void GnbRrcTask::onLoop()
         switch (w->present)
         {
         case NwGnbNgapToRrc::NGAP_LAYER_INITIALIZED: {
-            m_base->mrTask->push(new NwGnbRrcToMr(NwGnbRrcToMr::N1_N2_READY));
+            m_base->mrTask->push(new NwGnbRrcToMr(NwGnbRrcToMr::NGAP_LAYER_INITIALIZED));
             break;
         }
         case NwGnbNgapToRrc::NAS_DELIVERY: {
